@@ -1,0 +1,123 @@
+openapi: "3.0.2"
+info:
+  title: "api documention"
+  description: "this is document page of our apis"
+  version: "2.0.0"
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: IndexPage
+  - name: Authentication
+paths:
+  /:
+    get:
+      summary: Index Page Routes
+      tags: [IndexPage]
+      description: get all data for index page
+      responses:
+        201:
+          description: success
+        400:
+          description: not found
+  /user/authentication/getOtp:
+    post:
+      summary: get Otp code
+      tags: [Authentication]
+      description: one time password (OTP) send code
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mobile:
+                  type: string
+      responses:
+        201:
+          description: success
+        400:
+          description: unauthorization
+        401:
+          description: bad request
+        500:
+          description: internal server error
+
+  /user/authentication/checkOtp:
+    post:
+      summary: check Otp code
+      tags: [Authentication]
+      description: one time password (OTP) check code
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mobile:
+                  type: string
+                code:
+                  type: string
+                  minLength: 5
+                  maxLength: 6
+      responses:
+        201:
+          description: success
+        400:
+          description: unauthorization
+        401:
+          description: bad request
+        500:
+          description: internal server error
+
+  /user/authentication/refreshToken:
+    post:
+      summary: refresh token
+      tags: [Authentication]
+      description: check refresh token for get new access token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        201:
+          description: success
+        400:
+          description: unauthorization
+        401:
+          description: bad request
+        500:
+          description: internal server error
+  /developer/hash-string/{string}:
+    get:
+      summary: hash one string
+      tags: [Developers]
+      description: hash one string with bcrypt
+      parameters:
+        - in: path
+          name: string
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: success
+        400:
+          description: bad request
+        500:
+          description: internal server error
+  /developer/random-number:
+    get:
+      summary: get a random number
+      tags: [Developers]
+      description: get a random number
+      responses:
+        200:
+          description: success
+        400:
+          description: bad request
+        500:
+          description: internal server error
