@@ -7,5 +7,6 @@ const router = new Router();
 router.get("/", isAuthenticated , apiController.home);
 
 module.exports = {
-  home: router,
+  home: router
 };
+  

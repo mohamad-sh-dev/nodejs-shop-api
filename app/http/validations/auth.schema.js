@@ -10,7 +10,19 @@ function validateRequestBody (schema) {
     }
   };
 }
+function validateRequestParams (schema) {
+  return async (req, res, next) => {
+    try {
+      console.log(req.query);
+      await schema.validateAsync(req.query);
+      next()
+    } catch (error) {
+      next(createHttpError.BadRequest(error.message))
+    }
+  };
+}
 
 module.exports = {
   validateRequestBody,
+  validateRequestParams
 };

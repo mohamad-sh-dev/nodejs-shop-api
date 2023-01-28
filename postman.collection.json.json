@@ -1,0 +1,113 @@
+{
+  "info": {
+    "_postman_id": "97e2a89a-64df-4867-8e46-0219b3d34b3a",
+    "name": "Swagger Example Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Index Page Routes",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": [""]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get Otp code",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"mobile\": \"\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/user/authentication/getOtp",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["user", "authentication", "getOtp"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "check Otp code",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"mobile\": \"\",\n\t\"code\": \"\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/user/authentication/checkOtp",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["user", "authentication", "checkOtp"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "refresh token",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"refreshToken\": \"\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/user/authentication/refreshToken",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["user", "authentication", "refreshToken"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "hash one string",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/developer/hash-string/{string}",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["developer", "hash-string", "{string}"]
+        },
+        "description": "hash one string with bcrypt"
+      },
+      "response": []
+    },
+    {
+      "name": "get a random number",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/developer/random-number/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["developer", "random-number"],
+          "description": "get a random number"
+        }
+      },
+      "response": []
+    }
+  ]
+}

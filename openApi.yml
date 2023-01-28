@@ -5,6 +5,12 @@ info:
   version: "2.0.0"
 servers:
   - url: http://localhost:8080
+components:
+  securitySchemes:
+    authorization:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 tags:
   - name: IndexPage
   - name: Authentication
@@ -41,7 +47,6 @@ paths:
           description: bad request
         500:
           description: internal server error
-
   /user/authentication/checkOtp:
     post:
       summary: check Otp code
@@ -68,7 +73,6 @@ paths:
           description: bad request
         500:
           description: internal server error
-
   /user/authentication/refreshToken:
     post:
       summary: refresh token
@@ -119,5 +123,66 @@ paths:
           description: success
         400:
           description: bad request
+        500:
+          description: internal server error
+  /admin/panel/categories:
+    get:
+      summary: get a category
+      tags: [AdminPanel]
+      description: get a specifiec category
+      security:
+        - authorization: []
+      parameters:
+        - name: categoryId
+          in: query
+          description: The ID of the category to retrieve
+          required: true
+          schema:
+            type: string
+            pattern: "^[a-f\\d]{24}$"
+        - name: title
+          in: query
+          description: The title of the category to retrieve
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: success
+        400:
+          description: bad request
+        404:
+          description: not found
+        500:
+          description: internal server error
+    post:
+      summary: cteate a category
+      tags: [AdminPanel]
+      description: create a specifiec category
+      security:
+        - authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                parentCategory:
+                  type: string
+                  pattern: "^[a-f\\d]{24}$"
+                subCategory:
+                  type: array
+                  items:
+                    type: string
+                    pattern: "^[a-f\\d]{24}$"
+      responses:
+        200:
+          description: success
+        400:
+          description: bad request
+        401:
+          description: unauthorized
         500:
           description: internal server error
