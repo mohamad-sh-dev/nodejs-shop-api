@@ -1,5 +1,6 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+
 const userSchema = new mongoose.Schema(
   {
     firstName: {
@@ -24,11 +25,11 @@ const userSchema = new mongoose.Schema(
     },
     mobile: {
       type: String,
-      required : [true , 'شماره همراه مورد نیاز میباشد']
+      required: [true, 'شماره همراه مورد نیاز میباشد']
     },
     roles: {
       type: [String],
-      default: ["USER"],
+      default: ['USER'],
     },
     otp: {
       type: Object,
@@ -39,7 +40,7 @@ const userSchema = new mongoose.Schema(
     },
     profileImage: {
       type: String,
-      default: "/uploads/users/profileImages/default.png",
+      default: '/uploads/users/profileImages/default.png',
     },
     discount: {
       type: String,
@@ -47,23 +48,22 @@ const userSchema = new mongoose.Schema(
     birthDate: {
       type: String,
     },
+    courses: { type: [mongoose.Schema.ObjectId], ref: 'Courses', default: [] }
   },
   {
     timestamps: true,
   }
 );
 
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
-  this.password = await bcrypt.hash(this.password, 10);
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password')) return next();
+  this.password = bcrypt.hash(this.password, 10);
   next();
 });
 
-userSchema.method("comparePassword", async (savedPass, enteredPass) => {
-  return await bcrypt.compare(enteredPass, savedPass);
-});
+userSchema.method('comparePassword', async (savedPass, enteredPass) => bcrypt.compare(enteredPass, savedPass));
 
-const UserModel = mongoose.model("User", userSchema);
+const UserModel = mongoose.model('User', userSchema);
 module.exports = {
   UserModel,
 };

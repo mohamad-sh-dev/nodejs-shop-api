@@ -1,11 +1,11 @@
-const BaseController = require("../baseController");
+const BaseController = require('../baseController');
 
 class ApiController extends BaseController {
-  home(req, res, next) {
+  home(req, res) {
     return res.status(200).json({
-        status : 'success' ,
-        message : 'hi from index page'
-    })
+        status: 'success',
+        message: 'hi from index page'
+    });
   }
 }
 

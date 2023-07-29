@@ -1,23 +1,22 @@
-const createHttpError = require("http-errors");
+const createHttpError = require('http-errors');
 
-function validateRequestBody (schema) {
+function validateRequestBody(schema) {
   return async (req, res, next) => {
     try {
       await schema.validateAsync(req.body);
-      next()
+      next();
     } catch (error) {
-      next(createHttpError.BadRequest(error.message))
+      next(createHttpError.BadRequest(error.message));
     }
   };
 }
-function validateRequestParams (schema) {
+function validateRequestParams(schema) {
   return async (req, res, next) => {
     try {
-      console.log(req.query);
-      await schema.validateAsync(req.query);
-      next()
+      await schema.validateAsync(req.params);
+      next();
     } catch (error) {
-      next(createHttpError.BadRequest(error.message))
+      next(createHttpError.BadRequest(error.message));
     }
   };
 }

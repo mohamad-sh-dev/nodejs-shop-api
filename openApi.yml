@@ -12,8 +12,12 @@ components:
       scheme: bearer
       bearerFormat: JWT
 tags:
-  - name: IndexPage
-  - name: Authentication
+  - name : Authentication
+  - name : Admin Panel [Products]
+  - name : Admin Panel [Categories]
+  - name : Admin Panel [Blogs]
+  - name : IndexPage
+  - name : Developers
 paths:
   /:
     get:
@@ -125,16 +129,16 @@ paths:
           description: bad request
         500:
           description: internal server error
-  /admin/panel/categories:
+  /admin/panel/categories/{id}:
     get:
       summary: get a category
-      tags: [AdminPanel]
+      tags:  ['Admin Panel [Categories]']
       description: get a specifiec category
       security:
         - authorization: []
       parameters:
-        - name: categoryId
-          in: query
+        - name: id
+          in: path
           description: The ID of the category to retrieve
           required: true
           schema:
@@ -155,9 +159,67 @@ paths:
           description: not found
         500:
           description: internal server error
+    delete:
+      summary: delete a category
+      tags:  ['Admin Panel [Categories]']
+      description: delete a specifiec category
+      security:
+        - authorization: []
+      parameters:
+        - name: categoryId
+          in: path
+          description: The ID of the category to retrieve
+          required: true
+          schema:
+            type: string
+            pattern: "^[a-f\\d]{24}$"
+
+      responses:
+        200:
+          description: success
+        400:
+          description: bad request
+        404:
+          description: not found
+        401: 
+          description: unauthorized
+        500:
+          description: internal server error
+  /admin/panel/categories/list:
+   get:
+      summary: get a list of categories
+      tags:  ['Admin Panel [Categories]']
+      description: get all categories without nested subCategories 
+      security:
+        - authorization: []    
+      responses:
+        200:
+          description: success
+        400:
+          description: bad request
+        404:
+          description: not found
+        500:
+          description: internal server error
+  /admin/panel/categories:
+    get:
+      summary: get a category
+      tags:  ['Admin Panel [Categories]']
+      description: get all categories with subCategories details
+      security:
+        - authorization: []    
+      responses:
+        200:
+          description: success
+        400:
+          description: bad request
+        404:
+          description: not found
+        500:
+          description: internal server error
     post:
       summary: cteate a category
-      tags: [AdminPanel]
+      tags:  ['Admin Panel [Categories]']
       description: create a specifiec category
       security:
         - authorization: []
@@ -186,3 +248,395 @@ paths:
           description: unauthorized
         500:
           description: internal server error
+    put:
+      summary: update a category
+      tags: ['Admin Panel [Categories]']
+      description: update a specifiec category name
+      security:
+        - authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id : 
+                  type : string
+                  pattern : "^[a-f\\d]{24}$"
+                name:
+                  type: string
+      responses:
+        200:
+          description: success
+        400:
+          description: bad request
+        404:
+          description: not found
+        401: 
+          description: unauthorized
+        500:
+          description: internal server error    
+  /admin/blogs:
+    get:
+      summary: Get List Of Blogs
+      tags: ['Admin Panel [Blogs]']
+      description: Get List Of All Blogs
+      security:
+        - authorization: []    
+      responses:
+        200:
+          description: success
+        400:
+          description: bad request
+        404:
+          description: not found
+        500:
+          description: internal server error
+    post:
+      summary: Create a Blog
+      tags: ['Admin Panel [Blogs]']
+      description: Create a Specifiec Blog
+      security:
+        - authorization: []
+      consumes : 
+        - application/x-www-form-urlencoded
+        - application/json
+      requestBody:
+         content:
+          multipart/form-data:
+            schema:
+              type : object 
+              properties : 
+                title: 
+                  type : string  
+                  required : true
+                  description: The Title Of The Blog 
+                summary: 
+                  type : string  
+                  required : true
+                  description: The Summary Of The Blog 
+                body: 
+                  type : string  
+                  required : true
+                  description: The Body Of The Blog 
+                tag: 
+                  type : array
+                  items : 
+                    type : string
+                    example : '#'
+                  description: The Tags Of The Blog 
+                category: 
+                 type : string
+                 pattern : "^[a-f\\d]{24}$"
+                 description: The Category Of The Blog 
+                image :
+                  type : file
+                  description: The Image Of The Blog
+            encoding :
+              tag : 
+                 contentType: application/json
+      responses:
+        200:
+          description: success
+        400:
+          description: bad request
+        401:
+          description: unauthorized
+        500:
+          description: internal server error
+    patch:
+      summary: Update A Specific Blog
+      tags: ['Admin Panel [Blogs]']
+      description:  Update A Specific Blog
+      security:
+        - authorization: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type : object 
+              properties : 
+                id : 
+                  type : string
+                  patern : "^[a-f\\d]{24}$"
+                  description: The Id Of The Blog
+                title: 
+                  type : string  
+                  required : true
+                  description: The Title Of The Blog 
+                summary: 
+                  type : string  
+                  required : true
+                  description: The Summary Of The Blog 
+                body: 
+                  type : string  
+                  required : true
+                  description: The Body Of The Blog 
+                tag: 
+                  type : array
+                  items : 
+                    type : string
+                    example : '#'
+                  description: The Tags Of The Blog 
+                category: 
+                 type : string
+                 pattern : "^[a-f\\d]{24}$"
+                 description: The Category Of The Blog 
+                image :
+                  type : file
+                  description: The Image Of The Blog
+            encoding :
+              tag : 
+                 contentType: application/json
+      responses:
+        200:
+          description: success
+        400:
+          description: bad request
+        404:
+          description: not found
+        401: 
+          description: unauthorized
+        500:
+          description: internal server error    
+    delete:
+      summary: Delete A Blog
+      tags:  ['Admin Panel [Blogs]']
+      description: Delete A Specifiec Blog
+      security:
+        - authorization: []
+      requestBody:
+         content:
+          application/json:
+            schema:
+              type : object 
+              properties : 
+                id: 
+                  type : string  
+                  pattern : "^[a-f\\d]{24}$"
+                  description: The Id Of The Blog 
+                required : true
+      responses:
+        200:
+          description: success
+        400:
+          description: bad request
+        404:
+          description: not found
+        401: 
+          description: unauthorized
+        500:
+          description: internal server error
+               
+  /admin/products:
+    get:
+      summary: Get List Of Products
+      tags: ['Admin Panel [Products]']
+      description: Get List Of All Products
+      security:
+        - authorization: []    
+      responses:
+        200:
+          description: success
+        400:
+          description: bad request
+        404:
+          description: not found
+        500:
+          description: internal server error
+    post:
+      summary: Create a Blog
+      tags: ['Admin Panel [Products]']
+      description: Create a Specifiec Blog
+      security:
+        - authorization: []
+      consumes : 
+        - application/x-www-form-urlencoded
+        - application/json
+      requestBody:
+         content:
+          multipart/form-data:
+            schema:
+              type : object 
+              properties : 
+                title: 
+                  type : string  
+                  required : true
+                  description: The Title Of The Product 
+                summary: 
+                  type : string  
+                  required : true
+                  description: The Summary Of The Product 
+                description: 
+                  type : string  
+                  required : true
+                  description: The Description Of The Product 
+                tag: 
+                  type : array
+                  items : 
+                    type : string
+                    example : '#'
+                  description: The Tags Of The Product 
+                category: 
+                 type : string
+                 pattern : "^[a-f\\d]{24}$"
+                 required : true
+                 description: The Category Of The Product 
+                type: 
+                 type : string
+                 enum : ['virtual' ,'phicycal' ]  
+                 required : true
+                 description: The Summary Of The Product 
+                price : 
+                  type : number 
+                  required : true
+                  description : The Price Of The Product
+                discount : 
+                  type : number 
+                  description : The Discount Of The Product
+                images :
+                  type : array
+                  items : 
+                    type : file
+                    format : binary
+                  description: The Images Of The Product
+                imageCover :
+                  type : file
+                  description: The Image Cover Of The Product
+                properties : 
+                  type : object
+                  properties :
+                    length : 
+                      type : number
+                      defualt : 0
+                    height : 
+                      type : number
+                      defualt : 0
+                    width : 
+                      type : number
+                      defualt : 0
+                    weight : 
+                      type : number
+                      defualt : 0
+                    colors : 
+                      type : number
+                      defualt : 0
+                    model : 
+                      type : number
+                      defualt : 0
+                    madein : 
+                      type : number
+                      defualt : 0
+            encoding :
+              tag : 
+                 contentType: application/json
+              properties : 
+                 contentType: application/json
+      responses:
+        200:
+          description: success
+        400:
+          description: bad request
+        401:
+          description: unauthorized
+        500:
+          description: internal server error
+    patch:
+      summary: Update A Specific Product
+      tags: ['Admin Panel [Products]']
+      description:  Update A Specific Blog
+      security:
+        - authorization: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type : object 
+              properties : 
+                title: 
+                  type : string  
+                  required : true
+                  description: The Title Of The Product 
+                summary: 
+                  type : string  
+                  required : true
+                  description: The Summary Of The Product 
+                description: 
+                  type : string  
+                  required : true
+                  description: The Description Of The Product 
+                tags: 
+                  type : array
+                  items : 
+                    type : string
+                    example : '#'
+                  description: The Tags Of The Product 
+                category: 
+                 type : string
+                 pattern : "^[a-f\\d]{24}$"
+                 required : true
+                 description: The Category Of The Product 
+                type: 
+                 type : string
+                 enum : ['free' , 'cash' , 'vip']  
+                 required : true
+                 description: The Summary Of The Product 
+                price : 
+                  type : number 
+                  required : true
+                  description : The Price Of The Product
+                discount : 
+                  type : number 
+                  description : The Discount Of The Product
+                images :
+                  type : array
+                  items : 
+                      type : string
+                      format : binary
+                  description: The Images Of The Product
+                imageCover :
+                  type : file
+                  description: The Image Cover Of The Product
+            encoding :
+              tag : 
+                 contentType: application/json
+      responses:
+        200:
+          description: success
+        400:
+          description: bad request
+        404:
+          description: not found
+        401: 
+          description: unauthorized
+        500:
+          description: internal server error    
+    delete:
+      summary: Delete A Blog
+      tags:  ['Admin Panel [Products]']
+      description: Delete A Specifiec Blog
+      security:
+        - authorization: []
+      requestBody:
+         content:
+          application/json:
+            schema:
+              type : object 
+              properties : 
+                id: 
+                  type : string  
+                  pattern : "^[a-f\\d]{24}$"
+                  description: The Id Of The Blog 
+                required : true
+      responses:
+        200:
+          description: success
+        400:
+          description: bad request
+        404:
+          description: not found
+        401: 
+          description: unauthorized
+        500:
+          description: internal server error
+               

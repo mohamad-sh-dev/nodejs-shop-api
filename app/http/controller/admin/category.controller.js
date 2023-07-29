@@ -1,6 +1,9 @@
-const { CategoryModel } = require("../../../model/categories");
-const createHttpError = require("http-errors");
-const BaseController = require("../baseController");
+const createHttpError = require('http-errors');
+const mongoose = require('mongoose');
+const { CategoryModel } = require('../../../model/categories');
+const BaseController = require('../baseController');
+
+const { ObjectId } = mongoose.Types;
 
 class CategoryManager extends BaseController {
   // Create category
@@ -8,11 +11,22 @@ class CategoryManager extends BaseController {
     try {
       const { name, parentCategory, subCategory } = req.body;
       const existCategory = await this.checkCategoryExist(name);
-      if (existCategory.exist)
-        throw createHttpError.BadRequest("دسته بندی مورد نظر وجود دارد");
-      await CategoryModel.create({name, parentCategory, subCategory});
+      if (existCategory.exist) { throw createHttpError.BadRequest('دسته بندی مورد نظر وجود دارد'); }
+      const createdCategory = await CategoryModel.create({ name, parentCategory, subCategory });
+      if (parentCategory) {
+        await CategoryModel.aggregate([
+          {
+            $addFields: {
+              subCategory: { $concatArrays: ['$subCategory', [new ObjectId(createdCategory.id)]] },
+            },
+          },
+          {
+            $out: 'categories',
+          },
+        ]);
+      }
       res.status(201).json({
-        message: "دسته بندی با موفقیت ایجاد شد",
+        message: 'دسته بندی با موفقیت ایجاد شد',
       });
     } catch (error) {
       next(error);
@@ -22,15 +36,42 @@ class CategoryManager extends BaseController {
   // Read category
   async getCategory(req, res, next) {
     try {
-      const { categoryId, name } = req.query;
+      const { categoryId, name } = req.params;
       const category = await CategoryModel.findOne({
-        $or: [{ _id: categoryId }, { name }]
+        $or: [{ _id: categoryId }, { name }],
       });
-      if (!category)
-        throw createHttpError.NotFound("دسته بندی مورد نظر موجود نمیباشد");
+      if (!category) { throw createHttpError.NotFound('دسته بندی مورد نظر موجود نمیباشد'); }
       return res.status(200).json({
-        status: "success",
-        data: category
+        status: 'success',
+        data: category,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getAllCategories(req, res, next) {
+    try {
+      const categories = await CategoryModel.find({}, { __v: 0, createdAt: 0, updatedAt: 0 });
+      return res.status(200).json({
+        status: 'success',
+        data: categories,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getCategoriesList(req, res, next) {
+    try {
+      const categories = await CategoryModel.aggregate([
+        {
+          $match: {},
+        },
+      ]);
+      return res.status(200).json({
+        status: 'success',
+        data: categories,
       });
     } catch (error) {
       next(error);
@@ -40,57 +81,88 @@ class CategoryManager extends BaseController {
   // Update category
   async updateCategory(req, res, next) {
     try {
-      const { categoryId, name, parentCategory, subCategories } = req.body;
-      const category = (await this.checkCategoryExist(name, categoryId)).data;
-      if(!category) throw createHttpError.NotFound('دسته بندی مورد نظر موجود نیست'); 
-      const updatedCategory = await CategoryModel.updateOne({_id : category.id} , {
-        name , parentCategory, subCategories
-      },
-      {
-        runValidators : true
-      })
-      if(updatedCategory.modifiedCount !== 1) throw createHttpError.InternalServerError('خطای داخلی سرور') ;
+      const { id: _id, name } = req.body;
+      console.log(_id);
+      const category = (await this.checkCategoryExist(name, _id)).data;
+      if (!category) { throw createHttpError.NotFound('دسته بندی مورد نظر موجود نیست'); }
+      const updatedCategory = await CategoryModel.updateOne(
+        { _id },
+        {
+          name,
+        },
+        {
+          runValidators: true,
+        },
+      );
+      if (updatedCategory.modifiedCount !== 1) { throw createHttpError.InternalServerError('خطای داخلی سرور'); }
       return res.status(200).json({
-        message :'اپدیت باموفقیت انجام شد' 
-      })
+        message: 'اپدیت باموفقیت انجام شد',
+      });
     } catch (error) {
       next(error);
     }
   }
 
   // Delete category
-  async deleteCategory(categoryId, callback) {
+  async deleteCategory(req, res, next) {
     try {
-      const {categoryId} = req.params
-      const category = await CategoryModel.findByIdAndRemove(categoryId)
-      if(!category) throw createHttpError.InternalServerError('خطای داخلی سرور') ;
-      return res.status(200).json({
-        status : 'success' ,
-        data : category
-      }) 
-    } catch (error) {
-      next(error) ;
-    }
-  }
-
-  async checkCategoryExist(name, id) {
-    try {
-      const category = await CategoryModel.findOne({
-        $or: [
-          {
-            _id: id
-          },
-          {name}
-        ],
+      const { id: _id } = req.params;
+      // let hasSubCategories = await this.checkHasSubCategories(_id);
+      // console.log(hasSubCategories);
+      // if (hasSubCategories)
+      //   throw createHttpError.BadRequest(
+      //     "دسته بندی مورد نظر دارای زیر مجموعه میباشد"
+      //   );
+      // const relatedSubCategories = await CategoryModel.aggregate([
+      //   {
+      //     $match: {
+      //       subCategory: {
+      //         $in: [new ObjectId(_id)],
+      //       },
+      //     },
+      //   },
+      // ]);
+      // if(relatedSubCategories.length) throw createHttpError.BadRequest()
+      const category = await CategoryModel.deleteMany({
+        $or:
+          [
+            { _id }, { parentCategory: _id },
+          ],
       });
-      return {
-        exist: !!category,
+      if (!category) { throw createHttpError.InternalServerError('خطای داخلی سرور'); }
+      return res.status(200).json({
+        status: 'success',
         data: category,
-      };
+      });
     } catch (error) {
       next(error);
     }
   }
+
+  async checkCategoryExist(name, id) {
+    const category = await CategoryModel.findOne({
+      $or: [
+        {
+          _id: id,
+        },
+        { name },
+      ],
+    });
+    return {
+      exist: !!category,
+      data: category,
+    };
+  }
+
+  async checkHasSubCategories(categoryId) {
+    try {
+      const category = await CategoryModel.findOne({ _id: categoryId });
+      console.log(category);
+      return !!category.subCategory.length;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
-module.exports = new CategoryManager() ;
+module.exports = new CategoryManager();

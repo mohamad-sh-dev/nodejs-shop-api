@@ -1,43 +1,42 @@
-const BaseController = require("../baseController");
-const { UserModel } = require("../../../model/user");
+const createHttpError = require('http-errors');
+const BaseController = require('../baseController');
+const { UserModel } = require('../../../model/user');
 const {
   randomTokenGenerator,
   signAccessToken,
   signRefreshToken,
   verifyRefreshToken,
-} = require("../../../utilities/functions");
-const { EXPIRES_TIME } = require("../../../utilities/constants");
-const createHttpError = require("http-errors");
+} = require('../../../utilities/functions');
+
 class UserAuthController extends BaseController {
   async getOtp(req, res, next) {
     try {
       const token = randomTokenGenerator();
       const { mobile } = req.body;
       const result = await this.saveUser(mobile, token);
-      if (!result) throw createHttpError.BadGateway("ورود شما انجام نشد");
+      if (!result) throw createHttpError.BadGateway('ورود شما انجام نشد');
       return res.status(200).json({
-        status: "success",
-        message: "توکن ارسال شد",
+        status: 'success',
+        message: 'توکن ارسال شد',
         token,
       });
     } catch (error) {
       next(error);
     }
   }
+
   async checkOtp(req, res, next) {
     try {
       const { mobile, code } = req.body;
       const user = await UserModel.findOne({ mobile });
-      if (!user) throw createHttpError.NotFound("کاربر یافت نشد");
-      if (user && user.otp.token != code)
-        throw createHttpError.Unauthorized("کد اعتبار سنجی صحیح نیست");
+      if (!user) throw createHttpError.NotFound('کاربر یافت نشد');
+      if (user && user.otp.token.toString() !== code) { throw createHttpError.Unauthorized('کد اعتبار سنجی صحیح نیست'); }
       const now = Date.now();
-      if (user.otp.expiresIn < now)
-        throw createHttpError.Unauthorized("کد شما منقضی شده است");
+      if (user.otp.expiresIn < now) { throw createHttpError.Unauthorized('کد شما منقضی شده است'); }
       const accessToken = await signAccessToken(user);
       const refreshToken = await signRefreshToken(user);
       return res.status(200).json({
-        status: "success",
+        status: 'success',
         accessToken,
         refreshToken,
       });
@@ -45,42 +44,34 @@ class UserAuthController extends BaseController {
       next(error);
     }
   }
+
   async saveUser(mobile, token) {
-    try {
-      const otp = {
-        token,
-        expiresIn: EXPIRES_TIME,
-      };
-      const user = await this.checkExistUser(mobile);
-      if (user) {
-        return await this.updateUser(mobile, otp);
-      }
-      await UserModel.create({
-        mobile,
-        otp,
-      });
-    } catch (error) {
-      next(error);
+    const otp = {
+      token,
+      expiresIn: Date.now() + 120000
+    };
+    const user = await this.checkExistUser(mobile);
+    if (user) {
+      return this.updateUser(mobile, otp);
     }
+    return UserModel.create({
+      mobile,
+      otp,
+    });
   }
+
   async checkExistUser(mobile) {
-    try {
-      return !!(await UserModel.findOne({ mobile }));
-    } catch (error) {
-      next(error);
-    }
+    return !!(await UserModel.findOne({ mobile }));
   }
+
   async updateUser(mobile, otp) {
-    try {
-      const updatedUser = await UserModel.updateOne(
-        { mobile },
-        { $set: { otp } }
-      );
-      return !!updatedUser.modifiedCount;
-    } catch (error) {
-      next(error);
-    }
+    const updatedUser = await UserModel.updateOne(
+      { mobile },
+      { $set: { otp } }
+    );
+    return !!updatedUser.modifiedCount;
   }
+
   async refreshToken(req, res, next) {
     try {
       const { refreshToken } = req.body;

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const productSchema = new mongoose.Schema(
+const courseSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -14,14 +14,10 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: [true, 'نام کاربری مورد نیاز میباشد'],
     },
-    imageCover: {
+    image: {
       type: String,
       required: true,
-      default: '/uploads/products/imageCover/default.png',
-    },
-    images: {
-      type: [String],
-      required: true,
+      default: '/uploads/courses/images/default.png',
     },
     tags: {
       type: [String],
@@ -29,7 +25,7 @@ const productSchema = new mongoose.Schema(
     },
     category: {
       type: mongoose.Schema.ObjectId,
-      ref: 'Category',
+      ref: 'Categories',
       required: true,
     },
     comments: {
@@ -60,29 +56,21 @@ const productSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ['virtual', 'phicycal'],
+      default: 'free',
+      required: true
     },
-    suplier: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Suplier',
-    },
-    properties: {
-      length: { type: Number, default: 0 },
-      height: { type: Number, default: 0 },
-      width: { type: Number, default: 0 },
-      weight: { type: Number },
-      colors: { type: String },
-      model: { type: String },
-      madein: { type: String },
-
-    },
+    time: { type: String, default: '00:00:00' },
+    format: { type: String, enum: ['.mp4', '.mkv'] },
+    teacher: { type: mongoose.Schema.ObjectId, ref: 'Teachers' },
+    chapters: { type: [mongoose.Schema.ObjectId], ref: 'Chapter', default: [] },
+    students: { type: [mongoose.Schema.ObjectId], ref: 'User', default: [] },
   },
   {
     timestamps: true,
   }
 );
 
-const ProductModel = mongoose.model('Product', productSchema);
+const CourseModel = mongoose.model('Course', courseSchema);
 module.exports = {
-  ProductModel,
+  CourseModel,
 };

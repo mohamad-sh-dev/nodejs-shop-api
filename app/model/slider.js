@@ -1,4 +1,5 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+
 const sliderSchema = new mongoose.Schema(
   {
     title: {
@@ -11,18 +12,18 @@ const sliderSchema = new mongoose.Schema(
     },
     image: {
         type: String,
-        default: "/uploads/silders/default.png",
+        default: '/uploads/silders/default.png',
     },
-    type : {
-      type : String , 
-      default : 'main'
+    type: {
+      type: String,
+      default: 'main'
     }
   },
   {
     timestamps: true,
   }
 );
-const SliderModel = mongoose.model("Slider", sliderSchema);
+const SliderModel = mongoose.model('Slider', sliderSchema);
 module.exports = {
   SliderModel,
 };
