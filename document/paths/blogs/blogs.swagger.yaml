@@ -1,0 +1,301 @@
+
+  /admin/blogs:
+    get:
+      summary: Get List Of Blogs
+      tags: ['Admin Panel [Blogs]']
+      description: Get List Of All Blogs
+      security:
+        - authorization: []    
+      responses:
+        200:
+          description: success
+          content: 
+            application/json :
+              schema :
+                $ref : '#/components/responses/schemas/public/200getSuccess'
+              example : 
+                "status": "success"
+                "count": 1,
+                "data": [
+                  {
+                    "_id": "64f74b04dda3ef0cb96b2fa1",
+                    "title": "عنوان وبلاگ نمونه",
+                    "summary": "توضیحات کوتاه وبلاگ نمونه",
+                    "body": "متن کامل وبلاگ متن کامل وبلاگ متن کامل وبلاگ متن کامل وبلاگ متن کامل وبلاگ متن کامل وبلاگ",
+                    "image": "",
+                    "tag": [
+                      "#برنامهنویسی",
+                    ],
+                    "comments": [],
+                    "likes": [],
+                    "disLikes": [],
+                    "bookmarks": [],
+                    "category": {
+                      "name": "javaScript" ,
+                    },
+                    "author": {
+                      "mobile": "09387949279" ,
+                    }
+                  }
+                ]
+        500:
+          description: internal server error   
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/500InternalServerError'
+              example : 
+                message : خطای داخلی سرور 
+    post:
+      summary: Create a Blog
+      tags: ['Admin Panel [Blogs]']
+      description: Create a Specifiec Blog
+      security:
+        - authorization: []
+      consumes : 
+        - application/x-www-form-urlencoded
+        - application/json
+      requestBody:
+         content:
+          multipart/form-data:
+            schema:
+              type : object 
+              properties : 
+                title: 
+                  type : string  
+                  required : true
+                  description: The Title Of The Blog 
+                summary: 
+                  type : string  
+                  required : true
+                  description: The Summary Of The Blog 
+                body: 
+                  type : string  
+                  required : true
+                  description: The Body Of The Blog 
+                tag: 
+                  type : array
+                  items : 
+                    type : string
+                    example : '#'
+                  description: The Tags Of The Blog 
+                category: 
+                 type : string
+                 pattern : "^[a-f\\d]{24}$"
+                 description: The Category Of The Blog 
+                image :
+                  type : file
+                  description: The Image Of The Blog
+            encoding :
+              tag : 
+                 contentType: application/json
+      responses:
+        200:
+          description: success
+          content : 
+            application/json  :
+              schema : 
+                $ref : '#/components/responses/schemas/201createdContent'
+              example :
+                "status" : success 
+                "message": "وبلاگ با موفقیت ایجاد شد"
+                "data": {
+                  "title": "وبلاگ نمونه دو",
+                  "summary": "توضیحات کوتاه وبلاگ نمونه دو",
+                  "body": " متن  وبلاگ نمونه دو متن  وبلاگ نمونه دو متن  وبلاگ نمونه دو متن  وبلاگ نمونه دو متن  وبلاگ نمونه دومتن  وبلاگ نمونه دو" ,
+                  "author": "63dd98711035750bf64d3a94",
+                  "image": "",
+                  "tag": [
+                    "#برنامهنویسی" ,
+                  ],
+                  "category": "63ee7250c89a66e7d87861e6",
+                  "comments": [],
+                  "likes": [],
+                  "disLikes": [],
+                  "bookmarks": [],
+                  "_id": "64f77506fe2d11fa77e4216a",
+                  "createdAt": "2023-09-05T18:35:50.323Z",
+                  "updatedAt": "2023-09-05T18:35:50.323Z",
+                  "__v": 0 ,
+                }
+        400:
+          description: bad request
+          content : 
+            application/json :
+              schema : 
+                $ref : '#/components/responses/schemas/400badRequest'
+              examples :
+                incorrectRequirements:
+                  $ref :  '#/components/examples/incorrectRequirements'
+                incorrectImageFormat:
+                  $ref :  '#/components/examples/incorrectImageFormat'
+                fileTooLarge:
+                  $ref :  '#/components/examples/fileTooLarge'
+        401:
+          description: unauthorized
+          content : 
+            application/json :
+              schema : 
+                $ref : '#/components/responses/schemas/401unuthorized'
+              example: 
+                message : 'وارد حساب کاربری خود شوید'
+        500:
+          description: internal server error , 
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/500InternalServerError'
+              example : 
+                message : 'خطای داخلی سرور'
+    patch:
+      summary: Update A Specific Blog
+      tags: ['Admin Panel [Blogs]']
+      description:  Update A Specific Blog
+      security:
+        - authorization: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type : object 
+              properties : 
+                id : 
+                  type : string
+                  patern : "^[a-f\\d]{24}$"
+                  description: The Id Of The Blog
+                title: 
+                  type : string  
+                  required : true
+                  description: The Title Of The Blog 
+                summary: 
+                  type : string  
+                  required : true
+                  description: The Summary Of The Blog 
+                body: 
+                  type : string  
+                  required : true
+                  description: The Body Of The Blog 
+                tag: 
+                  type : array
+                  items : 
+                    type : string
+                    example : '#'
+                  description: The Tags Of The Blog 
+                category: 
+                 type : string
+                 pattern : "^[a-f\\d]{24}$"
+                 description: The Category Of The Blog 
+                image :
+                  type : file
+                  description: The Image Of The Blog
+            encoding :
+              tag : 
+                 contentType: application/json
+      responses:
+        200:
+          description: success
+          content :  
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/200updatedContent'
+              example :
+                status : success 
+                message : بروز رسانی با موفقیت انجام شد
+        400:
+          description: bad request
+          content : 
+            application/json : 
+              schema :  
+                $ref : '#/components/responses/schemas/400badRequest' 
+              examples : 
+                incorrectRequirements:
+                  $ref :  '#/components/examples/incorrectRequirements'
+                incorrectImageFormat:
+                  $ref :  '#/components/examples/incorrectImageFormat'
+                fileTooLarge:
+                  $ref :  '#/components/examples/fileTooLarge'     
+        404:
+          description: not found
+          content : 
+            application/json : 
+              schema  : 
+                $ref  :   '#/components/responses/schemas/404notFound'
+              example : 
+                messasge : وبلاگ مورد نظر یافت نشد
+        401: 
+          description: unauthorized 
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/401unuthorized'
+              example : 
+                message : وارد حساب کاربری خود شوید
+        500:
+          description: internal server error   
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/500InternalServerError'
+              example : 
+                message : خطای داخلی سرور  
+    delete:
+      summary: Delete A Blog
+      tags:  ['Admin Panel [Blogs]']
+      description: Delete A Specifiec Blog
+      security:
+        - authorization: []
+      requestBody:
+         content:
+          application/json:
+            schema:
+              type : object 
+              properties : 
+                id: 
+                  type : string  
+                  pattern : "^[a-f\\d]{24}$"
+                  description: The Id Of The Blog 
+                  required : true
+      responses:
+        200:
+          description: success
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/200removeContent'
+              example : 
+                message : وبلاگ با موفقیت حذف شد 
+        400:
+          description: bad request
+          content : 
+            application/json : 
+              schema :  
+                $ref : '#/components/responses/schemas/400badRequest' 
+              example :
+                message : شناسه وبلاگ صحیح نمیباشد 
+        404: 
+          description: not found
+          content : 
+            application/json : 
+              schema  : 
+                $ref  :   '#/components/responses/schemas/404notFound'
+              example : 
+                messasge : وبلاگ مورد نظر یافت نشد
+        401: 
+          description: unauthorized 
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/401unuthorized'
+              example : 
+                message : وارد حساب کاربری خود شوید
+        500:
+          description: internal server error   
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/500InternalServerError'
+              examples :
+                internalServerError :  
+                  $ref : '#/components/examples/internalServerError'
+                removeFailed :  
+                   $ref : '#/components/examples/removeFailed'

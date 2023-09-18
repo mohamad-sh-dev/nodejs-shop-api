@@ -1,9 +1,7 @@
 const createHttpError = require('http-errors');
-const mongoose = require('mongoose');
-const { CategoryModel } = require('../../../model/categories');
-const BaseController = require('../baseController');
-
-const { ObjectId } = mongoose.Types;
+const { CategoryModel } = require('../../../../model/categories');
+const BaseController = require('../../baseController');
+const { messageCenter } = require('../../../../utilities/messages');
 
 class CategoryManager extends BaseController {
   // Create category
@@ -13,20 +11,22 @@ class CategoryManager extends BaseController {
       const existCategory = await this.checkCategoryExist(name);
       if (existCategory.exist) { throw createHttpError.BadRequest('دسته بندی مورد نظر وجود دارد'); }
       const createdCategory = await CategoryModel.create({ name, parentCategory, subCategory });
-      if (parentCategory) {
-        await CategoryModel.aggregate([
-          {
-            $addFields: {
-              subCategory: { $concatArrays: ['$subCategory', [new ObjectId(createdCategory.id)]] },
-            },
-          },
-          {
-            $out: 'categories',
-          },
-        ]);
-      }
+      // if (parentCategory) {
+      //   await CategoryModel.aggregate([
+      //     {
+      //       $addFields: {
+      //         subCategory: { $concatArrays: ['$subCategory', [new ObjectId(createdCategory.id)]] },
+      //       },
+      //     },
+      //     {
+      //       $out: 'categories',
+      //     },
+      //   ]);
+      // }
       res.status(201).json({
+        status: messageCenter.public.success,
         message: 'دسته بندی با موفقیت ایجاد شد',
+        data: createdCategory
       });
     } catch (error) {
       next(error);
@@ -39,11 +39,11 @@ class CategoryManager extends BaseController {
       const { categoryId, name } = req.params;
       const category = await CategoryModel.findOne({
         $or: [{ _id: categoryId }, { name }],
-      });
+      }).populate({ path: 'parentCategory' });
       if (!category) { throw createHttpError.NotFound('دسته بندی مورد نظر موجود نمیباشد'); }
       return res.status(200).json({
-        status: 'success',
-        data: category,
+        status: messageCenter.public.success,
+        data: category || {},
       });
     } catch (error) {
       next(error);
@@ -54,8 +54,9 @@ class CategoryManager extends BaseController {
     try {
       const categories = await CategoryModel.find({}, { __v: 0, createdAt: 0, updatedAt: 0 });
       return res.status(200).json({
-        status: 'success',
-        data: categories,
+        status: messageCenter.public.success,
+        count: categories.length || 0,
+        data: categories || [],
       });
     } catch (error) {
       next(error);
@@ -70,7 +71,7 @@ class CategoryManager extends BaseController {
         },
       ]);
       return res.status(200).json({
-        status: 'success',
+        status: messageCenter.public.success,
         data: categories,
       });
     } catch (error) {
@@ -82,7 +83,6 @@ class CategoryManager extends BaseController {
   async updateCategory(req, res, next) {
     try {
       const { id: _id, name } = req.body;
-      console.log(_id);
       const category = (await this.checkCategoryExist(name, _id)).data;
       if (!category) { throw createHttpError.NotFound('دسته بندی مورد نظر موجود نیست'); }
       const updatedCategory = await CategoryModel.updateOne(
@@ -129,10 +129,10 @@ class CategoryManager extends BaseController {
             { _id }, { parentCategory: _id },
           ],
       });
-      if (!category) { throw createHttpError.InternalServerError('خطای داخلی سرور'); }
+      if (!category) { throw createHttpError.InternalServerError('حذف با خطا مواجه شد'); }
       return res.status(200).json({
-        status: 'success',
-        data: category,
+        status: messageCenter.public.success,
+        message: 'دسته بندی با موفقیت حذف شد',
       });
     } catch (error) {
       next(error);
@@ -155,13 +155,8 @@ class CategoryManager extends BaseController {
   }
 
   async checkHasSubCategories(categoryId) {
-    try {
-      const category = await CategoryModel.findOne({ _id: categoryId });
-      console.log(category);
-      return !!category.subCategory.length;
-    } catch (error) {
-      console.log(error);
-    }
+    const category = await CategoryModel.findOne({ _id: categoryId });
+    return !!category.subCategory.length;
   }
 }
 

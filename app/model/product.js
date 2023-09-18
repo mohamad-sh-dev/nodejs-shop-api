@@ -32,27 +32,13 @@ const productSchema = new mongoose.Schema(
       ref: 'Category',
       required: true,
     },
-    comments: {
-      type: [mongoose.Schema.ObjectId],
-      ref: 'Comments',
-      required: true,
-    },
-    likes: {
-      type: [mongoose.Schema.ObjectId],
-      ref: 'Likes',
-      required: true,
-    },
-    disLikes: {
-      type: [mongoose.Schema.ObjectId],
-      ref: 'Dislikes',
-      required: true,
-    },
     bookmarks: {
       type: [mongoose.Schema.ObjectId],
       ref: 'Bookmarks',
     },
     price: {
       type: Number,
+      default: 0,
       required: true,
     },
     discount: {
@@ -81,6 +67,10 @@ const productSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+productSchema.index({
+  title: 'text', summary: 'text', description: 'text', tags: 'text', type: 'text',
+});
 
 const ProductModel = mongoose.model('Product', productSchema);
 module.exports = {

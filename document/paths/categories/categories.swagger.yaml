@@ -1,0 +1,298 @@
+
+  /admin/panel/categories/{id}:
+    get:
+      summary: get a category
+      tags:  ['Admin Panel [Categories]']
+      description: get a specifiec category
+      security:
+        - authorization: []
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the category to retrieve
+          required: true
+          schema:
+            type: string
+            pattern: "^[a-f\\d]{24}$"
+        - name: title
+          in: query
+          description: The title of the category to retrieve
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: success 
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/200getContents'
+              example : 
+                status : 'success'
+                count : 1
+                data :  {
+                  "status": "success",
+                  "data": {
+                    "_id": "64f83f02c2c2fa10be023092",
+                    "name": "دسته بندی نمونه",    
+                    "parentCategory": {
+                      "_id": "64f83e04c2c2fa10be02307e",
+                      "name": "دسته بندی پرنت نمونه",
+                      "parentCategory": null,
+                      "subCategory": [],
+                      "createdAt": "2023-09-06T08:53:24.189Z",
+                      "updatedAt": "2023-09-06T08:53:24.189Z",
+                      "__v": 0,
+                      "subCategoryDetails": [
+                        {
+                          "_id": "64f83f02c2c2fa10be023092",
+                          "name": "دسته بندی نمونه",
+                          "parentCategory": "64f83e04c2c2fa10be02307e",
+                          "subCategoryDetails": []
+                        }
+                      ]
+                    },
+                    "subCategory": [],
+                    "createdAt": "2023-09-06T08:57:38.590Z",
+                    "updatedAt": "2023-09-06T08:57:38.590Z",
+                    "__v": 0,
+                    "subCategoryDetails": []
+                  }
+                } 
+        400:
+          description: bad request
+          content : 
+            application/json : 
+              schema :  
+                $ref : '#/components/responses/schemas/400badRequest' 
+              example :
+                message : شناسه دسته بندی صحیح نمیباشد 
+        404: 
+          description: not found
+          content : 
+            application/json : 
+              schema  : 
+                $ref  :   '#/components/responses/schemas/404notFound'
+              example : 
+                messasge : دسته بندی مورد نظر یافت نشد
+        500:
+          description: internal server error   
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/500InternalServerError'
+              example : 
+                message : خطای داخلی سرور 
+    delete:
+      summary: delete a category
+      tags:  ['Admin Panel [Categories]']
+      description: delete a specifiec category
+      security:
+        - authorization: []
+      parameters:
+        - name: categoryId
+          in: path
+          description: The ID of the category to retrieve
+          required: true
+          schema:
+            type: string
+            pattern: "^[a-f\\d]{24}$"
+      responses:
+        200:
+          description: success
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/200removeContent'
+              example : 
+                status : 'success'
+                message : دسته بندی با موفقیت حذف شد 
+        400:
+          description: bad request
+          content : 
+            application/json : 
+              schema :  
+                $ref : '#/components/responses/schemas/400badRequest' 
+              example :
+                message : شناسه دسته بندی صحیح نمیباشد 
+        404: 
+          description: not found
+          content : 
+            application/json : 
+              schema  : 
+                $ref  :   '#/components/responses/schemas/404notFound'
+              example : 
+                messasge : دسته بندی مورد نظر یافت نشد
+        401: 
+          description: unauthorized 
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/401unuthorized'
+              example : 
+                message : وارد حساب کاربری خود شوید
+        500:
+          description: internal server error   
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/500InternalServerError'
+              examples :
+                internalServerError :  
+                  $ref : '#/components/examples/internalServerError'
+                removeFailed :  
+                   $ref : '#/components/examples/removeFailed'
+  /admin/panel/categories:
+    get:
+      summary: get a category
+      tags:  ['Admin Panel [Categories]']
+      description: get all categories with subCategories details
+      security:
+        - authorization: []    
+      responses:
+        200:
+          description: success
+          content : 
+            application/json : 
+              schema : 
+                $ref :  '#/components/responses/schemas/200getContents'
+              examples : 
+                category : 
+                  $ref : '#/components/examples/category'
+                contentNull : 
+                  $ref : '#/components/examples/contentNull'
+        500:
+          description: internal server error
+          content : 
+            application/json : 
+              schema : 
+                $ref: '#/components/responses/schemas/500InternalServerError'
+              example : 
+                message : 'خطای داخلی سرور'
+    post:
+      summary: cteate a category
+      tags:  ['Admin Panel [Categories]']
+      description: create a specifiec category
+      security:
+        - authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                parentCategory:
+                  type: string
+                  pattern: "^[a-f\\d]{24}$"
+                subCategory:
+                  type: array
+                  items:
+                    type: string
+                    pattern: "^[a-f\\d]{24}$"
+      responses:
+        200:
+          description: success , 
+          content : 
+            application/json :
+              schema : 
+                $ref : '#/components/responses/schemas/201createdContent' 
+              example: {
+                  "status": "success",
+                  "message": "دسته بندی با موفقیت ایجاد شد",
+                  "data": {
+                    "name": "دسته بندی نمونه",
+                    "parentCategory": "64f8373852a484df60e6b608",
+                    "subCategory": [
+                      "64f8376b52a484df60e6b60d" ,
+                    ],
+                    "_id": "64f837e5f64875a1d7b465b1",
+                    "createdAt": "2023-09-06T08:27:17.606Z",
+                    "updatedAt": "2023-09-06T08:27:17.606Z",
+                    "__v": 0 ,
+                  }
+              }
+        400:
+          description: bad request
+          content : 
+            application/json :
+              schema : 
+                $ref : '#/components/responses/schemas/400badRequest'
+              example :
+                 message : '" || شناسه فرزند صحیح نمیباشد عنوان" کمتر از حد مجاز است (حداقل 3 کاراکتر) || شناسه" دسته بندی باید از نوع رشته باشد'
+        401: 
+          description: unauthorized
+          content : 
+            application/json :
+              schema : 
+                $ref : '#/components/responses/schemas/401unuthorized'
+              example: 
+                message : 'وارد حساب کاربری خود شوید'
+        500:
+           description: internal server error , 
+           content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/500InternalServerError'
+              example : 
+                message : 'خطای داخلی سرور'
+    patch:
+      summary: update a category
+      tags: ['Admin Panel [Categories]']
+      description: update a specifiec category name
+      security:
+        - authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id : 
+                  type : string
+                  pattern : "^[a-f\\d]{24}$"
+                name:
+                  type: string
+      responses:
+        200:
+          description: success
+          content :  
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/200updatedContent'
+              example :
+                status : success 
+                message : بروز رسانی با موفقیت انجام شد
+        400:
+          description: bad request
+          content : 
+            application/json : 
+              schema :  
+                $ref : '#/components/responses/schemas/400badRequest' 
+              example : 
+                message : '" || شناسه فرزند صحیح نمیباشد عنوان" کمتر از حد مجاز است (حداقل 3 کاراکتر) || شناسه" دسته بندی باید از نوع رشته باشد'
+        404:
+          description: not found
+          content : 
+            application/json : 
+              schema  : 
+                $ref  :   '#/components/responses/schemas/404notFound'
+              example : 
+                messasge : دسته بندی مورد نظر یافت نشد
+        401: 
+          description: unauthorized 
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/401unuthorized'
+              example : 
+                message : وارد حساب کاربری خود شوید
+        500:
+          description: internal server error   
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/500InternalServerError'
+              example : 
+                message : خطای داخلی سرور 

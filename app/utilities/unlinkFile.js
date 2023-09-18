@@ -1,10 +1,18 @@
 const path = require('path');
 
-const fsPromises = require('fs').promises;
+const fs = require('fs');
 
-async function unlinkFile(filePath) {
-  filePath = path.join(__dirname, '..', '..', 'public', filePath);
-  await fsPromises.unlink(filePath);
+function unlinkFile(filePath = []) {
+  return new Promise((resolve, reject) => {
+    for (let i = 0; i < filePath.length; i += 1) {
+      let copyFilePath = filePath[i];
+      copyFilePath = path.join(__dirname, '..', '..', 'public', 'uploads', filePath[i].split('uploads')[1]);
+      fs.unlink(copyFilePath, (err) => {
+        if (err) return reject(err);
+        resolve();
+      });
+    }
+  });
 }
 
 module.exports = unlinkFile;

@@ -1,0 +1,274 @@
+
+  /admin/courses/chapters/episodes/{episodeId} :
+     get :
+      summary: Get A episode Of chapter 
+      tags: ['Admin Panel [Episodes]']
+      description: Get A Episode of chapter 
+      security:      
+            - authorization: []    
+      parameters: 
+          - name : episodeId
+            in : path
+            description : the id of episode
+            required : true
+            schema:
+              type: string
+              pattern: "^[a-f\\d]{24}$" 
+      responses:
+          200:
+            description: success
+            content : 
+              application/json : 
+                schema : 
+                  $ref :  '#/components/responses/schemas/200getContent'
+                example : {
+                  "status": "success",
+                  "message": "",
+                  "data": {
+                          "_id": "6501ffe7c6ab78b95a83a8b1",
+                          "title": "قسمت اول - نمونه",
+                          "description": "در این قسمت توضیحات نمونه ویدیو قرار میگیرد",
+                          "duration": "00:22:02",
+                          "address": "http://localhost:8080/uploads/episodes/2023/8/3/video1694629856652.mkv",
+                          "type": "unlock",
+                          "chapter": {
+                            "_id": "64fde2ad7bb3e957388a0ab2",
+                            "title": "فصل اول - مقدماتی",
+                            "description": "فصل اول - مقدماتی فصل اول - مقدماتی فصل اول - مقدماتی فصل اول - مقدماتی",
+                          }
+                      }
+                }
+          500:
+            description: internal server error
+            content : 
+              application/json : 
+                schema : 
+                  $ref: '#/components/responses/schemas/500InternalServerError'
+                example : 
+                  message : 'خطای داخلی سرور'
+  /admin/courses/chapters/episodes:
+    get:
+      description: Get List Of All Episodes of Chapeter
+      security:
+        - authorization: []
+      summary: Get List Of All Episodes Of Chapter
+      tags:
+        - Admin Panel [Episodes]
+      parameters:
+        - description: search box
+          in: query
+          name: search
+          schema:
+            type: string
+        - description : chapterId
+          in : query 
+          name : chapterId
+          schema : 
+            type : string  
+            pattern : "^[a-f\\d]{24}$"
+      responses:
+        200:
+          content:
+            application/json:
+              examples:
+                episodes:
+                  $ref: '#/components/examples/episode'
+                contentNull:
+                  $ref: '#/components/examples/contentNull'  
+              schema:
+                $ref: '#/components/responses/schemas/200getContents'
+          description: success
+        404:
+          description: not found
+          content : 
+            application/json : 
+              schema  : 
+                $ref  :   '#/components/responses/schemas/404notFound'
+              example : 
+                messasge : فصل مورد نظر یافت نشد
+        500:
+          content:
+            application/json:
+              example:
+                message: خطای داخلی سرور
+              schema:
+                $ref: '#/components/responses/schemas/500InternalServerError'
+          description: internal server error
+    post:
+      summary: Create An Episode
+      tags: ['Admin Panel [Episodes]']
+      description: Create a Specifiec Episode
+      security:
+        - authorization: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref : '#/components/schemas/episode'
+      responses:
+        201:
+          description: success
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/201createdContent'
+              example : {
+                "status": "success",
+                "message": "",
+                "data": {
+                  "status": "success",
+                  "message": "",
+                  "data": {
+                    "title": "قسمت اول - نمونه",
+                    "description": "در این قسمت توضیحات نمونه ویدیو قرار میگیرد",
+                    "duration": "00:22:02",
+                    "address": "http://localhost:8080/uploads/episodes/2023/8/3/video1694627546864.mkv",
+                    "type": "unlock",
+                    "chapterId": "64fde2ad7bb3e957388a0ab2",
+                    "_id": "6501f6e071ecc4861ff57c28",
+                    }
+                }
+              }
+        400:
+          description: bad request
+          content : 
+            application/json :
+              schema : 
+                $ref : '#/components/responses/schemas/400badRequest'
+              example :
+                message : ' "توضیحات" نمیتواند خالی باشد || "عنوان" کوتاه تر از حد مجاز است (حداقل 3 کاراکتر)'
+        401:
+          description: unauthorized
+          content : 
+            application/json :
+              schema : 
+                $ref : '#/components/responses/schemas/401unuthorized'
+              example: 
+                message : 'وارد حساب کاربری خود شوید'
+        500:
+          description: internal server error , 
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/500InternalServerError'
+              example : 
+                message : 'خطای داخلی سرور'
+    patch:
+      summary: Update A Specific episode
+      tags: ['Admin Panel [Episodes]']
+      description:  Update A Specific episode
+      security:
+        - authorization: []
+      requestBody:
+        content:
+          multipart/form-data:
+            encoding : 
+              episodeId : 
+                contentType: application/json
+            schema:
+              $ref : '#/components/schemas/editEpisode'
+      responses:
+        200:
+          description: success
+          content :  
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/200updatedContent'
+              example :
+                status : success 
+                message : بروز رسانی با موفقیت انجام شد
+        400:
+          description: bad request
+          content : 
+            application/json : 
+              schema :  
+                $ref : '#/components/responses/schemas/400badRequest' 
+              example : 
+                message : ' "توضیحات" نمیتواند خالی باشد || "عنوان" کوتاه تر از حد مجاز است (حداقل 3 کاراکتر)'
+        404:
+          description: not found
+          content : 
+            application/json : 
+              schema  : 
+                $ref  :   '#/components/responses/schemas/404notFound'
+              example : 
+                messasge : فصل مورد نظر یافت نشد
+        401: 
+          description: unauthorized 
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/401unuthorized'
+              example : 
+                message : وارد حساب کاربری خود شوید
+        500:
+          description: internal server error
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/500InternalServerError'
+              example : 
+                message : خطای داخلی سرور 
+    delete:
+      summary: Delete A Episode
+      tags:  ['Admin Panel [Episodes]']
+      description: Delete A Specifiec Episode
+      security:
+        - authorization: []
+      requestBody:
+          content:
+            application/json:
+              schema:
+                type : object 
+                properties : 
+                  episodeId: 
+                    type : string  
+                    pattern : "^[a-f\\d]{24}$"
+                    description: The Id Of The Episode
+                    required : true
+      responses:
+        200:
+          description: success
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/200removeContent'
+              example : 
+                status : success
+                message : قسمت با موفقیت حذف شد 
+        400:
+          description: bad request
+          content : 
+            application/json : 
+              schema :  
+                $ref : '#/components/responses/schemas/400badRequest' 
+              example :
+                message : شناسه قسمت صحیح نمیباشد 
+        404: 
+          description: not found
+          content : 
+            application/json : 
+              schema  : 
+                $ref  :   '#/components/responses/schemas/404notFound'
+              example : 
+                messasge : قسمت مورد نظر یافت نشد
+        401: 
+          description: unauthorized 
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/401unuthorized'
+              example : 
+                message : وارد حساب کاربری خود شوید
+        500:
+          description: internal server error   
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/500InternalServerError'
+              examples :
+                internalServerError :  
+                  $ref : '#/components/examples/internalServerError'
+                removeFailed :  
+                    $ref : '#/components/examples/removeFailed'
+  

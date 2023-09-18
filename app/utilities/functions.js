@@ -1,5 +1,7 @@
 const createHttpError = require('http-errors');
 const JWT = require('jsonwebtoken');
+const path = require('path');
+const fsPromises = require('fs').promises;
 const redisCilent = require('./initRedis');
 const { UserModel } = require('../model/user');
 
@@ -86,7 +88,10 @@ function filterObj(obj, allowedfields) {
   const newObj = {};
   Object.keys(obj).forEach((el) => {
     if (allowedfields.includes(el.toLowerCase())) {
-      newObj[el] = obj[el];
+      const nulishData = [undefined, null, '', {}];
+      if (!nulishData.includes(obj[el])) {
+        newObj[el] = obj[el];
+      }
     }
   });
   return newObj;
@@ -100,12 +105,39 @@ function restrictTo(allowedRole) {
     next();
   };
 }
+function assignUploadPathToImages(files) {
+  let { images, imageCover } = files;
+  images = images.map((imageObject) => imageObject.uploadedPath);
+  imageCover = imageCover[0].uploadedPath;
+  return { images, imageCover };
+}
+async function makeUploadDestination(entity) {
+  const date = new Date();
+  const year = date.getFullYear().toString();
+  const month = date.getMonth().toString();
+  const day = date.getDay().toString();
+  const dirPath = path.join(__dirname, '..', '..', 'public', 'uploads', entity);
+  const finalDirectoryPath = path.join(dirPath, year, month, day);
+  await fsPromises.mkdir(finalDirectoryPath, { recursive: true });
+  return finalDirectoryPath;
+}
+function sendResponseToClient(response, status, statusCode, data, message) {
+  return response.status(statusCode).json({
+    status: status || '',
+    message: message || '',
+    data: data || []
+  });
+}
+
 module.exports = {
+  sendResponseToClient,
   randomTokenGenerator,
   signAccessToken,
   verifyRefreshToken,
   signRefreshToken,
   verifyToken,
   filterObj,
-  restrictTo
+  restrictTo,
+  makeUploadDestination,
+  assignUploadPathToImages
 };

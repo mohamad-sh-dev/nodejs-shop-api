@@ -1,8 +1,9 @@
 const createHttpError = require('http-errors');
-const { BlogModel } = require('../../../model/blog');
-const BaseController = require('../baseController');
-const unlinkFile = require('../../../utilities/unlinkFile');
-const { filterObj } = require('../../../utilities/functions');
+const { BlogModel } = require('../../../../model/blog');
+const BaseController = require('../../baseController');
+const unlinkFile = require('../../../../utilities/unlinkFile');
+const { filterObj } = require('../../../../utilities/functions');
+const { messageCenter } = require('../../../../utilities/messages');
 
 class BlogManager extends BaseController {
   async createBlog(req, res, next) {
@@ -16,7 +17,8 @@ class BlogManager extends BaseController {
         },
       );
       res.status(201).json({
-        message: 'پست با موفقیت ایجاد شد',
+        status: messageCenter.public.success,
+        message: 'وبلاگ با موفقیت ایجاد شد',
         data: createdBlog,
       });
     } catch (error) {
@@ -76,7 +78,8 @@ class BlogManager extends BaseController {
       ]);
       return res.status(200).json({
         status: 'success',
-        data: blogs,
+        count: blogs.length || 0,
+        data: blogs || [],
       });
     } catch (error) {
       next(error);
@@ -112,7 +115,7 @@ class BlogManager extends BaseController {
       const { id: _id } = req.body;
       await this.checkBlogExist(_id);
       const deleteResult = await BlogModel.deleteOne({ _id });
-      if (deleteResult.deletedCount !== 1) { throw createHttpError.InternalServerError('خطای داخلی سرور'); }
+      if (deleteResult.deletedCount !== 1) { throw createHttpError.InternalServerError('حذف با خطا مواجه شد'); }
       return res.status(204);
     } catch (error) {
       next(error);

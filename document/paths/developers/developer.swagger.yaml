@@ -1,0 +1,31 @@
+
+ /developer/hash-string/{string}:
+    get:
+      summary: hash one string
+      tags: [Developers Routes]
+      description: hash one string with bcrypt
+      parameters:
+        - in: path
+          name: string
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: success
+        400:
+          description: bad request
+        500:
+          description: internal server error
+ /developer/random-number:
+    get:
+      summary: get a random number
+      tags: [Developers Routes]
+      description: get a random number
+      responses:
+        200:
+          description: success
+        400:
+          description: bad request
+        500:
+          description: internal server error

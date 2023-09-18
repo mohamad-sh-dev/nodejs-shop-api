@@ -1,0 +1,10 @@
+/:
+ get:
+  description: get all data for index page
+  responses:
+    '201':
+      description: success
+    '400':
+      description: not found
+  summary: Index Page Routes
+  tags: [IndexPage]

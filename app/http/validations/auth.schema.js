@@ -1,27 +1,15 @@
 const createHttpError = require('http-errors');
 
-function validateRequestBody(schema) {
+function validateRequestBody(schema, bodyType = 'body') {
   return async (req, res, next) => {
     try {
-      await schema.validateAsync(req.body);
+      await schema.validateAsync(req[bodyType]);
       next();
     } catch (error) {
       next(createHttpError.BadRequest(error.message));
     }
   };
 }
-function validateRequestParams(schema) {
-  return async (req, res, next) => {
-    try {
-      await schema.validateAsync(req.params);
-      next();
-    } catch (error) {
-      next(createHttpError.BadRequest(error.message));
-    }
-  };
-}
-
 module.exports = {
   validateRequestBody,
-  validateRequestParams
 };

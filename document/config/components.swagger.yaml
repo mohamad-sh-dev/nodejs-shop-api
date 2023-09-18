@@ -1,0 +1,403 @@
+components :
+  schemas : 
+    editEpisode : 
+      type : object 
+      properties : 
+        episodeId: 
+          type : string
+          pattern : "^[a-f\\d]{24}$"
+          required : true
+          description: The Id Of The Episode
+        title: 
+          type : string  
+          required : true
+          description: The Title Of The Episode 
+        description: 
+          type : string  
+          required : true
+          description: The description Of The Episode 
+        type: 
+          type : string  
+          enum : ['lock' , 'unlock']
+          required : true
+          description: The type Of The Episode 
+        video :
+          type : file
+          format : binary
+          description: The Video Of The Episode
+    episode : 
+      type : object 
+      properties : 
+        title: 
+          type : string  
+          required : true
+          description: The Title Of The Episode 
+        description: 
+          type : string  
+          required : true
+          description: The description Of The Episode 
+        type: 
+          type : string  
+          enum : ['lock' , 'unlock']
+          required : true
+          description: The type Of The Episode 
+        chapterId: 
+          type : string
+          pattern : "^[a-f\\d]{24}$"
+          required : true
+          description: The Id Of The Chapters
+        video :
+          type : file
+          format : binary
+          description: The Video Of The Episode
+    course : 
+        type : object 
+        properties : 
+          title: 
+            type : string  
+            required : true
+            description: The Title Of The Course 
+          summary: 
+            type : string  
+            required : true
+            description: The Summary Of The Course 
+          description: 
+            type : string  
+            required : true
+            description: The Description Of The Course 
+          tags: 
+            type : array
+            items : 
+              type : string
+              example : '#'
+            description: The Tags Of The Course 
+          category: 
+            type : string
+            pattern : "^[a-f\\d]{24}$"
+            required : true
+            description: The Category Of The Course 
+          type: 
+            type : string
+            enum : ['free' ,'cash' , 'vip' ]  
+            required : true
+            description: The Summary Of The Course 
+          price : 
+            type : number 
+            required : true
+            description : The Price Of The Course
+          discount : 
+            type : number 
+            description : The Discount Of The Course
+          imageCover :
+            type : string
+            format : binary 
+        encoding :
+          tags : 
+            contentType: application/json
+    chapter : 
+         type : object 
+         properties : 
+          courseId : 
+             type: string
+             required : true
+             pattern: "^[a-f\\d]{24}$"
+          title: 
+            type : string  
+            required : true
+            description: The Title Of The Chapter 
+          description: 
+            type : string  
+            required : true
+            description: The Description Of The Chapter       
+  securitySchemes:
+    authorization:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses : 
+    schemas : 
+      user : 
+        200getOtp : 
+          type : object 
+          properties: 
+            status: 
+              type : string
+            message: 
+              type: string
+            token:
+              type : string
+        200accessToken: 
+        type : object
+        properties: 
+          status : 
+            type : string
+          accessToken : 
+            type : string
+          refreshToken:
+            type:  string
+      200removeContent: 
+          type : object 
+          properties: 
+            message :  
+              type : string 
+      200updatedContent: 
+        type : object 
+        properties: 
+        status : 
+          type : string
+        message :  
+          type : string 
+      200getContent:
+          type : object
+          properties: 
+            status : 
+              type : string
+            message : 
+              type : string
+            data : 
+              type : object
+      200getContents:
+          type : object
+          properties: 
+            status : 
+              type : string
+            count : 
+              type : number
+            data : 
+              type : array
+              items : 
+                type : object
+      products: 
+        200createProduct:
+          type : object , 
+          properties : 
+            status : 
+              type : string
+            data : 
+              type : array
+              items : 
+                type : object
+      201createdContent : 
+        type : object 
+        properties : 
+          status : 
+            type : string 
+          data : 
+            type : array
+            items : 
+              type : object
+      400badRequest: 
+        type: object
+        properties:
+          message: 
+            type: 
+              string
+      404notFound: 
+        type: object
+        properties:
+          message: 
+            type: 
+              string
+      401unuthorized :
+        type : object 
+        properties : 
+        message : 
+          type : string
+      500InternalServerError : 
+        description : internal server error
+        type: object 
+        properties:
+          message : 
+            type: string
+      401Unuthorized:
+        description: unuthorized
+      500InternalError:
+        description: internal server error
+      public :
+        200getSuccess :
+          type : object 
+          properties :
+            status :
+              type : string
+            count : 
+              type : string 
+            data  :
+              type : array 
+              items :
+                type : object
+      blogs :
+        200getBlogs :
+          type : object 
+          properties :
+            status 
+  examples :
+    category : 
+      value : {
+        "status": "success",
+        "count" : 5 ,
+        "data": [
+          {
+            "_id": "64f8421f70253377ce19cf4e",
+            "name": "javascript",
+            "parentCategory": null,
+            "subCategory": [
+              "64f8423b70253377ce19cf52",
+              "64f8425470253377ce19cf56" ,
+            ],
+            "createdAt": "2023-09-06T09:10:55.916Z",
+            "updatedAt": "2023-09-06T09:10:55.916Z",
+            "__v": 0 ,
+          },
+          {
+            "_id": "64f8423b70253377ce19cf52",
+            "name": "nodejs",
+            "parentCategory": "64f8421f70253377ce19cf4e",
+            "subCategory": [],
+            "createdAt": "2023-09-06T09:11:23.371Z",
+            "updatedAt": "2023-09-06T09:11:23.371Z",
+            "__v": 0 ,
+          },
+          {
+            "_id": "64f8425470253377ce19cf56",
+            "name": "test.js",
+            "parentCategory": "64f8421f70253377ce19cf4e",
+            "subCategory": [],
+            "createdAt": "2023-09-06T09:11:48.317Z",
+            "updatedAt": "2023-09-06T09:11:48.317Z",
+            "__v": 0 ,
+          },
+          {
+            "_id": "64f8429470253377ce19cf5a",
+            "name": "دسته بندی پرنت نمونه",
+            "parentCategory": null,
+            "subCategory": [],
+            "createdAt": "2023-09-06T09:12:52.202Z",
+            "updatedAt": "2023-09-06T09:12:52.202Z",
+            "__v": 0 ,
+          },
+          {
+            "_id": "64f842b470253377ce19cf5e",
+            "name": "دسته بندی نمونه",
+            "parentCategory": "64f8429470253377ce19cf5a",
+            "subCategory": [],
+            "createdAt": "2023-09-06T09:13:24.750Z",
+            "updatedAt": "2023-09-06T09:13:24.750Z",
+            "__v": 0 ,
+          }
+        ]
+      }
+    product : 
+      value :
+        status : 'success'
+        count : 1
+        data :  {
+          "_id": "64f1c89380afcfb0059964b9",
+          "title": "محصول  نمونه",
+          "summary": "توضیحات محصول نمونه",
+          "description": "توضیحات کاملتر محصول نمونه",
+          "imageCover": "http://localhost:8080/uploads/products/2023/7/3/sampleImage1693410882758.jpg",
+          "images": [
+            "http://localhost:8080/uploads/products/2023/7/3/sample1693410882757.jpg",
+            "http://localhost:8080/uploads/products/2023/7/3/sample1693410882758.jpg",
+          ],
+          "tags": [
+            "#sampleTag1",
+            "#sampleTag2",
+          ],
+          "category": {
+            "name": "javaScript",
+          },
+          "comments": [],
+          "likes": [],
+          "disLikes": [],
+          "bookmarks": [],
+          "price": 1000,
+          "discount": "20",
+          "type": "virtual",
+          "suplier": "63dd98711035750bf64d3a94",
+          "properties": {
+            "length": 100,
+            "height": 12,
+            "width": 13,
+            "weight": 14,
+            "colors": "blue",
+            "model": "m234",
+            "madein": "iran",
+          }
+        }
+    contentNull : 
+      value :
+        status : success
+        count : 0
+        data : []
+    chapter : 
+      value : {
+          "status": "success",
+          "message": "",
+          "data": [
+            {
+              "_id": "64fde2ad7bb3e957388a0ab2",
+              "title": "فصل اول - مقدماتی",
+              "description": "فصل اول - مقدماتی فصل اول - مقدماتی فصل اول - مقدماتی فصل اول - مقدماتی",
+              "episods": [],
+              "course": {
+                "title": "عنوان دوره نمونه",
+                "summary": "توضیحات کوتاه دوره نمونه شماره یک",
+                "description": "توضیحات کامل دوره نمونه شماره یک توضیحات کامل دوره نمونه شماره یک توضیحات کامل دوره نمونه شماره یک" ,
+              }
+            }
+          ]
+        }
+    episode : 
+      value : {
+        "status": "success",
+        "count" : 1 ,
+        "data": [ 
+              {
+                "_id": "6501ffe7c6ab78b95a83a8b1",
+                "title": "قسمت اول - نمونه",
+                "description": "در این قسمت توضیحات نمونه ویدیو قرار میگیرد",
+                "duration": "00:22:02",
+                "address": "http://localhost:8080/uploads/episodes/2023/8/3/video1694629856652.mkv",
+                "type": "unlock",
+                "chapter": {
+                  "_id": "64fde2ad7bb3e957388a0ab2",
+                  "title": "فصل اول - مقدماتی",
+                  "description": "فصل اول - مقدماتی فصل اول - مقدماتی فصل اول - مقدماتی فصل اول - مقدماتی",
+                  }
+              }
+          ]
+        }
+    getOtp : 
+      value :
+      message : 'شماره همراه صحیح نیست'
+    expiredToken : 
+     value :
+       message: 'کد شما منقضی شده است'
+    userNotFound : 
+      value :
+        message : 'کاربر یافت نشد'
+    incorrectNumber : 
+      value :
+        message : 'شماره همراه صحیح نمیباشد'
+    incorrectToken : 
+      value :
+        message : 'کد اعتبار سنجی صحیح نمیباشد'
+    incorrectRefreshToken : 
+      value :
+        message : 'توکن نامعتبر'
+    incorrectRequirements : 
+      value :
+        message : '" || شناسه صحیح نمیباشد عنوان" کمتر از حد مجاز است (حداقل 3 کاراکتر) || توضیحات کوتاه" کمتر از حد مجاز است (حداقل 3 کاراکتر)'
+    incorrectImageFormat : 
+      value :
+        message : 'فرمت فایل صحیح نمیباشد'
+    fileTooLarge : 
+      value :
+        message : 'file is too large'
+    internalServerError : 
+      value :
+        message : خطای داخلی سرور
+    removeFailed : 
+      value :
+        message : حذف با خطا مواجه شد

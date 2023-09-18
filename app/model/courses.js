@@ -1,4 +1,9 @@
+/* eslint-disable no-await-in-loop */
+const createHttpError = require('http-errors');
 const mongoose = require('mongoose');
+const { messageCenter } = require('../utilities/messages');
+const { convertStringTimeToSeconds, getVideoTime } = require('../utilities/getVideoTime');
+const { ChapterModel } = require('./chapters');
 
 const courseSchema = new mongoose.Schema(
   {
@@ -52,23 +57,49 @@ const courseSchema = new mongoose.Schema(
       required: true,
     },
     discount: {
-      type: String,
+      type: Number,
     },
     type: {
       type: String,
       default: 'free',
       required: true
     },
-    time: { type: String, default: '00:00:00' },
-    format: { type: String, enum: ['.mp4', '.mkv'] },
-    teacher: { type: mongoose.Schema.ObjectId, ref: 'Teachers' },
-    chapters: { type: [mongoose.Schema.ObjectId], ref: 'Chapter', default: [] },
+    chapters: {
+      type: [mongoose.Schema.ObjectId],
+      ref: 'Chapters',
+      default: []
+    },
+    duration: { type: String, default: '00:00:00' },
+    teacher: { type: mongoose.Schema.ObjectId, ref: 'Teachers', required: true },
     students: { type: [mongoose.Schema.ObjectId], ref: 'User', default: [] },
   },
   {
     timestamps: true,
   }
 );
+
+courseSchema.pre('save', function (next) {
+  if (this.type === 'free') {
+    this.price = 0;
+    this.discount = 0;
+  }
+  next();
+});
+
+courseSchema.statics.updateCourseDuration = async function (courseId) {
+  let totalEpisodeSeconds = 0;
+  const course = await this.findById(courseId);
+  if (!course) {
+    throw createHttpError.NotFound(messageCenter.public.notFoundContent);
+  }
+  for (let i = 0; i < course.chapters.length; i += 1) {
+    const chapterDocument = await ChapterModel.findById(course.chapters[i].toString());
+    const { duration } = chapterDocument;
+    totalEpisodeSeconds += convertStringTimeToSeconds(duration);
+  }
+  course.duration = getVideoTime(totalEpisodeSeconds);
+  course.save();
+};
 
 const CourseModel = mongoose.model('Course', courseSchema);
 module.exports = {

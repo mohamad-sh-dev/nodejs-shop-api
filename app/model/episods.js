@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const episods = mongoose.Schema({
+const episodesSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true
@@ -9,15 +9,27 @@ const episods = mongoose.Schema({
         type: String,
         required: true
     },
-    time: {
+    duration: {
         type: String,
         default: '00:00:00',
+    },
+    address: {
+        type: String,
         required: true
     },
     type: {
         type: String,
-        default: 'free'
+        enum: ['lock', 'unlock'],
+        default: 'unlock'
     },
+    chapterId: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Chapter',
+        required: true
+    }
 });
+const EpisodeModel = mongoose.model('Episodes', episodesSchema);
 
-module.exports = mongoose.model('Episods', episods);
+module.exports = {
+    EpisodeModel,
+};

@@ -5,11 +5,10 @@ const http = require('http');
 const corsMiddleware = require('cors');
 const path = require('path');
 const swaggerUi = require('swagger-ui-express');
-const YAML = require('yamljs');
 
-const swaggerDocument = YAML.load('./openApi.yml');
 const manageErrors = require('http-errors');
 const { allRouets } = require('../router/router');
+const { swaggerHandler } = require('../utilities/swaggerHandler');
 
 module.exports = class Application {
   #PORT;
@@ -36,22 +35,22 @@ module.exports = class Application {
     this.#app.use(morgan('dev'));
     this.#app.use(express.json());
     this.#app.use(express.urlencoded({ extended: true }));
-    this.#app.use(this.#express.static(path.join(__dirname, '..', 'public')));
+    this.#app.use(this.#express.static(path.join(__dirname, '..', '..', 'public')));
     this.#app.use(
       '/apiDocs',
       swaggerUi.serve,
-      swaggerUi.setup(swaggerDocument)
+      swaggerUi.setup(swaggerHandler())
     );
   }
 
   connectToDatabase() {
     mongoose.connect(this.#DB_URL, (error) => {
       if (error) {
- return console.log(
+        return console.log(
           'there is problem with connectiong to database',
           error
         );
-}
+      }
       console.log('connected to database was succesfull !');
     });
 
@@ -80,6 +79,7 @@ module.exports = class Application {
     });
     // eslint-disable-next-line no-unused-vars
     this.#app.use((error, req, res, next) => {
+      console.log(error);
       const internalServerError = manageErrors.InternalServerError();
       const statusCode = error.statusCode || internalServerError.statusCode;
       const message = error.message || internalServerError.message;

@@ -10,25 +10,28 @@ const year = date.getFullYear().toString();
 const month = date.getMonth().toString();
 const day = date.getDay().toString();
 
-async function makeUploadDestination() {
-    const dirPath = path.join(__dirname, '..', '..', 'public', 'uploads', 'blogs');
+async function makeUploadDestination(entity) {
+    const dirPath = path.join(__dirname, '..', '..', 'public', 'uploads', entity);
     const finalDirectoryPath = path.join(dirPath, year, month, day);
     await fsPromises.mkdir(finalDirectoryPath, { recursive: true });
     return finalDirectoryPath;
 }
-
-const storage = multer.diskStorage({
-    destination: async function (req, file, cb) {
-        const uploadDestination = await makeUploadDestination();
-        cb(null, uploadDestination);
-    },
-    filename: function (req, file, cb) {
-        const fileName = `${file.fieldname}${new Date().getTime() + path.extname(file.originalname)}`;
-        const uploadedFilePath = path.join('uploads', 'blogs', year, month, day, fileName);
-        file.uploadedPath = uploadedFilePath.replace(/\\/g, '/');
-        cb(null, fileName);
-    }
-});
+const storage = function (entity) {
+    return multer.diskStorage({
+        destination: async function (req, file, cb) {
+            const uploadDestination = await makeUploadDestination(entity);
+            cb(null, uploadDestination);
+        },
+        filename: async function (req, file, cb) {
+            const fileName = `${file.fieldname}${new Date().getTime() + path.extname(file.originalname)}`;
+            const uploadedFilePath = path.join('uploads', entity, year, month, day, fileName);
+            const fileUrl = `${req.protocol}://${req.get('host')}/`;
+            // eslint-disable-next-line no-param-reassign
+            file.uploadedPath = `${fileUrl}${uploadedFilePath.replace(/\\/g, '/')}`;
+            cb(null, fileName);
+        }
+    });
+};
 
 const fileFilter = function (req, file, cb) {
     const extentionName = file.mimetype;
@@ -39,4 +42,25 @@ const fileFilter = function (req, file, cb) {
         cb(null, file);
     }
 };
-exports.upload = multer({ storage, fileFilter, limits: 1 * 1000 * 1000 });
+const videoFilter = function (req, file, cb) {
+    const extentionName = file.mimetype;
+    const allowedExtNames = ['video/x-matroska', 'video/mp4'];
+    if (!allowedExtNames.includes(extentionName)) {
+        cb(createHttpError.BadRequest('فرمت فایل صحیح نمیباشد', 400));
+    } else {
+        cb(null, file);
+    }
+};
+function fileUpload(entity) {
+    const limitSize = 1 * 1000 * 1000;
+    return multer({ storage: storage(entity), fileFilter, limits: limitSize });
+}
+function videoUpload(entity) {
+    const limitSize = 200 * 1000 * 1000;
+    return multer({ storage: storage(entity), fileFilter: videoFilter, limits: limitSize });
+}
+
+module.exports = {
+    fileUpload,
+    videoUpload
+};

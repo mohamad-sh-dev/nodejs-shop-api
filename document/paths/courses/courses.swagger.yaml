@@ -1,0 +1,360 @@
+---
+
+  /admin/courses:
+    delete:
+      description: Delete A Specifiec Course
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                courseId:
+                  description: The Id Of The Course
+                  pattern: ^[a-f\d]{24}$
+                  required: true
+                  type: string
+              type: object
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                message: دوره با موفقیت حذف شد
+              schema:
+                $ref: '#/components/responses/schemas/200removeContent'
+          description: success
+        '400':
+          content:
+            application/json:
+              example:
+                message: شناسه دوره صحیح نمیباشد
+              schema:
+                $ref: '#/components/responses/schemas/400badRequest'
+          description: bad request
+        '401':
+          content:
+            application/json:
+              example:
+                message: وارد حساب کاربری خود شوید
+              schema:
+                $ref: '#/components/responses/schemas/401unuthorized'
+          description: unauthorized
+        '404':
+          content:
+            application/json:
+              example:
+                messasge: دوره مورد نظر یافت نشد
+              schema:
+                $ref: '#/components/responses/schemas/404notFound'
+          description: not found
+        '500':
+          content:
+            application/json:
+              examples:
+                internalServerError:
+                  $ref: '#/components/examples/internalServerError'
+                removeFailed:
+                  $ref: '#/components/examples/removeFailed'
+              schema:
+                $ref: '#/components/responses/schemas/500InternalServerError'
+          description: internal server error
+      security:
+        - authorization: []
+      summary: Delete A Course
+      tags:
+        - Admin Panel [Courses]
+    get:
+      description: Get List Of All Courses
+      parameters:
+        - description: search box
+          in: query
+          name: search
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                contentNull:
+                  $ref: '#/components/examples/contentNull'
+                product:
+                  $ref: '#/components/examples/course'
+              schema:
+                $ref: '#/components/responses/schemas/200getContents'
+          description: success
+        '500':
+          content:
+            application/json:
+              example:
+                message: خطای داخلی سرور
+              schema:
+                $ref: '#/components/responses/schemas/500InternalServerError'
+          description: internal server error
+      security:
+        - authorization: []
+      summary: Get List Of Courses
+      tags:
+        - Admin Panel [Courses]
+    patch:
+      description: Update A Specific Course
+      requestBody:
+        content:
+          multipart/form-data:
+            encoding:
+              courseId:
+                contentType: application/json
+              tags:
+                contentType: application/json
+            schema:
+              properties:
+                category:
+                  description: The Category Of The Course
+                  pattern: ^[a-f\d]{24}$
+                  required: true
+                  type: string
+                courseId:
+                  description: The Id Of The Course
+                  pattern: ^[a-f\d]{24}$
+                  required: true
+                  type: string
+                description:
+                  description: The Description Of The Course
+                  required: true
+                  type: string
+                discount:
+                  description: The Discount Of The Course
+                  type: number
+                imageCover:
+                  description: The Image Cover Of The Course
+                  type: file
+                price:
+                  description: The Price Of The Course
+                  required: true
+                  type: number
+                summary:
+                  description: The Summary Of The Course
+                  required: true
+                  type: string
+                tags:
+                  description: The Tags Of The Course
+                  items:
+                    example: '#'
+                    type: string
+                  type: array
+                title:
+                  description: The Title Of The Course
+                  required: true
+                  type: string
+                type:
+                  description: The Summary Of The Course
+                  enum: ['virtual' , 'phicycal']
+                  required: true
+                  type: string
+              type: object
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                message: بروز رسانی با موفقیت انجام شد
+                status: success
+              schema:
+                $ref: '#/components/responses/schemas/200updatedContent'
+          description: success
+        '400':
+          content:
+            application/json:
+              examples:
+                fileTooLarge:
+                  $ref: '#/components/examples/fileTooLarge'
+                incorrectImageFormat:
+                  $ref: '#/components/examples/incorrectImageFormat'
+                incorrectRequirements:
+                  $ref: '#/components/examples/incorrectRequirements'
+              schema:
+                $ref: '#/components/responses/schemas/400badRequest'
+          description: bad request
+        '401':
+          content:
+            application/json:
+              example:
+                message: وارد حساب کاربری خود شوید
+              schema:
+                $ref: '#/components/responses/schemas/401unuthorized'
+          description: unauthorized
+        '404':
+          content:
+            application/json:
+              example:
+                messasge: دوره مورد نظر یافت نشد
+              schema:
+                $ref: '#/components/responses/schemas/404notFound'
+          description: not found
+        '500':
+          content:
+            application/json:
+              example:
+                message: خطای داخلی سرور
+              schema:
+                $ref: '#/components/responses/schemas/500InternalServerError'
+          description: internal server error
+      security:
+        - authorization: []
+      summary: Update A Specific Course
+      tags:
+        - Admin Panel [Courses]
+    post:
+      consumes:
+        - application/x-www-form-urlencoded
+        - application/json
+      description: Create a Specifiec Blog
+      requestBody:
+        content:
+          multipart/form-data:
+            encoding:
+              tags:
+                contentType: application/json
+            schema:
+              $ref: '#/components/schemas/course'
+      responses:
+        '201':
+          content:
+            application/json:
+              example:
+                data:
+                  __v: 0
+                  _id: 64f9d19559f0e8b27fe7eba6
+                  bookmarks: []
+                  category: 64f842b470253377ce19cf5e
+                  chapters: []
+                  comments: []
+                  createdAt: '2023-09-07T13:35:17.968Z'
+                  description: توضیحات کامل دوره نمونه شماره یک توضیحات کامل دوره نمونه شماره یک توضیحات کامل دوره نمونه شماره یک
+                  disLikes: []
+                  discount: '20'
+                  image: /uploads/courses/images/default.png
+                  likes: []
+                  price: 0
+                  students: []
+                  summary: توضیحات کوتاه دوره نمونه شماره یک
+                  tags: [ 
+                    "#java" ,
+                  ]
+                  time: '00:00:00'
+                  title: عنوان دوره نمونه
+                  type: free
+                  updatedAt: '2023-09-07T13:35:17.968Z'
+                message: دوره با موفقیت افزوده شد
+                status: success
+              schema:
+                $ref: '#/components/responses/schemas/201createdContent'
+          description: success
+        '400':
+          content:
+            application/json:
+              examples:
+                fileTooLarge:
+                  $ref: '#/components/examples/fileTooLarge'
+                incorrectImageFormat:
+                  $ref: '#/components/examples/incorrectImageFormat'
+                incorrectRequirements:
+                  $ref: '#/components/examples/incorrectRequirements'
+              schema:
+                $ref: '#/components/responses/schemas/400badRequest'
+          description: bad request
+        '401':
+          content:
+            application/json:
+              example:
+                message: وارد حساب کاربری خود شوید
+              schema:
+                $ref: '#/components/responses/schemas/401unuthorized'
+          description: unauthorized
+        '500':
+          content:
+            application/json:
+              example:
+                message: خطای داخلی سرور
+              schema:
+                $ref: '#/components/responses/schemas/500InternalServerError'
+          description: internal server error ,
+      security:
+        - authorization: vscode-yaml-sort.array.1
+      summary: Create a Product
+      tags:
+        - Admin Panel [Courses]
+  /admin/courses/{courseId}:
+    get:
+      description: Get A Specific Course
+      parameters:
+        - description: the id of Course
+          in: path
+          name: courseId
+          required: true
+          schema:
+            pattern: ^[a-f\d]{24}$
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example:
+                data:
+                  data:
+                    __v: 0
+                    _id: 64f9d19559f0e8b27fe7eba6
+                    bookmarks: []
+                    category: 64f842b470253377ce19cf5e
+                    chapters: []
+                    comments: []
+                    createdAt: '2023-09-07T13:35:17.968Z'
+                    description: توضیحات کامل دوره نمونه شماره یک توضیحات کامل دوره نمونه شماره یک توضیحات کامل دوره نمونه شماره یک
+                    disLikes: []
+                    discount: 0
+                    duration: '00:00:00'
+                    image: /uploads/courses/images/default.png
+                    likes: []
+                    price: 0
+                    students: []
+                    summary: توضیحات کوتاه دوره نمونه شماره یک
+                    tags: [
+                        "#java" ,
+                      ]
+                    title: عنوان دوره نمونه
+                    type: free
+                    updatedAt: '2023-09-07T13:35:17.968Z'
+                message: ''
+                status: success
+              schema:
+                $ref: '#/components/responses/schemas/200getContents'
+          description: success
+        '400':
+          content:
+            application/json:
+              example:
+                message: شناسه دوره صحیح نمیباشد
+              schema:
+                $ref: '#/components/responses/schemas/400badRequest'
+          description: bad request
+        '404':
+          content:
+            application/json:
+              example:
+                messasge: محتوای مورد نظر شما یافت نشد
+              schema:
+                $ref: '#/components/responses/schemas/404notFound'
+          description: not found
+        '500':
+          content:
+            application/json:
+              example:
+                message: خطای داخلی سرور
+              schema:
+                $ref: '#/components/responses/schemas/500InternalServerError'
+          description: internal server error
+      security:
+        - authorization: []
+      summary: Get A Specific Course
+      tags:
+        - Admin Panel [Courses]

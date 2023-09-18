@@ -1,0 +1,133 @@
+
+  /user/authentication/getOtp:
+    post:
+      summary: get Otp code
+      tags: [Authentication]
+      description: one time password (OTP) send code
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mobile:
+                  type: string
+      responses:
+        200:
+          description : 'success'
+          content : 
+            application/json : 
+              schema : 
+                $ref: '#/components/responses/schemas/user/200getOtp'
+              example :
+                status  : 'success' 
+                message:  'توکن ارسال شد'
+                token: 8758
+        400:
+          description: bad request
+          content : 
+            application/json:
+              schema : 
+                $ref :  '#/components/responses/schemas/400badRequest'
+              example : 
+                message : 'شماره همراه صحیح نیست'
+        500:
+          description: internal server error
+          content : 
+            application/json :
+              schema: 
+                $ref: '#/components/responses/schemas/500InternalServerError'
+              example: 
+                message : 'خطای داخلی سرور'
+  /user/authentication/checkOtp:
+    post:
+      summary: check Otp code
+      tags: [Authentication]
+      description: one time password (OTP) check code
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mobile:
+                  type: string
+                code:
+                  type: string
+                  minLength: 5
+                  maxLength: 6
+      responses:
+        200:
+          description: success
+          content : 
+            application/json : 
+              schema : 
+                $ref: '#/components/responses/schemas/user/200accessToken'
+              example :
+                "status": "success"
+                "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTM4Nzk0OTI3OSIsImlhdCI6MTY5MzU2MDg2MCwiZXhwIjoxNjkzNjQ3MjYwfQ.8w4YnD5zBUlc87PHDfVft1NMacMGgLVzMP1pkZCk548"
+                "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTM4Nzk0OTI3OSIsImlhdCI6MTY5MzU2MDg2MCwiZXhwIjoxNzI1MTE4NDYwfQ.-bhVzzvBFMqa6JsKvK8RYBcjZU7vgXZe6gnB1GjqO4E"
+        400:
+          description: bad request
+          content : 
+            application/json : 
+              schema : 
+                $ref: '#/components/responses/schemas/400badRequest'
+              examples :
+                userNotFound : 
+                  $ref : '#/components/examples/userNotFound'
+                incorrectNumber :
+                  $ref: '#/components/examples/incorrectNumber'
+                incorrectToken :
+                  $ref: '#/components/examples/incorrectToken'
+                expiredToken :
+                  $ref: '#/components/examples/expiredToken'
+        500:
+          description: internal server error
+          content : 
+            application/json :
+              schema: 
+                $ref: '#/components/responses/schemas/500InternalServerError'
+              example: 
+                message : 'خطای داخلی سرور'
+  /user/authentication/refreshToken:
+    post:
+      summary: refresh token
+      tags: [Authentication]
+      description: check refresh token for get new access token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        200:
+          description: success
+          content : 
+            application/json : 
+              schema : 
+                $ref: '#/components/responses/schemas/user/200accessToken'
+              example :
+                "status": "success"
+                "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTM4Nzk0OTI3OSIsImlhdCI6MTY5MzU2MDg2MCwiZXhwIjoxNjkzNjQ3MjYwfQ.8w4YnD5zBUlc87PHDfVft1NMacMGgLVzMP1pkZCk548"
+                "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTM4Nzk0OTI3OSIsImlhdCI6MTY5MzU2MDg2MCwiZXhwIjoxNzI1MTE4NDYwfQ.-bhVzzvBFMqa6JsKvK8RYBcjZU7vgXZe6gnB1GjqO4E"
+        400:
+          description: bad request
+          content :
+            application/json :  
+              schema : 
+                $ref: '#/components/responses/schemas/400badRequest'
+              example:
+                message : 'توکن نامعتبر'
+        500:
+          description: internal server error
+          content : 
+            application/json :
+              schema: 
+                $ref: '#/components/responses/schemas/500InternalServerError'
+              example: 
+                message : 'خطای داخلی سرور'
+                         
