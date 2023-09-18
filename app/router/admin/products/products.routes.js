@@ -1,11 +1,12 @@
 const { Router } = require('express');
 const { isAuthenticated } = require('../../../http/middlewares/authorization');
 const productController = require('../../../http/controller/admin/products/product.controller');
-const { validateRequestBody, validateRequestParams } = require('../../../http/validations/auth.schema');
+const { validateRequestBody } = require('../../../http/validations/auth.schema');
 const { createUpdateProductSchema, getDeleteProductSchema, updateProductSchema } = require('../../../model/schemas/products.schema');
 const { fileUpload } = require('../../../utilities/multerConfig');
 const parseToJsonArray = require('../../../http/middlewares/jsonArrayPars');
 const { restrictTo } = require('../../../utilities/functions');
+const { REQUEST_PARAMS } = require('../../../utilities/constants');
 
 const router = new Router();
 router.get(
@@ -14,7 +15,7 @@ router.get(
 );
 router.get(
     '/:productId',
-    validateRequestParams(getDeleteProductSchema),
+    validateRequestBody(getDeleteProductSchema, REQUEST_PARAMS),
     productController.getProductById
 );
 router.post(
