@@ -6,7 +6,7 @@
       description: one time password (OTP) send code
       requestBody:
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
@@ -46,7 +46,7 @@
       description: one time password (OTP) check code
       requestBody:
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
@@ -97,7 +97,7 @@
       description: check refresh token for get new access token
       requestBody:
         content:
-          application/json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:

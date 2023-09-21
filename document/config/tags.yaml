@@ -1,6 +1,8 @@
 tags:
   - name : IndexPage
   - name : Authentication
+  - name : RBAC Panel [Admin]
+    description : (Required Super-admin Or Master Permission)
   - name : Admin Panel [Blogs]
   - name : Admin Panel [Products]
   - name : Admin Panel [Categories]

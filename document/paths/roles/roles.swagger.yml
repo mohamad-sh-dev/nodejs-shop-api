@@ -1,0 +1,251 @@
+
+  /admin/roles/list :
+     get :
+      summary: Get List Of Roles 
+      tags: ['RBAC Panel [Admin]']
+      description: Get A List Of All Roles
+      security:      
+            - authorization: []    
+      parameters: 
+          - name : search
+            in : query
+            description : search specific content
+            schema:
+              type: string
+      responses:
+          200:
+            description: success
+            content : 
+              application/json : 
+                schema : 
+                  $ref :  '#/components/responses/schemas/200getContent'
+                example : {
+                  "status": "success",
+                  "message": "",
+                  "data": { }
+                }
+          403:
+            description: forbidden
+            content : 
+              application/json : 
+                schema  : 
+                  $ref  : '#/components/responses/schemas/403Forbidden'
+                example : 
+                  status : ناموفق
+                  messasge : شما دسترسی لازم را ندارید
+          500:
+            description: internal server error
+            content : 
+              application/json : 
+                schema : 
+                  $ref: '#/components/responses/schemas/500InternalServerError'
+                example : 
+                  message : 'خطای داخلی سرور'
+  /admin/roles:
+    get:
+      description: Get List Of All Roles With Permissions
+      security:
+        - authorization: []
+      summary: Get List Of All Roles With Permissions
+      tags:
+        - RBAC Panel [Admin]
+      parameters:
+        - description: search box
+          in: query
+          name: search
+          schema:
+            type: string
+      responses:
+        200:
+          content:
+            application/json:
+              examples:
+                roles:
+                  $ref: '#/components/examples/roles'
+                contentNull:
+                  $ref: '#/components/examples/contentNull'  
+              schema:
+                $ref: '#/components/responses/schemas/200getContents'
+          description: success
+        403:
+          description: forbidden
+          content : 
+            application/json : 
+              schema  : 
+                $ref  : '#/components/responses/schemas/403Forbidden'
+              example : 
+                status : failed ,
+                messasge : شما دسترسی لازم را ندارید
+        500:
+          content:
+            application/json:
+              example:
+                message: خطای داخلی سرور
+              schema:
+                $ref: '#/components/responses/schemas/500InternalServerError'
+          description: internal server error
+    post:
+      summary: Create Role
+      tags: ['RBAC Panel [Admin]']
+      description: Create a Specifiec Episode
+      security:
+        - authorization: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref : '#/components/schemas/roles'
+            encoding : 
+              permissions : 
+                contentType : application/json
+      responses:
+        201:
+          description: success
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/201createdContent'
+              example : {
+                "status": "success",
+                "message": "",
+                "data": {}
+              }
+        400:
+          description: bad request
+          content : 
+            application/json :
+              schema : 
+                $ref : '#/components/responses/schemas/400badRequest'
+              example :
+                message : ' "توضیحات" نمیتواند خالی باشد || "عنوان" کوتاه تر از حد مجاز است (حداقل 3 کاراکتر)'
+        401:
+          description: unauthorized
+          content : 
+            application/json :
+              schema : 
+                $ref : '#/components/responses/schemas/401unuthorized'
+              example: 
+                message : 'وارد حساب کاربری خود شوید'
+        500:
+          description: internal server error , 
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/500InternalServerError'
+              example : 
+                message : 'خطای داخلی سرور'
+    patch:
+      summary: Update A Specific Role
+      tags: ['RBAC Panel [Admin]']
+      description:  Update A Specific Role
+      security:
+        - authorization: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            encoding : 
+              permissions : 
+                contentType: application/json
+            schema:
+              $ref : '#/components/schemas/editRole'
+      responses:
+        200:
+          description: success
+          content :  
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/200updatedContent'
+              example :
+                status : success 
+                message : بروز رسانی با موفقیت انجام شد
+        400:
+          description: bad request
+          content : 
+            application/json : 
+              schema :  
+                $ref : '#/components/responses/schemas/400badRequest' 
+              example : 
+                message : ' "توضیحات" نمیتواند خالی باشد || "عنوان" کوتاه تر از حد مجاز است (حداقل 3 کاراکتر)'
+        404:
+          description: not found
+          content : 
+            application/json : 
+              schema  : 
+                $ref  :   '#/components/responses/schemas/404notFound'
+              example : 
+                messasge : فصل مورد نظر یافت نشد
+        401: 
+          description: unauthorized 
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/401unuthorized'
+              example : 
+                message : وارد حساب کاربری خود شوید
+        500:
+          description: internal server error
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/500InternalServerError'
+              example : 
+                message : خطای داخلی سرور 
+    delete:
+      summary: Delete A Role
+      tags:  ['RBAC Panel [Admin]']
+      description: Delete A Specifiec Role
+      security:
+        - authorization: []
+      parameters: 
+        - name : roleID
+          in : query
+          description : The ID Of the role
+        - name : name 
+          in : query  
+          description : The Name Of The Role
+      responses:
+        200:
+          description: success
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/200removeContent'
+              example : 
+                status : success
+                message : نقش با موفقیت حذف شد 
+        400:
+          description: bad request
+          content : 
+            application/json : 
+              schema :  
+                $ref : '#/components/responses/schemas/400badRequest' 
+              example :
+                message : شناسه قسمت صحیح نمیباشد 
+        404: 
+          description: not found
+          content : 
+            application/json : 
+              schema  : 
+                $ref  :   '#/components/responses/schemas/404notFound'
+              example : 
+                messasge : قسمت مورد نظر یافت نشد
+        401: 
+          description: unauthorized 
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/401unuthorized'
+              example : 
+                message : وارد حساب کاربری خود شوید
+        500:
+          description: internal server error   
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/500InternalServerError'
+              examples :
+                internalServerError :  
+                  $ref : '#/components/examples/internalServerError'
+                removeFailed :  
+                    $ref : '#/components/examples/removeFailed'
+  

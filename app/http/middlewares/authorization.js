@@ -5,7 +5,7 @@ const { verifyToken } = require('../../utilities/functions');
 exports.isAuthenticated = async (req, res, next) => {
   try {
     let token;
-    if (
+    if ( 
       req.headers.authorization
       && req.headers.authorization.startsWith('Bearer')
     ) {

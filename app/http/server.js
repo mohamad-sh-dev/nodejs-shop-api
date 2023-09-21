@@ -9,6 +9,7 @@ const swaggerUi = require('swagger-ui-express');
 const manageErrors = require('http-errors');
 const { allRouets } = require('../router/router');
 const { swaggerHandler } = require('../utilities/swaggerHandler');
+const { messageCenter } = require('../utilities/messages');
 
 module.exports = class Application {
   #PORT;
@@ -84,6 +85,7 @@ module.exports = class Application {
       const statusCode = error.statusCode || internalServerError.statusCode;
       const message = error.message || internalServerError.message;
       return res.status(statusCode).json({
+        status: messageCenter.public.FAILED ,
         message,
       });
     });

@@ -27,9 +27,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'شماره همراه مورد نیاز میباشد']
     },
-    roles: {
-      type: [String],
-      default: ['USER'],
+    role: {
+      type: String,
+      default: 'USER',
     },
     otp: {
       type: Object,

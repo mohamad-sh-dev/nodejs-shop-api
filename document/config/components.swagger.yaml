@@ -25,6 +25,76 @@ components :
           type : file
           format : binary
           description: The Video Of The Episode
+    permissions : 
+      type : object 
+      properties : 
+        title: 
+          type : string  
+          pattern : /^[\w-]+(\/[\w-]+)*$/
+          required : true
+          description: The Title Of The Permission 
+        methods : 
+          type : array
+          items : 
+            type  : string
+        description: 
+          type : string  
+          required : true
+          description: The description Of The Permission 
+    editPermissions : 
+      type : object 
+      properties : 
+        permissionID : 
+          type : string
+          pattern : /^[0-9a-fA-F]{24}$/
+        title: 
+          type : string  
+          pattern : /^[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)$/
+          required : true
+          description: The Title Of The Permission 
+        methods : 
+          type : array
+          items : 
+            type  : string
+        description: 
+          type : string  
+          required : true
+          description: The description Of The Permission 
+    roles : 
+      type : object 
+      properties : 
+        name: 
+          type : string  
+          required : true
+          description: The Title Of The Permission 
+        description: 
+          type : string  
+          required : true
+          description: The description Of The Permission
+        permissions : 
+          type : array
+          items : 
+            type : string 
+          default : []
+    editRole : 
+      type : object 
+      properties : 
+        roleID : 
+          type : string
+          pattern : /^[0-9a-fA-F]{24}$/
+        name: 
+          type : string  
+          required : true
+          description: The Title Of The Permission 
+        description: 
+          type : string  
+          required : true
+          description: The description Of The Permission
+        permissions : 
+          type : array
+          items : 
+            type : string 
+          default : []
     episode : 
       type : object 
       properties : 
@@ -195,6 +265,14 @@ components :
       404notFound: 
         type: object
         properties:
+          message: 
+            type: 
+              string
+      403Forbidden: 
+        type: object
+        properties:
+          status : 
+            type : string
           message: 
             type: 
               string

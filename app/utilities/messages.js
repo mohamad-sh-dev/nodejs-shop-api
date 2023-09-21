@@ -3,6 +3,9 @@ module.exports = {
         schemaDefention: {
         },
         public: {
+            REMOVEFAILED: 'حذف ناموفق',
+            FAILED: 'ناموفق',
+            FAILED_UPDATE: 'بروز رسانی انجام نشد',
             removeSuccessfull: 'محصول با موفقیت حذف شد',
             success: 'success',
             internalServerErrorMsg: 'خطای داخلی سرور',
@@ -23,6 +26,15 @@ module.exports = {
             //     'string.empty': '"عنوان" نمیتواند خالی باشد',
             //     any.required
             // }
+        },
+        PERMISSIONS: {
+            CREATED: ' سطح دسترسی با موفقیت ایجاد شد',
+            EXISTCONTENT: 'سطح دسترسی از قبل وجود دارد',
+            NOT_ACCESS: 'شما دسترسی لازم را ندارید'
+        },
+        ROLES: {
+            CREATED: ' نقش با موفقیت ایجاد شد',
+            EXISTCONTENT: 'نقش از قبل وجود دارد'
         }
 
     }

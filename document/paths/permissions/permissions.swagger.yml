@@ -1,0 +1,300 @@
+
+  /admin/permissions/list :
+     get :
+      summary: Get List Of Permissions 
+      tags: ['RBAC Panel [Admin]']
+      description: Get A List Of All Permissions
+      security:      
+            - authorization: []    
+      parameters: 
+          - name : search
+            in : query
+            description : search specific content
+            schema:
+              type: string
+      responses:
+          200:
+            description: success
+            content : 
+              application/json : 
+                schema : 
+                  $ref :  '#/components/responses/schemas/200getContent'
+                example : {
+                    "status": "success",
+                    "message": "",
+                    "count": 1,
+                    "data": [
+                      {
+                        "_id": "650c3ddbf1598ce0b921319c",
+                        "title": "sample/example",
+                        "methods": [
+                          "GET" ,
+                        ],
+                        "description": "دسترسی به محتوای نمونه " ,
+                      },
+                    ]
+                }
+          500:
+            description: internal server error
+            content : 
+              application/json : 
+                schema : 
+                  $ref: '#/components/responses/schemas/500InternalServerError'
+                example : 
+                  message : 'خطای داخلی سرور'
+  /admin/permissions/{permissionID}:
+        get:
+            description: Get A Specific Permission 
+            security:
+              - authorization: []
+            summary: Get A Specific Permission
+            tags:
+              - RBAC Panel [Admin]
+            parameters:
+              - description: The ID Of Permission
+                in: params
+                name: permissionID
+                schema : 
+                type : string  
+                pattern : "^[a-f\\d]{24}$"
+            responses:
+              200:
+                content:
+                  application/json:
+                    examples:
+                      permission:
+                        $ref: '#/components/examples/permission'
+                      contentNull:
+                        $ref: '#/components/examples/contentNull'  
+                    schema:
+                      $ref: '#/components/responses/schemas/200getContents'
+                description: success
+              404:
+                description: not found
+                content : 
+                  application/json : 
+                    schema  : 
+                      $ref  :   '#/components/responses/schemas/404notFound'
+                    example : 
+                      messasge : دسترسی مورد نظر یافت نشد
+              403:
+              description: forbidden
+              content : 
+                application/json : 
+                  schema  : 
+                    $ref  : '#/components/responses/schemas/403Forbidden'
+                  example : 
+                    status : ناموفق
+                    messasge : شما دسترسی لازم را ندارید
+              500:
+                content:
+                  application/json:
+                    example:
+                      status : ناموفق
+                      message: خطای داخلی سرور
+                    schema:
+                      $ref: '#/components/responses/schemas/500InternalServerError'
+                description: internal server error
+  /admin/permissions:
+    post:
+      summary: Create An Permission 
+      tags: ['RBAC Panel [Admin]']
+      description: Create a Specifiec Permission
+      security:
+        - authorization: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref : '#/components/schemas/permissions'
+            encoding : 
+              methods : 
+                contentType: 
+                  application/json
+      responses:
+        201:
+          description: success
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/201createdContent'
+              example : {
+                  "status": "success",
+                  "message": " سطح دسترسی با موفقیت ایجاد شد",
+                  "count": 1,
+                  "data": {
+                    "title": "sample/example",
+                    "methods": [
+                      "GET" ,
+                    ],
+                    "description": "دسترسی به محتوای نمونه",
+                    "_id": "650c469fbf9a18bcb7311ad3",
+                    "createdAt": "2023-09-21T13:35:27.421Z",
+                    "updatedAt": "2023-09-21T13:35:27.421Z",
+                    "__v": 0 ,
+                  }
+              }
+        400:
+          description: bad request
+          content : 
+            application/json :
+              schema : 
+                $ref : '#/components/responses/schemas/400badRequest'
+              example :
+                message : ' "توضیحات" نمیتواند خالی باشد || "عنوان" فرمت صحیح نمیباشد'
+        403:
+            description: forbidden
+            content : 
+              application/json : 
+                schema  : 
+                  $ref  : '#/components/responses/schemas/403Forbidden'
+                example : 
+                  status : ناموفق
+                  messasge : شما دسترسی لازم را ندارید
+        401:
+          description: unauthorized
+          content : 
+            application/json :
+              schema : 
+                $ref : '#/components/responses/schemas/401unuthorized'
+              example: 
+                message : 'وارد حساب کاربری خود شوید'
+        500:
+          description: internal server error , 
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/500InternalServerError'
+              example : 
+                message : 'خطای داخلی سرور'
+    patch:
+      summary: Update A Specific Permission  
+      tags: ['RBAC Panel [Admin]']
+      description:  Update A Specific Permission 
+      security:
+        - authorization: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref : '#/components/schemas/editPermissions'
+            encoding : 
+              methods : 
+                contentType: application/json
+      responses:
+        200:
+          description: success
+          content :  
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/200updatedContent'
+              example :
+                status : success 
+                message : بروز رسانی با موفقیت انجام شد
+        400:
+          description: bad request
+          content : 
+            application/json : 
+              schema :  
+                $ref : '#/components/responses/schemas/400badRequest' 
+              example : 
+                message : ' "توضیحات" نمیتواند خالی باشد || فرمت "عنوان" صحیح نمیباشد'
+        403:
+            description: forbidden
+            content : 
+              application/json : 
+                schema  : 
+                  $ref  : '#/components/responses/schemas/403Forbidden'
+                example : 
+                  status : ناموفق
+                  messasge : شما دسترسی لازم را ندارید
+        404:
+          description: not found
+          content : 
+            application/json : 
+              schema  : 
+                $ref  :   '#/components/responses/schemas/404notFound'
+              example : 
+                messasge : دسترسی مورد نظر یافت نشد
+        401: 
+          description: unauthorized 
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/401unuthorized'
+              example : 
+                message : وارد حساب کاربری خود شوید
+        500:
+          description: internal server error
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/500InternalServerError'
+              example : 
+                message : خطای داخلی سرور 
+    delete:
+      summary: Delete A Permission 
+      tags:  ['RBAC Panel [Admin]']
+      description: Delete A Specifiec Episode
+      security:
+        - authorization: []
+      requestBody:
+          content:
+            application/x-www-form-urlencoded:
+              schema:
+                type : object 
+                properties : 
+                  permissionID: 
+                    type : string  
+                    pattern : "^[a-f\\d]{24}$"
+                    description: The Id Of The Permission
+                    required : true
+              encoding : 
+                permissionID : 
+                  contentType : application/json
+      responses:
+        200:
+          description: success
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/200removeContent'
+              example : 
+                status : success
+                message : قسمت با موفقیت حذف شد 
+        400:
+          description: bad request
+          content : 
+            application/json : 
+              schema :  
+                $ref : '#/components/responses/schemas/400badRequest' 
+              example :
+                message : شناسه قسمت صحیح نمیباشد 
+        404: 
+          description: not found
+          content : 
+            application/json : 
+              schema  : 
+                $ref  :   '#/components/responses/schemas/404notFound'
+              example : 
+                messasge : قسمت مورد نظر یافت نشد
+        401: 
+          description: unauthorized 
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/401unuthorized'
+              example : 
+                message : وارد حساب کاربری خود شوید
+        500:
+          description: internal server error   
+          content : 
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/500InternalServerError'
+              examples :
+                internalServerError :  
+                  $ref : '#/components/examples/internalServerError'
+                removeFailed :  
+                    $ref : '#/components/examples/removeFailed'
+  

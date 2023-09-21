@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 const createHttpError = require('http-errors');
 const JWT = require('jsonwebtoken');
 const path = require('path');
@@ -88,7 +89,7 @@ function filterObj(obj, allowedfields) {
   const newObj = {};
   Object.keys(obj).forEach((el) => {
     if (allowedfields.includes(el.toLowerCase())) {
-      const nulishData = [undefined, null, '', {}];
+      const nulishData = [undefined, null, '', {}, []];
       if (!nulishData.includes(obj[el])) {
         newObj[el] = obj[el];
       }
@@ -96,14 +97,16 @@ function filterObj(obj, allowedfields) {
   });
   return newObj;
 }
-function restrictTo(allowedRole) {
-  return function (req, res, next) {
-    const userRoles = req.user.roles;
-    if (!userRoles.includes(allowedRole)) {
-      return next(createHttpError.Forbidden('شما نمیتوانید به این قسمت دسترسی داشته باشید'));
+function mergeExistContentWithFilteredBody(existContent, newBody) {
+  const copyOfNewBody = JSON.parse(JSON.stringify(newBody));
+  Object.keys(existContent).forEach((key) => {
+    if (Array.isArray(existContent[key]) && copyOfNewBody.hasOwnProperty(key)) {
+      copyOfNewBody[key] = existContent[key].concat(copyOfNewBody[key]);
+    } else if (typeof existContent[key] === 'object' && copyOfNewBody.hasOwnProperty(key)) {
+      copyOfNewBody[key] = Object.assign(existContent[key], copyOfNewBody[key]);
     }
-    next();
-  };
+  });
+  return copyOfNewBody;
 }
 function assignUploadPathToImages(files) {
   let { images, imageCover } = files;
@@ -122,9 +125,14 @@ async function makeUploadDestination(entity) {
   return finalDirectoryPath;
 }
 function sendResponseToClient(response, status, statusCode, data, message) {
+  let dataCount = 0;
+  if (data) {
+    dataCount = Array.isArray(data) ? data?.length : Object.keys(data)?.length;
+  }
   return response.status(statusCode).json({
     status: status || '',
     message: message || '',
+    count: dataCount,
     data: data || []
   });
 }
@@ -137,7 +145,7 @@ module.exports = {
   signRefreshToken,
   verifyToken,
   filterObj,
-  restrictTo,
   makeUploadDestination,
+  mergeExistContentWithFilteredBody,
   assignUploadPathToImages
 };

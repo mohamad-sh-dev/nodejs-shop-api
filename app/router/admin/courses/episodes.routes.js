@@ -1,7 +1,5 @@
 const express = require('express');
 const { validateRequestBody } = require('../../../http/validations/auth.schema');
-const { restrictTo } = require('../../../utilities/functions');
-const { isAuthenticated } = require('../../../http/middlewares/authorization');
 const {
  getDeleteEpisodesSchema, createUpdateEpisodesSchema, getEpisodesOfChapterSchema, updateEpisodesSchema
 } = require('../../../model/schemas/episodes');
@@ -23,24 +21,18 @@ router.get(
 );
 router.post(
     '/',
-    isAuthenticated,
-    restrictTo('ADMIN'),
     videoUpload('episodes').single('video'),
     validateRequestBody(createUpdateEpisodesSchema, 'body'),
     episdoesController.createEpisode
 );
 router.patch(
     '/',
-    isAuthenticated,
-    restrictTo('ADMIN'),
     videoUpload('episodes').single('video'),
     validateRequestBody(updateEpisodesSchema, 'body'),
     episdoesController.updateEpisode
 );
 router.delete(
     '/',
-    isAuthenticated,
-    restrictTo('ADMIN'),
     validateRequestBody(getDeleteEpisodesSchema),
     episdoesController.removeEpisode
 );
