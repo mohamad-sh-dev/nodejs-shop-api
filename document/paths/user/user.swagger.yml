@@ -1,0 +1,183 @@
+
+  /user :
+    get :
+      summary: Get User Profile
+      tags: [UserAuthentication]
+      description:  Get User Profile
+      security:      
+            - authorization: []    
+      responses:
+          200:
+            description: success
+            content : 
+              application/json : 
+                schema : 
+                  $ref :  '#/components/responses/schemas/200getContent'
+                examples : 
+                  user : 
+                    $ref : '#/components/examples/user'
+          403:
+            description: forbidden
+            content : 
+              application/json : 
+                schema  : 
+                  $ref  : '#/components/responses/schemas/403Forbidden'
+                example : 
+                  status : ناموفق
+                  messasge : شما دسترسی لازم را ندارید
+          404: 
+            description: not found
+            content : 
+              application/json : 
+                schema  : 
+                  $ref  :   '#/components/responses/schemas/404notFound'
+                example : 
+                  messasge : پروفایل کاربری یافت نشد
+          500:
+            description: internal server error
+            content : 
+              application/json : 
+                schema : 
+                  $ref: '#/components/responses/schemas/500InternalServerError'
+                example : 
+                  message : 'خطای داخلی سرور'
+    patch:
+        summary: Update Profile
+        tags: [UserAuthentication]
+        description: Update Profile
+        security:
+          - authorization: []
+        requestBody:
+          content:
+            multipart/form-data:
+              schema:
+                $ref : '#/components/schemas/updateProfile'
+        responses:
+          200:
+            $ref: '#/components/definitions/200updatedContent'
+          400:
+            description: bad request
+            content : 
+              application/json : 
+                schema :  
+                  $ref : '#/components/responses/schemas/400badRequest' 
+                example : 
+                  message : ' "نام" بیشتر از حد مجاز  است (حداکثر 15 کاراکتر) " || "نام" کوتاه تر از حد مجاز است (حداقل 2 کاراکتر)'
+          401: 
+            $ref: '#/components/definitions/401'
+          403:
+                description: forbidden
+                content : 
+                  application/json : 
+                    schema  : 
+                      $ref  : '#/components/responses/schemas/403Forbidden'
+                    example : 
+                      status : ناموفق
+                      messasge : شما دسترسی لازم را ندارید
+          500:
+            description: internal server error
+            content : 
+              application/json : 
+                schema : 
+                  $ref : '#/components/responses/schemas/500InternalServerError'
+                example : 
+                  message : خطای داخلی سرور 
+    delete:
+        summary: Delete A User 
+        tags:  [UserAuthentication]
+        description: Delete A User (Required Permoision)
+        security:
+          - authorization: []
+        parameters: 
+          - name : userID
+            in : query
+            description : The ID Of The User
+    responses:
+      200:
+        description: success
+        content : 
+          application/json : 
+            schema : 
+              $ref : '#/components/responses/schemas/200removeContent'
+            example : 
+              status : success
+              message : کاربر با موفقیت حذف شد 
+      400:
+        description: bad request
+        content : 
+          application/json : 
+            schema :  
+              $ref : '#/components/responses/schemas/400badRequest' 
+            example :
+              message : شناسه کاربر صحیح نمیباشد 
+      404: 
+        description: not found
+        content : 
+          application/json : 
+            schema  : 
+              $ref  :   '#/components/responses/schemas/404notFound'
+            example : 
+              messasge : کاربر یافت نشد
+      401: 
+        description: unauthorized 
+        content : 
+          application/json : 
+            schema : 
+              $ref : '#/components/responses/schemas/401unuthorized'
+            example : 
+              message : وارد حساب کاربری خود شوید
+      500:
+        description: internal server error   
+        content : 
+          application/json : 
+            schema : 
+              $ref : '#/components/responses/schemas/500InternalServerError'
+            examples :
+              internalServerError :  
+                $ref : '#/components/examples/internalServerError'
+              removeFailed :  
+                  $ref : '#/components/examples/removeFailed'
+  /user/list :
+     get :
+      summary: Get List Of Users 
+      tags: [UserAuthentication]
+      description:  Get List Of Users 
+      security:      
+            - authorization: []    
+      parameters: 
+          - name : search
+            in : query
+            description : search specific content
+            schema:
+              type: string
+      responses:
+          200:
+            description: success
+            content : 
+              application/json : 
+                schema : 
+                  $ref :  '#/components/responses/schemas/200getContent'
+                examples : 
+                  users : 
+                    $ref : '#/components/examples/users'
+                  contentNull : 
+                    $ref: '#/components/examples/contentNull'
+          403:
+            description: forbidden
+            content : 
+              application/json : 
+                schema  : 
+                  $ref  : '#/components/responses/schemas/403Forbidden'
+                example : 
+                  status : ناموفق
+                  messasge : شما دسترسی لازم را ندارید
+          500:
+            description: internal server error
+            content : 
+              application/json : 
+                schema : 
+                  $ref: '#/components/responses/schemas/500InternalServerError'
+                example : 
+                  message : 'خطای داخلی سرور'
+
+  

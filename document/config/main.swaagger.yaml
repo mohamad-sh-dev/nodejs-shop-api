@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
-  title: "api documention"
-  description: "this is document page of our apis"
-  version: "2.0.0"
+  title: "NodeJs Store Api Documention"
+  description: "This Is Document Page NodeJs Store"
+  version: "1.0.0"
 servers:
   - url: http://localhost:8080

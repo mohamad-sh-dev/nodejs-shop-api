@@ -35,6 +35,9 @@ module.exports = {
         ROLES: {
             CREATED: ' نقش با موفقیت ایجاد شد',
             EXISTCONTENT: 'نقش از قبل وجود دارد'
+        },
+        USER: {
+            NOTFOUND: 'کاربر یافت نشد',
         }
 
     }

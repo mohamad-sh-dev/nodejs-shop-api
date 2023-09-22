@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { userAuthentication } = require('./user/userAuth.router');
+const { userAuthentication } = require('./user/user.auth.router');
 const { DeveloperRouets } = require('./router.developer');
 const { adminPanelRoutes } = require('./admin/categories/category.routes');
 const { adminBlogsRoutes } = require('./admin/blogs/blogs.routes');
@@ -12,9 +12,11 @@ const { adminRolesRoutes } = require('./admin/RBAC/roles.routes');
 const { adminPermissionsRoutes } = require('./admin/RBAC/permissions.routes');
 const { hasPermission } = require('../http/validations/RBAC.guard');
 const { isAuthenticated } = require('../http/middlewares/authorization');
+const { userRoutes } = require('./user/user.router');
 
 const router = new Router();
 
+router.use('/user', isAuthenticated, hasPermission, userRoutes);
 router.use('/admin/roles/', isAuthenticated, hasPermission, adminRolesRoutes);
 router.use('/admin/permissions/', isAuthenticated, hasPermission, adminPermissionsRoutes);
 router.use('/admin/courses/chapters/episodes', isAuthenticated, hasPermission, adminEpisodesRoutes);
@@ -23,7 +25,7 @@ router.use('/admin/courses', isAuthenticated, hasPermission, adminCoursesRoutes)
 router.use('/admin/courses/chapters', isAuthenticated, hasPermission, adminChaptersRoutes);
 router.use('/admin/blogs', isAuthenticated, hasPermission, adminBlogsRoutes);
 router.use('/admin/panel', isAuthenticated, hasPermission, adminPanelRoutes);
-router.use('/user/authentication', isAuthenticated, hasPermission, userAuthentication);
+router.use('/user/authentication', userAuthentication);
 router.use('/developer', isAuthenticated, DeveloperRouets);
 router.use('/', home);
 

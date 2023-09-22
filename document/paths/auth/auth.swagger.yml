@@ -2,7 +2,7 @@
   /user/authentication/getOtp:
     post:
       summary: get Otp code
-      tags: [Authentication]
+      tags: [UserAuthentication]
       description: one time password (OTP) send code
       requestBody:
         content:
@@ -42,7 +42,7 @@
   /user/authentication/checkOtp:
     post:
       summary: check Otp code
-      tags: [Authentication]
+      tags: [UserAuthentication]
       description: one time password (OTP) check code
       requestBody:
         content:
@@ -93,7 +93,7 @@
   /user/authentication/refreshToken:
     post:
       summary: refresh token
-      tags: [Authentication]
+      tags: [UserAuthentication]
       description: check refresh token for get new access token
       requestBody:
         content:

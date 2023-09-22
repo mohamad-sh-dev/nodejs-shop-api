@@ -26,7 +26,7 @@ permissionsSchema.pre('aggregate', function (next) {
 permissionsSchema.pre('find', function (next) {
     this.select('-createdAt -updatedAt -__v');
     next();
-}); 
+});
 permissionsSchema.index({ title: 'text', description: 'text' });
 const PermissionsModel = mongoose.model('Permissions', permissionsSchema);
 

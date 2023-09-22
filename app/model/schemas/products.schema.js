@@ -4,7 +4,6 @@ const { messageCenter } = require('../../utilities/messages');
 
 exports.createUpdateProductSchema = joi.object({
     id: joi.string().pattern(/^[a-f0-9]{24}$/),
-
     summary: joi
         .string()
         .min(7)
@@ -16,7 +15,6 @@ exports.createUpdateProductSchema = joi.object({
             'string.max': '"توضیحات کوتاه" بیشتر از حد مجاز  است (حداکثر 15 کاراکتر)',
             'any.required': '"توضیحات کوتاه" مورد نیاز میباشد'
         }),
-
     tags: joi
         .array()
         .items(/^#[A-Za-z0-9_\u0600-\u06FF]+$/)

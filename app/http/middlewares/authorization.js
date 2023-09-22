@@ -5,8 +5,7 @@ const { verifyToken } = require('../../utilities/functions');
 exports.isAuthenticated = async (req, res, next) => {
   try {
     let token;
-    if ( 
-      req.headers.authorization
+    if (req.headers.authorization
       && req.headers.authorization.startsWith('Bearer')
     ) {
       // eslint-disable-next-line prefer-destructuring

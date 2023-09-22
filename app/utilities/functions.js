@@ -88,7 +88,7 @@ async function verifyRefreshToken(token) {
 function filterObj(obj, allowedfields) {
   const newObj = {};
   Object.keys(obj).forEach((el) => {
-    if (allowedfields.includes(el.toLowerCase())) {
+    if (allowedfields.includes(el)) { 
       const nulishData = [undefined, null, '', {}, []];
       if (!nulishData.includes(obj[el])) {
         newObj[el] = obj[el];
@@ -127,7 +127,7 @@ async function makeUploadDestination(entity) {
 function sendResponseToClient(response, status, statusCode, data, message) {
   let dataCount = 0;
   if (data) {
-    dataCount = Array.isArray(data) ? data?.length : Object.keys(data)?.length;
+    dataCount = Array.isArray(data) ? data?.length : 1;
   }
   return response.status(statusCode).json({
     status: status || '',

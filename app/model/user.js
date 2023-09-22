@@ -55,6 +55,20 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+userSchema.pre('aggregate', function (next) {
+  this.project('-createdAt -updatedAt -__v -role -otp');
+  next();
+});
+
+userSchema.pre('find', function (next) {
+  this.select('-createdAt -updatedAt -__v -role -otp');
+  next();
+});
+userSchema.pre('findOne', function (next) {
+  this.select('-createdAt -updatedAt -__v -role -otp');
+  next();
+});
+
 userSchema.pre('save', function (next) {
   if (!this.isModified('password')) return next();
   this.password = bcrypt.hash(this.password, 10);

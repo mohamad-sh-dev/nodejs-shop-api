@@ -86,4 +86,6 @@ class UserAuthController extends BaseController {
     }
   }
 }
-module.exports = new UserAuthController();
+module.exports = {
+  UserAuthController: new UserAuthController()
+};

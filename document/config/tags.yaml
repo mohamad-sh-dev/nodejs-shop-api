@@ -1,12 +1,18 @@
 tags:
   - name : IndexPage
-  - name : Authentication
+  - name : UserAuthentication
   - name : RBAC Panel [Admin]
-    description : (Required Super-admin Or Master Permission)
+    description : (Required Permission)
   - name : Admin Panel [Blogs]
+    description : (Required Permission)
   - name : Admin Panel [Products]
+    description : (Required Permission)
   - name : Admin Panel [Categories]
+    description : (Required Permission)
   - name : Admin Panel [Courses]
+    description : (Required Permission)
   - name : Admin Panel [Chapters]
+    description : (Required Permission)
   - name : Admin Panel [Episodes]
+    description : (Required Permission)
   - name : Developers Routes    

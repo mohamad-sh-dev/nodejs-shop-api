@@ -1,5 +1,39 @@
 components :
+  definitions : 
+    200updatedContent : 
+      description: success
+      content :  
+        application/json : 
+          schema : 
+            $ref : '#/components/responses/schemas/200updatedContent'
+          example :
+            status : success 
+            message : بروز رسانی با موفقیت انجام شد
+    401 : 
+      description: unauthorized 
+      content : 
+        application/json : 
+          schema : 
+            $ref : '#/components/responses/schemas/401unuthorized'
+          example : 
+            status : 'ناموفق'
+            message : وارد حساب کاربری خود شوید
   schemas : 
+    updateProfile : 
+      type : object 
+      properties : 
+        firstName: 
+          type : string
+          description: firstname
+        lastName : 
+          type : string  
+          description: lastname
+        profileImage: 
+          type : file
+          description : Profile Image
+        birthDate :
+          type : string
+          description: date of birth
     editEpisode : 
       type : object 
       properties : 
