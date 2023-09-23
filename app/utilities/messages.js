@@ -2,7 +2,15 @@ module.exports = {
     messageCenter: {
         schemaDefention: {
         },
+        AUTHENTICATION: {
+            INVALID_TOKEN: 'توکن نا معتبر',
+            EXPIRE_TOKEN: 'کد اعتبارسنجی شما منقضی شده است لطفا مجددا تلاش نمایید',
+            INCORRECT_TOKEN: 'کد اعتبار سنجی صحیح نیست',
+            FAILED_LOGIN: 'ورود شما انجام نشد',
+            TOKEN_SENT: 'توکن ارسال شد',
+        },
         public: {
+            DUPLICATE_CONTENT: 'محتوای مورد نظر از قبل وجود دارد',
             REMOVEFAILED: 'حذف ناموفق',
             FAILED: 'ناموفق',
             FAILED_UPDATE: 'بروز رسانی انجام نشد',
@@ -13,6 +21,12 @@ module.exports = {
             notFoundContent: 'محتوای مورد نظر شما یافت نشد',
             incorrectId: 'شناسه صحیح نمیباشد',
         },
+        BLOGS: {
+            CREATED: 'وبلاگ با موفقیت ایجاد شد',
+        },
+        CATEGORIES: {
+            CREATED: 'دسته بندی با موفقیت ایجاد شد',
+        },
         product: {
             removeSuccessfull: 'محصول با موفقیت حذف شد',
             removeFaild: 'حذف محصول با خطا مواجه شد',
@@ -20,12 +34,6 @@ module.exports = {
             incorrectId: 'شناسه محصول صحیح نمیباشد',
             successUpdate: 'بروز رسانی محصول با موفقیت انجام شد',
             failedUpdate: 'بروز رسانی محصول با خطال مواجه شد',
-            // validations: {
-            //     'string.min': '"عنوان" محصول کوتاه تر از حد مجاز است (حداقل 3 کاراکتر)',
-            //     'string.max': '"عنوان" محصول بیشتر از حد مجاز  است (حداکثر 15 کاراکتر)',
-            //     'string.empty': '"عنوان" نمیتواند خالی باشد',
-            //     any.required
-            // }
         },
         PERMISSIONS: {
             CREATED: ' سطح دسترسی با موفقیت ایجاد شد',
@@ -38,6 +46,10 @@ module.exports = {
         },
         USER: {
             NOTFOUND: 'کاربر یافت نشد',
+            ACCOUNT_NOTFOUND: 'وارد حساب کاربری خود شوید'
+        },
+        MULTER: {
+            INCCORECT_FILE_FORMAT: 'فرمت فایل صحیح نمیباشد',
         }
 
     }

@@ -8,6 +8,7 @@ const {
     sendResponseToClient, filterObj, mergeExistContentWithFilteredBody
 } = require('../../../utilities/functions');
 const unlinkFile = require('../../../utilities/unlinkFile');
+const { publicDefinitions } = require('../../../utilities/publicDefinitions');
 
 class UserController extends BaseController {
     async getListOfUsers(req, res, next) {
@@ -51,8 +52,7 @@ class UserController extends BaseController {
                 const newProfileImagePath = req.file.uploadedPath;
                 req.body.profileImage = newProfileImagePath;
             }
-            const allowedFieldToBeUpdate = ['firstName', 'lastName', 'profileImage', 'password', 'birthDate'];
-            const filteredBody = filterObj(req.body, allowedFieldToBeUpdate);
+            const filteredBody = filterObj(req.body, publicDefinitions.userAllowedFieldsToBeUpdated());
             const mergedContents = mergeExistContentWithFilteredBody(user, filteredBody);
             const updateResult = await UserModel.updateOne({ _id: id }, {
                 $set: mergedContents

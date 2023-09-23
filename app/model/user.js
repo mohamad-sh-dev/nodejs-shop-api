@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
@@ -25,7 +26,7 @@ const userSchema = new mongoose.Schema(
     },
     mobile: {
       type: String,
-      required: [true, 'شماره همراه مورد نیاز میباشد']
+      required: true
     },
     role: {
       type: String,

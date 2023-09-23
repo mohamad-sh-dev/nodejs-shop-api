@@ -22,7 +22,7 @@
               example :
                 status  : 'success' 
                 message:  'توکن ارسال شد'
-                token: 8758
+                token: 87583
         400:
           description: bad request
           content : 

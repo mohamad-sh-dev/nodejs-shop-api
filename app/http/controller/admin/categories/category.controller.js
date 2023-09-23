@@ -1,7 +1,9 @@
 const createHttpError = require('http-errors');
+const { StatusCodes: httpStatusCodes } = require('http-status-codes');
 const { CategoryModel } = require('../../../../model/categories');
 const BaseController = require('../../baseController');
 const { messageCenter } = require('../../../../utilities/messages');
+const { sendResponseToClient } = require('../../../../utilities/functions');
 
 class CategoryManager extends BaseController {
   // Create category
@@ -9,7 +11,7 @@ class CategoryManager extends BaseController {
     try {
       const { name, parentCategory, subCategory } = req.body;
       const existCategory = await this.checkCategoryExist(name);
-      if (existCategory.exist) { throw createHttpError.BadRequest('دسته بندی مورد نظر وجود دارد'); }
+      if (existCategory.exist) { throw createHttpError.BadRequest(messageCenter.public.DUPLICATE_CONTENT); }
       const createdCategory = await CategoryModel.create({ name, parentCategory, subCategory });
       // if (parentCategory) {
       //   await CategoryModel.aggregate([
@@ -23,11 +25,7 @@ class CategoryManager extends BaseController {
       //     },
       //   ]);
       // }
-      res.status(201).json({
-        status: messageCenter.public.success,
-        message: 'دسته بندی با موفقیت ایجاد شد',
-        data: createdCategory
-      });
+      return sendResponseToClient(res, messageCenter.public.success, httpStatusCodes.CREATED, createdCategory, messageCenter.CATEGORIES.CREATED);
     } catch (error) {
       next(error);
     }
@@ -40,11 +38,8 @@ class CategoryManager extends BaseController {
       const category = await CategoryModel.findOne({
         $or: [{ _id: categoryId }, { name }],
       }).populate({ path: 'parentCategory' });
-      if (!category) { throw createHttpError.NotFound('دسته بندی مورد نظر موجود نمیباشد'); }
-      return res.status(200).json({
-        status: messageCenter.public.success,
-        data: category || {},
-      });
+      if (!category) { throw createHttpError.NotFound(messageCenter.public.notFoundContent); }
+      return sendResponseToClient(res, messageCenter.public.success, httpStatusCodes.OK, category);
     } catch (error) {
       next(error);
     }
@@ -53,11 +48,7 @@ class CategoryManager extends BaseController {
   async getAllCategories(req, res, next) {
     try {
       const categories = await CategoryModel.find({}, { __v: 0, createdAt: 0, updatedAt: 0 });
-      return res.status(200).json({
-        status: messageCenter.public.success,
-        count: categories.length || 0,
-        data: categories || [],
-      });
+      return sendResponseToClient(res, messageCenter.public.success, httpStatusCodes.OK, categories);
     } catch (error) {
       next(error);
     }
@@ -70,10 +61,7 @@ class CategoryManager extends BaseController {
           $match: {},
         },
       ]);
-      return res.status(200).json({
-        status: messageCenter.public.success,
-        data: categories,
-      });
+      return sendResponseToClient(res, messageCenter.public.success, httpStatusCodes.OK, categories);
     } catch (error) {
       next(error);
     }
@@ -84,7 +72,7 @@ class CategoryManager extends BaseController {
     try {
       const { id: _id, name } = req.body;
       const category = (await this.checkCategoryExist(name, _id)).data;
-      if (!category) { throw createHttpError.NotFound('دسته بندی مورد نظر موجود نیست'); }
+      if (!category) { throw createHttpError.NotFound(messageCenter.public.notFoundContent); }
       const updatedCategory = await CategoryModel.updateOne(
         { _id },
         {
@@ -94,10 +82,8 @@ class CategoryManager extends BaseController {
           runValidators: true,
         },
       );
-      if (updatedCategory.modifiedCount !== 1) { throw createHttpError.InternalServerError('خطای داخلی سرور'); }
-      return res.status(200).json({
-        message: 'اپدیت باموفقیت انجام شد',
-      });
+      if (!updatedCategory.modifiedCount) { throw createHttpError.InternalServerError(messageCenter.public.internalServerErrorMsg); }
+      return sendResponseToClient(res, messageCenter.public.success, httpStatusCodes.OK, null, messageCenter.public.successUpdate);
     } catch (error) {
       next(error);
     }
@@ -129,11 +115,8 @@ class CategoryManager extends BaseController {
             { _id }, { parentCategory: _id },
           ],
       });
-      if (!category) { throw createHttpError.InternalServerError('حذف با خطا مواجه شد'); }
-      return res.status(200).json({
-        status: messageCenter.public.success,
-        message: 'دسته بندی با موفقیت حذف شد',
-      });
+      if (!category) { throw createHttpError.InternalServerError(messageCenter.public.REMOVEFAILED); }
+      return sendResponseToClient(res, messageCenter.public.success, httpStatusCodes.OK, null, messageCenter.public.removeSuccessfull);
     } catch (error) {
       next(error);
     }

@@ -4,7 +4,9 @@ const { fileUpload } = require('../../../utilities/multerConfig');
 const { createUpdateCoursesSchema, getDeleteCoursesSchema, updateCoursesSchema } = require('../../../model/schemas/courses.schema');
 const { validateRequestBody } = require('../../../http/validations/auth.schema');
 const parseToJsonArray = require('../../../http/middlewares/jsonArrayPars');
-const { REQUEST_PARAMS } = require('../../../utilities/constants');
+const {
+    REQUEST_PARAMS, UPLOADS_ENTITIES, REQUEST_BODY_FIELD_NAMES, UPLOAD_FIELD_NAMES
+} = require('../../../utilities/constants');
 
 const { Router } = express;
 
@@ -16,22 +18,22 @@ router.get('/:courseId', validateRequestBody(getDeleteCoursesSchema, REQUEST_PAR
 
 router.post(
     '/',
-    fileUpload('courses').single('imageCover'),
-    parseToJsonArray(['tags']),
+    fileUpload(UPLOADS_ENTITIES.COURSES).single(UPLOAD_FIELD_NAMES.IMAGECOVER),
+    parseToJsonArray([REQUEST_BODY_FIELD_NAMES.TAGS]),
     validateRequestBody(createUpdateCoursesSchema),
     coursesController.createCourse
 );
 router.patch(
     '/',
-    fileUpload('courses').single('imageCover'),
-    parseToJsonArray(['tags']),
+    fileUpload(UPLOADS_ENTITIES.COURSES).single(UPLOAD_FIELD_NAMES.IMAGECOVER),
+    parseToJsonArray([REQUEST_BODY_FIELD_NAMES.TAGS]),
     validateRequestBody(updateCoursesSchema),
     coursesController.updateCourse
 );
 router.delete(
     '/',
-    fileUpload('courses').single('imageCover'),
-    parseToJsonArray(['tags']),
+    fileUpload(UPLOADS_ENTITIES.COURSES).single(UPLOAD_FIELD_NAMES.IMAGECOVER),
+    parseToJsonArray([REQUEST_BODY_FIELD_NAMES.TAGS]),
     validateRequestBody(getDeleteCoursesSchema),
     coursesController.removeCourse
 );

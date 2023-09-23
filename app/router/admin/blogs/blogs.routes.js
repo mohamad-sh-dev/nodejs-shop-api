@@ -4,6 +4,7 @@ const { validateRequestBody } = require('../../../http/validations/auth.schema')
 const { createUpdateBlogsSchema, getDeleteBlogsSchema } = require('../../../model/schemas/blogs.schema');
 const { fileUpload } = require('../../../utilities/multerConfig');
 const parseToJsonArray = require('../../../http/middlewares/jsonArrayPars');
+const { UPLOADS_ENTITIES, REQUEST_BODY_FIELD_NAMES, UPLOAD_FIELD_NAMES } = require('../../../utilities/constants');
 
 const router = new Router();
 router.get(
@@ -12,15 +13,15 @@ router.get(
 );
 router.post(
   '/',
-  fileUpload('blogs').single('image'),
-  parseToJsonArray(['tag', 'categories']),
+  fileUpload(UPLOADS_ENTITIES.BLOGS).single(UPLOAD_FIELD_NAMES.IMAGE),
+  parseToJsonArray([REQUEST_BODY_FIELD_NAMES.TAGS, REQUEST_BODY_FIELD_NAMES.CATEGORIES]),
   validateRequestBody(createUpdateBlogsSchema),
   blogController.createBlog
 );
 router.patch(
   '/',
-  fileUpload('blogs').single('image'),
-  parseToJsonArray(['tag', 'categories']),
+  fileUpload(UPLOADS_ENTITIES.BLOGS).single(UPLOAD_FIELD_NAMES.IMAGE),
+  parseToJsonArray([REQUEST_BODY_FIELD_NAMES.TAGS, REQUEST_BODY_FIELD_NAMES.CATEGORIES]),
   validateRequestBody(createUpdateBlogsSchema),
   blogController.updateBlog
 );

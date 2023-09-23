@@ -4,6 +4,7 @@ const parseToJsonArray = require('../../../http/middlewares/jsonArrayPars');
 const permissionsController = require('../../../http/controller/admin/RBAC/permissions.controller');
 const { updatePermissionSchema, getDeletePermissionsSchema } = require('../../../model/schemas/RBAC/permissions.schema');
 const { createPermissionSchema } = require('../../../model/schemas/RBAC/permissions.schema');
+const { REQUEST_BODY_FIELD_NAMES } = require('../../../utilities/constants');
 
 const router = new Router();
 router.get(
@@ -12,13 +13,13 @@ router.get(
 );
 router.post(
     '/',
-    parseToJsonArray(['methods']),
+    parseToJsonArray([REQUEST_BODY_FIELD_NAMES.METHODS]),
     validateRequestBody(createPermissionSchema),
     permissionsController.addNewPermission
 );
 router.patch(
     '/',
-    parseToJsonArray(['methods']),
+    parseToJsonArray([REQUEST_BODY_FIELD_NAMES.METHODS]),
     validateRequestBody(updatePermissionSchema),
     permissionsController.updatePermission
 );

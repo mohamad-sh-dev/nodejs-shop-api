@@ -1,18 +1,19 @@
 const mongoose = require('mongoose');
+const { PRODUCT_TYPES } = require('../utilities/constants');
 
 const productSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, 'نام مورد نیاز میباشد'],
+      required: true
     },
     summary: {
       type: String,
-      required: [true, 'نام خانوادگی شما مورد نیاز میباشد'],
+      required: true
     },
     description: {
       type: String,
-      required: [true, 'نام کاربری مورد نیاز میباشد'],
+      required: true
     },
     imageCover: {
       type: String,
@@ -46,7 +47,7 @@ const productSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ['virtual', 'phicycal'],
+      enum: PRODUCT_TYPES
     },
     suplier: {
       type: mongoose.Schema.ObjectId,

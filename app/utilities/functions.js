@@ -5,9 +5,11 @@ const path = require('path');
 const fsPromises = require('fs').promises;
 const redisCilent = require('./initRedis');
 const { UserModel } = require('../model/user');
+const { publicDefinitions } = require('./publicDefinitions');
+const { messageCenter } = require('./messages');
 
 function randomTokenGenerator() {
-  return Math.floor(Math.random() * 10000);
+  return Math.floor((Math.random() * 10000) * 10);
 }
 
 function signAccessToken(user) {
@@ -17,7 +19,7 @@ function signAccessToken(user) {
         mobile: user.mobile,
       };
       const options = {
-        expiresIn: '1d',
+        expiresIn: process.env.ACCESS_TOKEN_EXPIRE
       };
       const secretKey = process.env.ACCESS_TOKEN_SECRET;
       JWT.sign(payload, secretKey, options, (err, token) => {
@@ -36,7 +38,7 @@ function signRefreshToken(user) {
         mobile: user.mobile,
       };
       const options = {
-        expiresIn: '1y',
+        expiresIn: process.env.REFRESH_TOKEN_EXPIRE
       };
       const secretKey = process.env.REFRESH_TOKEN_SECRET;
       JWT.sign(payload, secretKey, options, async (err, token) => {
@@ -56,7 +58,7 @@ async function verifyToken(token) {
         token,
         process.env.ACCESS_TOKEN_SECRET,
         (err, decodedToken) => {
-          if (err) reject(createHttpError.BadRequest('توکن نامعتبر'));
+          if (err) reject(createHttpError.BadRequest(messageCenter.AUTHENTICATION.INVALID_TOKEN));
           resolve(decodedToken);
         },
       );
@@ -72,12 +74,12 @@ async function verifyRefreshToken(token) {
         token,
         process.env.REFRESH_TOKEN_SECRET,
         async (err, tokenPayload) => {
-          if (err) reject(createHttpError.BadRequest('توکن نامعتبر'));
+          if (err) reject(createHttpError.BadRequest(messageCenter.AUTHENTICATION.INVALID_TOKEN));
           const { mobile } = tokenPayload || {};
           const user = await UserModel.findOne({ mobile }, { password: 0, otp: 0 });
           const userRefreshTokne = await redisCilent.get(user.id);
           if (userRefreshTokne === token) resolve(mobile);
-          else reject(createHttpError.Unauthorized('توکن نامعتبر'));
+          else reject(createHttpError.Unauthorized(messageCenter.AUTHENTICATION.INVALID_TOKEN));
         },
       );
     } catch (error) {
@@ -88,8 +90,8 @@ async function verifyRefreshToken(token) {
 function filterObj(obj, allowedfields) {
   const newObj = {};
   Object.keys(obj).forEach((el) => {
-    if (allowedfields.includes(el)) { 
-      const nulishData = [undefined, null, '', {}, []];
+    if (allowedfields.includes(el)) {
+      const nulishData = publicDefinitions.nullishData();
       if (!nulishData.includes(obj[el])) {
         newObj[el] = obj[el];
       }

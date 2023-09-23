@@ -4,10 +4,11 @@ const createHttpError = require('http-errors');
 const { StatusCodes: httpStatusCodes } = require('http-status-codes');
 const mongoose = require('mongoose');
 const { ProductModel } = require('../../../../model/product');
-const { filterObj, assignUploadPathToImages } = require('../../../../utilities/functions');
+const { filterObj, assignUploadPathToImages, sendResponseToClient } = require('../../../../utilities/functions');
 const BaseController = require('../../baseController');
 const { messageCenter } = require('../../../../utilities/messages');
 const unlinkFile = require('../../../../utilities/unlinkFile');
+const { publicDefinitions } = require('../../../../utilities/publicDefinitions');
 
 const { ObjectId } = mongoose.Types;
 
@@ -37,10 +38,7 @@ class ProductController extends BaseController {
                 imageCover,
                 suplier: req.user.id
             });
-            res.status(httpStatusCodes.CREATED).json({
-                status: messageCenter.public.success,
-                data: createdProduct
-            });
+            return sendResponseToClient(res, messageCenter.public.success, httpStatusCodes.CREATED, createdProduct);
         } catch (error) {
             next(error);
         }
@@ -49,11 +47,8 @@ class ProductController extends BaseController {
     async getProductById(req, res, next) {
         try {
             const { productId } = req.params;
-            const product = await ProductModel.findOne({ _id: productId });
-            return res.status(httpStatusCodes.OK).json({
-                message: messageCenter.public.success,
-                data: product
-            });
+            const { data: product } = await this.checkExistProduct(productId);
+            return sendResponseToClient(res, messageCenter.public.success, httpStatusCodes.OK, product);
         } catch (error) {
             next(error);
         }
@@ -69,8 +64,7 @@ class ProductController extends BaseController {
                     }
                 }
             ]))[0];
-            const allowedFiledsForUpdate = ['title', 'summary', 'description', 'image', 'tags', 'category', 'price', 'discount', 'type', 'properties'];
-            const filteredBody = filterObj(req.body, allowedFiledsForUpdate);
+            const filteredBody = filterObj(req.body, publicDefinitions.productsAllowedFieldsToBeUpdated());
             if (Object.keys(req.files).length > 1) {
                 const { images, imageCover } = assignUploadPathToImages(req.files);
                 filteredBody['images'] = images;
@@ -89,10 +83,7 @@ class ProductController extends BaseController {
             if (!productUpdatedrersult.modifiedCount) {
                 throw createHttpError.InternalServerError(messageCenter.product.failedUpdate);
             }
-            return res.status(httpStatusCodes.OK).json({
-                status: messageCenter.public.success,
-                message: messageCenter.public.successUpdate
-            });
+            return sendResponseToClient(res, messageCenter.public.success, httpStatusCodes.OK, null, messageCenter.public.successUpdate);
         } catch (error) {
             next(error);
         }
@@ -102,7 +93,6 @@ class ProductController extends BaseController {
         try {
             const { productId } = req.body;
             const { data: product } = await this.checkExistProduct(productId);
-            // Promise.all([])
             const removeProductImagesFromServer = unlinkFile([...product.images, product?.imageCover]);
             const removeProductAction = ProductModel.deleteOne({ _id: productId });
             const removeContentResult = await Promise.all([removeProductImagesFromServer, removeProductAction]);
@@ -111,14 +101,7 @@ class ProductController extends BaseController {
                     throw createHttpError.InternalServerError(new Error(messageCenter.product.removeFaild));
                 }
             });
-
-            // const deletedProdcutResult = await ProductModel.deleteOne({ _id: productId });
-            // if (!deletedProdcutResult.deletedCount) {
-            //     throw createHttpError.InternalServerError(new Error(messageCenter.public.internalServerErrorMsg));
-            // }
-            return res.status(httpStatusCodes.OK).json({
-                message: messageCenter.product.removeSuccessfull
-            });
+            return sendResponseToClient(res, messageCenter.public.success, httpStatusCodes.OK, null, messageCenter.public.removeSuccessfull);
         } catch (error) {
             next(error);
         }
@@ -172,11 +155,7 @@ class ProductController extends BaseController {
                     },
                 ]);
             }
-            return res.status(200).json({
-                status: 'success',
-                count: products?.length || 0,
-                data: products || []
-            });
+            return sendResponseToClient(res, messageCenter.public.success, httpStatusCodes.OK, products);
         } catch (error) {
             next(error);
         }
@@ -184,7 +163,7 @@ class ProductController extends BaseController {
 
     async checkExistProduct(id) {
         const product = await ProductModel.findOne({ _id: id });
-        if (!product) throw createHttpError.NotFound('محصول مورد نظر مورد نظر یافت نشد');
+        if (!product) throw createHttpError.NotFound(messageCenter.public.notFoundContent);
         return {
             exist: !!product,
             data: product,

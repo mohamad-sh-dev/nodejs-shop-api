@@ -3,7 +3,6 @@ const { RolesModel } = require('../../model/RBAC/roles');
 const { messageCenter } = require('../../utilities/messages');
 
 async function hasPermission(req, res, next) {
-  console.log('ssssssssssssssssssssssssssss');
     try {
         const { role } = req.user;
         const rolesDocument = await RolesModel.findOne({ name: role }).populate({

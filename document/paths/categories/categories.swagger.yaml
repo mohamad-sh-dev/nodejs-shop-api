@@ -75,14 +75,10 @@
                 $ref  :   '#/components/responses/schemas/404notFound'
               example : 
                 messasge : دسته بندی مورد نظر یافت نشد
+        403:
+          $ref: '#/components/definitions/403'
         500:
-          description: internal server error   
-          content : 
-            application/json : 
-              schema : 
-                $ref : '#/components/responses/schemas/500InternalServerError'
-              example : 
-                message : خطای داخلی سرور 
+          $ref: '#/components/definitions/500'
     delete:
       summary: delete a category
       tags:  ['Admin Panel [Categories]']
@@ -124,13 +120,9 @@
               example : 
                 messasge : دسته بندی مورد نظر یافت نشد
         401: 
-          description: unauthorized 
-          content : 
-            application/json : 
-              schema : 
-                $ref : '#/components/responses/schemas/401unuthorized'
-              example : 
-                message : وارد حساب کاربری خود شوید
+          $ref: '#/components/definitions/401'
+        403: 
+          $ref: '#/components/definitions/403'
         500:
           description: internal server error   
           content : 
@@ -161,14 +153,10 @@
                   $ref : '#/components/examples/category'
                 contentNull : 
                   $ref : '#/components/examples/contentNull'
+        403:
+          $ref: '#/components/definitions/403'
         500:
-          description: internal server error
-          content : 
-            application/json : 
-              schema : 
-                $ref: '#/components/responses/schemas/500InternalServerError'
-              example : 
-                message : 'خطای داخلی سرور'
+          $ref: '#/components/definitions/500'
     post:
       summary: cteate a category
       tags:  ['Admin Panel [Categories]']
@@ -222,21 +210,11 @@
               example :
                  message : '" || شناسه فرزند صحیح نمیباشد عنوان" کمتر از حد مجاز است (حداقل 3 کاراکتر) || شناسه" دسته بندی باید از نوع رشته باشد'
         401: 
-          description: unauthorized
-          content : 
-            application/json :
-              schema : 
-                $ref : '#/components/responses/schemas/401unuthorized'
-              example: 
-                message : 'وارد حساب کاربری خود شوید'
+          $ref: '#/components/definitions/401'
+        403: 
+          $ref: '#/components/definitions/403'
         500:
-           description: internal server error , 
-           content : 
-            application/json : 
-              schema : 
-                $ref : '#/components/responses/schemas/500InternalServerError'
-              example : 
-                message : 'خطای داخلی سرور'
+           $ref: '#/components/definitions/500'
     patch:
       summary: update a category
       tags: ['Admin Panel [Categories]']
@@ -281,18 +259,8 @@
               example : 
                 messasge : دسته بندی مورد نظر یافت نشد
         401: 
-          description: unauthorized 
-          content : 
-            application/json : 
-              schema : 
-                $ref : '#/components/responses/schemas/401unuthorized'
-              example : 
-                message : وارد حساب کاربری خود شوید
+          $ref: '#/components/definitions/401'
+        403: 
+          $ref: '#/components/definitions/403'
         500:
-          description: internal server error   
-          content : 
-            application/json : 
-              schema : 
-                $ref : '#/components/responses/schemas/500InternalServerError'
-              example : 
-                message : خطای داخلی سرور 
+          $ref: '#/components/definitions/500'

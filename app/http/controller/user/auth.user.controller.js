@@ -1,4 +1,5 @@
 const createHttpError = require('http-errors');
+const { StatusCodes: httpStatusCodes } = require('http-status-codes');
 const BaseController = require('../baseController');
 const { UserModel } = require('../../../model/user');
 const {
@@ -7,6 +8,7 @@ const {
   signRefreshToken,
   verifyRefreshToken,
 } = require('../../../utilities/functions');
+const { messageCenter } = require('../../../utilities/messages');
 
 class UserAuthController extends BaseController {
   async getOtp(req, res, next) {
@@ -14,10 +16,10 @@ class UserAuthController extends BaseController {
       const token = randomTokenGenerator();
       const { mobile } = req.body;
       const result = await this.saveUser(mobile, token);
-      if (!result) throw createHttpError.BadGateway('ورود شما انجام نشد');
+      if (!result) throw createHttpError.BadGateway(messageCenter.AUTHENTICATION.FAILED_LOGIN);
       return res.status(200).json({
-        status: 'success',
-        message: 'توکن ارسال شد',
+        status: messageCenter.public.success,
+        message: messageCenter.AUTHENTICATION.TOKEN_SENT,
         token,
       });
     } catch (error) {
@@ -29,14 +31,14 @@ class UserAuthController extends BaseController {
     try {
       const { mobile, code } = req.body;
       const user = await UserModel.findOne({ mobile });
-      if (!user) throw createHttpError.NotFound('کاربر یافت نشد');
-      if (user && user.otp.token.toString() !== code) { throw createHttpError.Unauthorized('کد اعتبار سنجی صحیح نیست'); }
+      if (!user) throw createHttpError.NotFound(messageCenter.USER.NOTFOUND);
+      if (user && user.otp.token.toString() !== code) { throw createHttpError.Unauthorized(messageCenter.AUTHENTICATION.INCORRECT_TOKEN); }
       const now = Date.now();
-      if (user.otp.expiresIn < now) { throw createHttpError.Unauthorized('کد شما منقضی شده است'); }
+      if (user.otp.expiresIn < now) { throw createHttpError.Unauthorized(messageCenter.AUTHENTICATION.EXPIRE_TOKEN); }
       const accessToken = await signAccessToken(user);
       const refreshToken = await signRefreshToken(user);
-      return res.status(200).json({
-        status: 'success',
+      return res.status(httpStatusCodes.OK).json({
+        status: messageCenter.public.success,
         accessToken,
         refreshToken,
       });

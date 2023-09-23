@@ -76,13 +76,7 @@
               example : 
                 messasge : محصول مورد نظر یافت نشد
         500:
-          description: internal server error   
-          content : 
-            application/json : 
-              schema : 
-                $ref : '#/components/responses/schemas/500InternalServerError'
-              example : 
-                message : خطای داخلی سرور 
+          $ref: '#/components/definitions/500'
   /admin/products:
     get:
       summary: Get List Of Products
@@ -109,13 +103,7 @@
                 contentNull : 
                   $ref : '#/components/examples/contentNull'
         500:
-          description: internal server error
-          content : 
-            application/json : 
-              schema : 
-                $ref: '#/components/responses/schemas/500InternalServerError'
-              example : 
-                message : 'خطای داخلی سرور'
+          $ref: '#/components/definitions/500'
     post:
       summary: Create a Product
       tags: ['Admin Panel [Products]']
@@ -262,21 +250,9 @@
                 fileTooLarge:
                   $ref :  '#/components/examples/fileTooLarge'
         401:
-          description: unauthorized
-          content : 
-            application/json :
-              schema : 
-                $ref : '#/components/responses/schemas/401unuthorized'
-              example: 
-                message : 'وارد حساب کاربری خود شوید'
+          $ref: '#/components/definitions/401'
         500:
-          description: internal server error , 
-          content : 
-            application/json : 
-              schema : 
-                $ref : '#/components/responses/schemas/500InternalServerError'
-              example : 
-                message : 'خطای داخلی سرور'
+          $ref: '#/components/definitions/500'
     patch:
       summary: Update A Specific Product
       tags: ['Admin Panel [Products]']
@@ -401,21 +377,11 @@
               example : 
                 messasge : محصول مورد نظر یافت نشد
         401: 
-          description: unauthorized 
-          content : 
-            application/json : 
-              schema : 
-                $ref : '#/components/responses/schemas/401unuthorized'
-              example : 
-                message : وارد حساب کاربری خود شوید
+          $ref: '#/components/definitions/401'
+        403: 
+          $ref: '#/components/definitions/403'
         500:
-          description: internal server error   
-          content : 
-            application/json : 
-              schema : 
-                $ref : '#/components/responses/schemas/500InternalServerError'
-              example : 
-                message : خطای داخلی سرور 
+          $ref: '#/components/definitions/500'
     delete:
       summary: Delete A Product
       tags:  ['Admin Panel [Products]']
@@ -459,13 +425,7 @@
               example : 
                 messasge : محصول مورد نظر یافت نشد
         401: 
-          description: unauthorized 
-          content : 
-            application/json : 
-              schema : 
-                $ref : '#/components/responses/schemas/401unuthorized'
-              example : 
-                message : وارد حساب کاربری خود شوید
+          $ref: '#/components/definitions/401'
         500:
           description: internal server error   
           content : 

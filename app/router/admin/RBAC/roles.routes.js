@@ -4,7 +4,7 @@ const rolesController = require('../../../http/controller/admin/RBAC/roles.contr
 const { createRoleSchema, updateRolesSchema, deleteRoleSchema } = require('../../../model/schemas/RBAC/roles.schema');
 const parseToJsonArray = require('../../../http/middlewares/jsonArrayPars');
 const { hasPermission } = require('../../../http/validations/RBAC.guard');
-const { REQUEST_QUERY } = require('../../../utilities/constants');
+const { REQUEST_QUERY, REQUEST_BODY_FIELD_NAMES } = require('../../../utilities/constants');
 
 const router = new Router();
 router.get(
@@ -13,14 +13,14 @@ router.get(
 );
 router.post(
     '/',
-    parseToJsonArray(['permissions']),
+    parseToJsonArray([REQUEST_BODY_FIELD_NAMES.PERMISSIONS]),
     validateRequestBody(createRoleSchema),
     rolesController.addNewRole
 );
 router.patch(
     '/',
     // ,
-    parseToJsonArray(['permissions']),
+    parseToJsonArray([REQUEST_BODY_FIELD_NAMES.PERMISSIONS]),
     validateRequestBody(updateRolesSchema),
     rolesController.updateRole
 );

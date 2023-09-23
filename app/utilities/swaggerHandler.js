@@ -4,10 +4,10 @@ const YAML = require('yamljs');
 
 function swaggerHandler() {
     let swaggerDocumentObject = {};
-    const swaggerConfigsRoot = path.join(__dirname, '../../document/config');
+    const swaggerConfigsRoot = path.join(__dirname, process.env.DOCUMENTS_CONFIG_PATH);
     const swaggerConfigsDirectory = fs.readdirSync(swaggerConfigsRoot);
 
-    const parenetDcumentRootOFAllApis = path.join(__dirname, '../../document/paths');
+    const parenetDcumentRootOFAllApis = path.join(__dirname, process.env.DOCUMENTS_APIS_ROOT_PATH);
     const allApisDocumentDirectory = fs.readdirSync(parenetDcumentRootOFAllApis);
 
     swaggerConfigsDirectory.forEach((swaggerDocumentConfigRoot) => {

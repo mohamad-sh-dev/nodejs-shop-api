@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 /* eslint-disable no-await-in-loop */
 const createHttpError = require('http-errors');
 const mongoose = require('mongoose');
@@ -9,15 +10,15 @@ const courseSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, 'نام مورد نیاز میباشد'],
+      required: true
     },
     summary: {
       type: String,
-      required: [true, 'نام خانوادگی شما مورد نیاز میباشد'],
+      required: true
     },
     description: {
       type: String,
-      required: [true, 'نام کاربری مورد نیاز میباشد'],
+      required: true
     },
     image: {
       type: String,

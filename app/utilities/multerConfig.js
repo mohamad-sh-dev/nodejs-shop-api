@@ -4,6 +4,10 @@ const createHttpError = require('http-errors');
 const multer = require('multer');
 const path = require('path');
 const fsPromises = require('fs').promises;
+const { StatusCodes: httpStatusCodes } = require('http-status-codes');
+const { messageCenter } = require('./messages');
+const { publicDefinitions } = require('./publicDefinitions');
+const { LIMIT_SIZES } = require('./constants');
 
 const date = new Date();
 const year = date.getFullYear().toString();
@@ -35,28 +39,28 @@ const storage = function (entity) {
 
 const fileFilter = function (req, file, cb) {
     const extentionName = file.mimetype;
-    const allowedExtNames = ['image/png', 'image/jpg', 'image/jpeg'];
+    const allowedExtNames = publicDefinitions.allowedImagesFormats();
     if (!allowedExtNames.includes(extentionName)) {
-        cb(createHttpError.BadRequest('فرمت فایل صحیح نمیباشد', 400));
+        cb(createHttpError.BadRequest(messageCenter.MULTER.INCCORECT_FILE_FORMAT, httpStatusCodes.BAD_REQUEST));
     } else {
         cb(null, file);
     }
 };
 const videoFilter = function (req, file, cb) {
     const extentionName = file.mimetype;
-    const allowedExtNames = ['video/x-matroska', 'video/mp4'];
+    const allowedExtNames = publicDefinitions.allowedVideosFormats();
     if (!allowedExtNames.includes(extentionName)) {
-        cb(createHttpError.BadRequest('فرمت فایل صحیح نمیباشد', 400));
+        cb(createHttpError.BadRequest(messageCenter.MULTER.INCCORECT_FILE_FORMAT, httpStatusCodes.BAD_REQUEST));
     } else {
         cb(null, file);
     }
 };
 function fileUpload(entity) {
-    const limitSize = 1 * 1000 * 1000;
+    const limitSize = LIMIT_SIZES.FILES;
     return multer({ storage: storage(entity), fileFilter, limits: limitSize });
 }
 function videoUpload(entity) {
-    const limitSize = 200 * 1000 * 1000;
+    const limitSize = LIMIT_SIZES.VIDEOS;
     return multer({ storage: storage(entity), fileFilter: videoFilter, limits: limitSize });
 }
 

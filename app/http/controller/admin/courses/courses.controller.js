@@ -98,7 +98,7 @@ class CourseController extends BaseController {
 
     async checkExistCourse(id) {
         const course = await CourseModel.findOne({ _id: id });
-        if (!course) throw createHttpError.NotFound('دوره مورد نظر مورد نظر یافت نشد');
+        if (!course) throw createHttpError.NotFound(messageCenter.public.notFoundContent);
         return {
             exist: !!course,
             data: course,

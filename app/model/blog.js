@@ -4,15 +4,15 @@ const blogSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, 'عنوان وبلاگ مورد نیاز میباشد'],
+      required: true
     },
     summary: {
       type: String,
-      required: [true, 'توضیح کوتاه مورد نیاز میباشد'],
+      required: true
     },
     body: {
       type: String,
-      required: [true, 'متن وبلاگ مورد نیاز میباشد'],
+      required: true
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
@@ -28,7 +28,7 @@ const blogSchema = new mongoose.Schema(
     category: {
       type: mongoose.Schema.ObjectId,
       ref: 'Categories',
-      required: [true, 'دسته بندی مورد نیاز میباشد'],
+      required: true
     },
     comments: {
       type: [mongoose.Schema.ObjectId],

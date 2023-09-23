@@ -16,6 +16,7 @@ const { userRoutes } = require('./user/user.router');
 
 const router = new Router();
 
+router.use('/user/authentication', userAuthentication);
 router.use('/user', isAuthenticated, hasPermission, userRoutes);
 router.use('/admin/roles/', isAuthenticated, hasPermission, adminRolesRoutes);
 router.use('/admin/permissions/', isAuthenticated, hasPermission, adminPermissionsRoutes);
@@ -25,7 +26,6 @@ router.use('/admin/courses', isAuthenticated, hasPermission, adminCoursesRoutes)
 router.use('/admin/courses/chapters', isAuthenticated, hasPermission, adminChaptersRoutes);
 router.use('/admin/blogs', isAuthenticated, hasPermission, adminBlogsRoutes);
 router.use('/admin/panel', isAuthenticated, hasPermission, adminPanelRoutes);
-router.use('/user/authentication', userAuthentication);
 router.use('/developer', isAuthenticated, DeveloperRouets);
 router.use('/', home);
 

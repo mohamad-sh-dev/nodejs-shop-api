@@ -1,6 +1,7 @@
 const createHttpError = require('http-errors');
+const { REQUEST_BODY } = require('../../utilities/constants');
 
-function validateRequestBody(schema, bodyType = 'body') {
+function validateRequestBody(schema, bodyType = REQUEST_BODY) {
   return async (req, res, next) => {
     try {
       await schema.validateAsync(req[bodyType]);

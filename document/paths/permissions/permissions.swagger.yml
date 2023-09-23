@@ -34,14 +34,10 @@
                       },
                     ]
                 }
+          403 : 
+            $ref: '#/components/definitions/403'
           500:
-            description: internal server error
-            content : 
-              application/json : 
-                schema : 
-                  $ref: '#/components/responses/schemas/500InternalServerError'
-                example : 
-                  message : 'خطای داخلی سرور'
+            $ref: '#/components/definitions/500'
   /admin/permissions/{permissionID}:
         get:
             description: Get A Specific Permission 
@@ -78,23 +74,9 @@
                     example : 
                       messasge : دسترسی مورد نظر یافت نشد
               403:
-              description: forbidden
-              content : 
-                application/json : 
-                  schema  : 
-                    $ref  : '#/components/responses/schemas/403Forbidden'
-                  example : 
-                    status : ناموفق
-                    messasge : شما دسترسی لازم را ندارید
+                $ref: '#/components/definitions/403'
               500:
-                content:
-                  application/json:
-                    example:
-                      status : ناموفق
-                      message: خطای داخلی سرور
-                    schema:
-                      $ref: '#/components/responses/schemas/500InternalServerError'
-                description: internal server error
+                $ref: '#/components/definitions/500'
   /admin/permissions:
     post:
       summary: Create An Permission 
@@ -143,30 +125,11 @@
               example :
                 message : ' "توضیحات" نمیتواند خالی باشد || "عنوان" فرمت صحیح نمیباشد'
         403:
-            description: forbidden
-            content : 
-              application/json : 
-                schema  : 
-                  $ref  : '#/components/responses/schemas/403Forbidden'
-                example : 
-                  status : ناموفق
-                  messasge : شما دسترسی لازم را ندارید
+          '#/components/definitions/403'
         401:
-          description: unauthorized
-          content : 
-            application/json :
-              schema : 
-                $ref : '#/components/responses/schemas/401unuthorized'
-              example: 
-                message : 'وارد حساب کاربری خود شوید'
+          $ref: '#/components/definitions/401'
         500:
-          description: internal server error , 
-          content : 
-            application/json : 
-              schema : 
-                $ref : '#/components/responses/schemas/500InternalServerError'
-              example : 
-                message : 'خطای داخلی سرور'
+          $ref: '#/components/definitions/500'
     patch:
       summary: Update A Specific Permission  
       tags: ['RBAC Panel [Admin]']
@@ -200,14 +163,7 @@
               example : 
                 message : ' "توضیحات" نمیتواند خالی باشد || فرمت "عنوان" صحیح نمیباشد'
         403:
-            description: forbidden
-            content : 
-              application/json : 
-                schema  : 
-                  $ref  : '#/components/responses/schemas/403Forbidden'
-                example : 
-                  status : ناموفق
-                  messasge : شما دسترسی لازم را ندارید
+          $ref: '#/components/definitions/403'
         404:
           description: not found
           content : 
@@ -217,21 +173,9 @@
               example : 
                 messasge : دسترسی مورد نظر یافت نشد
         401: 
-          description: unauthorized 
-          content : 
-            application/json : 
-              schema : 
-                $ref : '#/components/responses/schemas/401unuthorized'
-              example : 
-                message : وارد حساب کاربری خود شوید
+          $ref: '#/components/definitions/401'
         500:
-          description: internal server error
-          content : 
-            application/json : 
-              schema : 
-                $ref : '#/components/responses/schemas/500InternalServerError'
-              example : 
-                message : خطای داخلی سرور 
+          $ref: '#/components/definitions/500'
     delete:
       summary: Delete A Permission 
       tags:  ['RBAC Panel [Admin]']
@@ -279,13 +223,9 @@
               example : 
                 messasge : قسمت مورد نظر یافت نشد
         401: 
-          description: unauthorized 
-          content : 
-            application/json : 
-              schema : 
-                $ref : '#/components/responses/schemas/401unuthorized'
-              example : 
-                message : وارد حساب کاربری خود شوید
+          $ref: '#/components/definitions/401'
+        403: 
+          $ref: '#/components/definitions/403'
         500:
           description: internal server error   
           content : 

@@ -32,13 +32,7 @@
                 $ref: '#/components/responses/schemas/400badRequest'
           description: bad request
         '401':
-          content:
-            application/json:
-              example:
-                message: وارد حساب کاربری خود شوید
-              schema:
-                $ref: '#/components/responses/schemas/401unuthorized'
-          description: unauthorized
+          $ref: '#/components/definitions/401'
         '404':
           content:
             application/json:
@@ -83,14 +77,10 @@
               schema:
                 $ref: '#/components/responses/schemas/200getContents'
           description: success
+        '403':
+          $ref: '#/components/definitions/403'
         '500':
-          content:
-            application/json:
-              example:
-                message: خطای داخلی سرور
-              schema:
-                $ref: '#/components/responses/schemas/500InternalServerError'
-          description: internal server error
+          $ref: '#/components/definitions/500'
       security:
         - authorization: []
       summary: Get List Of Courses
@@ -176,13 +166,9 @@
                 $ref: '#/components/responses/schemas/400badRequest'
           description: bad request
         '401':
-          content:
-            application/json:
-              example:
-                message: وارد حساب کاربری خود شوید
-              schema:
-                $ref: '#/components/responses/schemas/401unuthorized'
-          description: unauthorized
+          $ref: '#/components/definitions/401'
+        '403':
+          $ref: '#/components/definitions/403'
         '404':
           content:
             application/json:
@@ -192,13 +178,7 @@
                 $ref: '#/components/responses/schemas/404notFound'
           description: not found
         '500':
-          content:
-            application/json:
-              example:
-                message: خطای داخلی سرور
-              schema:
-                $ref: '#/components/responses/schemas/500InternalServerError'
-          description: internal server error
+          $ref: '#/components/definitions/500'
       security:
         - authorization: []
       summary: Update A Specific Course
@@ -264,21 +244,11 @@
                 $ref: '#/components/responses/schemas/400badRequest'
           description: bad request
         '401':
-          content:
-            application/json:
-              example:
-                message: وارد حساب کاربری خود شوید
-              schema:
-                $ref: '#/components/responses/schemas/401unuthorized'
-          description: unauthorized
+          $ref: '#/components/definitions/401'
+        '403':
+          $ref: '#/components/definitions/403'
         '500':
-          content:
-            application/json:
-              example:
-                message: خطای داخلی سرور
-              schema:
-                $ref: '#/components/responses/schemas/500InternalServerError'
-          description: internal server error ,
+          $ref: '#/components/definitions/500'
       security:
         - authorization: vscode-yaml-sort.array.1
       summary: Create a Product
@@ -345,14 +315,10 @@
               schema:
                 $ref: '#/components/responses/schemas/404notFound'
           description: not found
+        '403':
+         $ref: '#/components/definitions/403'
         '500':
-          content:
-            application/json:
-              example:
-                message: خطای داخلی سرور
-              schema:
-                $ref: '#/components/responses/schemas/500InternalServerError'
-          description: internal server error
+          $ref: '#/components/definitions/500'
       security:
         - authorization: []
       summary: Get A Specific Course

@@ -17,9 +17,8 @@ function getVideoTime(time) {
 }
 
 function convertStringTimeToSeconds(stringTime) {
-    const splitedTime = stringTime.split(':'); // split it at the colons
+    const splitedTime = stringTime.split(':');
     let totalSeconds;
-    // minutes are worth 60 seconds. Hours are worth 60 minutes.
     if (splitedTime.length > 2) {
         totalSeconds = (+splitedTime[0]) * 60 * 60 + (+splitedTime[1]) * 60 + (+splitedTime[2]);
     } else {

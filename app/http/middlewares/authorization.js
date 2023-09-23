@@ -1,6 +1,8 @@
+/* eslint-disable prefer-destructuring */
 const createHttpError = require('http-errors');
 const { UserModel } = require('../../model/user');
 const { verifyToken } = require('../../utilities/functions');
+const { messageCenter } = require('../../utilities/messages');
 
 exports.isAuthenticated = async (req, res, next) => {
   try {
@@ -8,11 +10,10 @@ exports.isAuthenticated = async (req, res, next) => {
     if (req.headers.authorization
       && req.headers.authorization.startsWith('Bearer')
     ) {
-      // eslint-disable-next-line prefer-destructuring
       token = req.headers.authorization.split(' ')[1];
     }
     if (!token) {
-      throw createHttpError.Unauthorized('وارد حساب کاربری خود شوید');
+      throw createHttpError.Unauthorized(messageCenter.USER.ACCOUNT_NOTFOUND);
     }
 
     const decodedToken = await verifyToken(token);
@@ -20,7 +21,7 @@ exports.isAuthenticated = async (req, res, next) => {
       { mobile: decodedToken.mobile },
       { password: 0, otp: 0 }
     );
-    if (!user) throw createHttpError.NotFound('کاربر یافت نشد');
+    if (!user) throw createHttpError.NotFound(messageCenter.USER.NOTFOUND);
     req.user = user;
     next();
   } catch (error) {

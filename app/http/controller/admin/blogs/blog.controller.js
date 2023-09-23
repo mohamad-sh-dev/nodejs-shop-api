@@ -1,26 +1,33 @@
 const createHttpError = require('http-errors');
+const { StatusCodes: httpStatusCodes } = require('http-status-codes');
 const { BlogModel } = require('../../../../model/blog');
 const BaseController = require('../../baseController');
 const unlinkFile = require('../../../../utilities/unlinkFile');
-const { filterObj } = require('../../../../utilities/functions');
+const { filterObj, sendResponseToClient } = require('../../../../utilities/functions');
 const { messageCenter } = require('../../../../utilities/messages');
+const { publicDefinitions } = require('../../../../utilities/publicDefinitions');
 
 class BlogManager extends BaseController {
   async createBlog(req, res, next) {
     try {
       const {
-        title, summary, body, image, tag, category,
+        title, summary, body, tag, category,
       } = req.body;
+      if (Object.keys(req.file).length > 1) {
+        req.body.image = req.file.uploadedPath;
+      }
       const createdBlog = await BlogModel.create(
         {
-          title, summary, body, author: req.user.id, image, tag, category,
+          title,
+          summary,
+          body,
+          tag,
+          category,
+          author: req.user.id,
+          image: req.body.image,
         },
       );
-      res.status(201).json({
-        status: messageCenter.public.success,
-        message: 'وبلاگ با موفقیت ایجاد شد',
-        data: createdBlog,
-      });
+      return sendResponseToClient(res, messageCenter.public.success, httpStatusCodes.CREATED, createdBlog, messageCenter.BLOGS.CREATED);
     } catch (error) {
       await unlinkFile(req.body.uploadedFilePath);
       next(error);
@@ -76,11 +83,7 @@ class BlogManager extends BaseController {
           },
         },
       ]);
-      return res.status(200).json({
-        status: 'success',
-        count: blogs.length || 0,
-        data: blogs || [],
-      });
+      return sendResponseToClient(res, messageCenter.public.success, httpStatusCodes.OK, blogs);
     } catch (error) {
       next(error);
     }
@@ -90,8 +93,7 @@ class BlogManager extends BaseController {
     try {
       const { id } = req.body;
       await this.checkBlogExist(id);
-      const allowedFiledsForUpdate = ['title', 'summary', 'body', 'image', 'tag', 'category'];
-      const filteredBody = filterObj(req.body, allowedFiledsForUpdate);
+      const filteredBody = filterObj(req.body, publicDefinitions.blogsAllowedFieldsToBeUpdated());
       const updatedResult = await BlogModel.updateOne(
         { _id: id },
         {
@@ -101,10 +103,8 @@ class BlogManager extends BaseController {
           runValidators: true,
         },
       );
-      if (updatedResult.modifiedCount !== 1) { throw createHttpError.InternalServerError('خطای داخلی سرور'); }
-      return res.status(200).json({
-        message: 'بروزرسانی باموفقیت انجام شد',
-      });
+      if (!updatedResult.modifiedCount) throw createHttpError.InternalServerError(messageCenter.public.internalServerErrorMsg);
+      return sendResponseToClient(res, messageCenter.public.successUpdate, httpStatusCodes.OK);
     } catch (error) {
       next(error);
     }
@@ -115,8 +115,8 @@ class BlogManager extends BaseController {
       const { id: _id } = req.body;
       await this.checkBlogExist(_id);
       const deleteResult = await BlogModel.deleteOne({ _id });
-      if (deleteResult.deletedCount !== 1) { throw createHttpError.InternalServerError('حذف با خطا مواجه شد'); }
-      return res.status(204);
+      if (!deleteResult.deletedCount) { throw createHttpError.InternalServerError(messageCenter.public.REMOVEFAILED); }
+      return sendResponseToClient(res, messageCenter.public.removeSuccessfull, httpStatusCodes.OK);
     } catch (error) {
       next(error);
     }
@@ -131,7 +131,7 @@ class BlogManager extends BaseController {
         { title },
       ],
     });
-    if (!blog) throw createHttpError.NotFound('پست مورد نظر یافت نشد');
+    if (!blog) throw createHttpError.NotFound(messageCenter.public.notFoundContent);
     return {
       exist: !!blog,
       data: blog,

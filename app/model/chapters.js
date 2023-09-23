@@ -29,23 +29,6 @@ const chapterSchema = new mongoose.Schema({
   duration: { type: String, default: '00:00:00' },
 });
 
-// chapterSchema.pre('updateOne', async function (next) {
-//   let totalEpisodeSeconds = 0;
-//   try {
-//     for (let i = 0; i < doc.episodes.length; i++) {
-//       console.log(doc.episodes[i]);
-//       const episodeDocument = await EpisodeModel.findById(doc.episodes[i].toString());
-//       const { duration } = episodeDocument;
-//       totalEpisodeSeconds += convertStringTimeToSeconds(duration);
-//     }
-//     doc.duration = getVideoTime(totalEpisodeSeconds);
-//     doc.save()
-//     next();
-//   } catch (error) {
-//     next(error)
-//   }
-// });
-
 chapterSchema.statics.updateChapterDuration = async function (chapterId) {
   let totalEpisodeSeconds = 0;
   const chapter = await this.findById(chapterId);

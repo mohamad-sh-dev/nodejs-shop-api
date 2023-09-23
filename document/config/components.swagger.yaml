@@ -18,6 +18,31 @@ components :
           example : 
             status : 'ناموفق'
             message : وارد حساب کاربری خود شوید
+    403 : 
+      description: forbidden
+      content : 
+        application/json : 
+          schema  : 
+            $ref  : '#/components/responses/schemas/403Forbidden'
+          example : 
+            status : ناموفق
+            messasge : شما دسترسی لازم را ندارید
+    404: 
+      description: not found
+      content : 
+        application/json : 
+          schema  : 
+            $ref  :   '#/components/responses/schemas/404notFound'
+          example : 
+            messasge : کاربر یافت نشد
+    500: 
+      description: internal server error
+      content : 
+        application/json : 
+          schema : 
+            $ref : '#/components/responses/schemas/500InternalServerError'
+          example : 
+            message : خطای داخلی سرور 
   schemas : 
     updateProfile : 
       type : object 

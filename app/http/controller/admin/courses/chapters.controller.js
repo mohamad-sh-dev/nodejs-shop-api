@@ -65,7 +65,7 @@ class CourseController extends BaseController {
                 $set: req.body
             });
             if (!chapterUpdatedRersult.modifiedCount) {
-                throw createHttpError.InternalServerError(messageCenter.public.failedUpdate);
+                throw createHttpError.InternalServerError(messageCenter.public.FAILED_UPDATE);
             }
             return res.status(httpStatusCodes.OK).json({
                 status: messageCenter.public.success,
@@ -105,7 +105,7 @@ class CourseController extends BaseController {
 
     async checkExistChapter(id) {
         const chapter = await ChapterModel.findOne({ _id: id });
-        if (!chapter) throw createHttpError.NotFound('فصل مورد نظر مورد نظر یافت نشد');
+        if (!chapter) throw createHttpError.NotFound(messageCenter.public.notFoundContent);
         return {
             exist: !!chapter,
             data: chapter,

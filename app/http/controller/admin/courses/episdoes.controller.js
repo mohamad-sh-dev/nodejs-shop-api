@@ -11,6 +11,7 @@ const unlinkFile = require('../../../../utilities/unlinkFile');
 const { getVideoTime } = require('../../../../utilities/getVideoTime');
 const { CourseModel } = require('../../../../model/courses');
 const { ChapterModel } = require('../../../../model/chapters');
+const { publicDefinitions } = require('../../../../utilities/publicDefinitions');
 
 const { ObjectId } = mongoose.Types;
 class EpisodesController extends BaseController {
@@ -107,8 +108,7 @@ class EpisodesController extends BaseController {
             const episode = await EpisodeModel.findOne({ _id: episodeId });
             let newVideoAddress;
             let newVideoDuration;
-            const allowedFiledsToBeUpdate = ['title', 'description', 'type'];
-            const filteredBody = filterObj(req.body, allowedFiledsToBeUpdate);
+            const filteredBody = filterObj(req.body, publicDefinitions.episodesAllowedFieldsToBeUpdated());
             if (req.file && Object.keys(req.file).length > 1) {
                 const oldVideoAddress = episode.address;
                 await unlinkFile([oldVideoAddress]);
@@ -122,12 +122,9 @@ class EpisodesController extends BaseController {
                 $set: filteredBody
             });
             if (!episodeUpdatedRersult.modifiedCount) {
-                throw createHttpError.InternalServerError(messageCenter.public.failedUpdate);
+                throw createHttpError.InternalServerError(messageCenter.public.FAILED_UPDATE);
             }
-            return res.status(httpStatusCodes.OK).json({
-                status: messageCenter.public.success,
-                message: messageCenter.public.successUpdate
-            });
+            return sendResponseToClient(res, messageCenter.public.success, httpStatusCodes.OK, null, messageCenter.public.successUpdate);
         } catch (error) {
             next(error);
         }
@@ -152,10 +149,7 @@ class EpisodesController extends BaseController {
                     throw createHttpError.InternalServerError(new Error(messageCenter.course.removeFaild));
                 }
             });
-
-            return res.status(httpStatusCodes.OK).json({
-                message: messageCenter.public.removeSuccessfull
-            });
+            return sendResponseToClient(res, messageCenter.public.success, httpStatusCodes.OK, null, messageCenter.public.removeSuccessfull);
         } catch (error) {
             if (error.syscall === 'unlink') {
                 await EpisodeModel.create(episode._doc);
@@ -173,7 +167,7 @@ class EpisodesController extends BaseController {
 
     async checkExistChapter(id) {
         const chapter = await ChapterModel.findOne({ _id: id });
-        if (!chapter) throw createHttpError.NotFound('دوره مورد نظر مورد نظر یافت نشد');
+        if (!chapter) throw createHttpError.NotFound(messageCenter.public.notFoundContent);
         return {
             exist: !!chapter,
             data: chapter,
@@ -182,7 +176,7 @@ class EpisodesController extends BaseController {
 
     async checkExistEpisode(id) {
         const episode = await EpisodeModel.findOne({ _id: id });
-        if (!episode) throw createHttpError.NotFound('قسمت مورد نظر مورد نظر یافت نشد');
+        if (!episode) throw createHttpError.NotFound(messageCenter.public.notFoundContent);
         return {
             exist: !!episode,
             data: episode,
