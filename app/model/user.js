@@ -65,10 +65,10 @@ userSchema.pre('find', function (next) {
   this.select('-createdAt -updatedAt -__v -role -otp');
   next();
 });
-userSchema.pre('findOne', function (next) {
-  this.select('-createdAt -updatedAt -__v -role -otp');
-  next();
-});
+// userSchema.pre('findOne', function (next) {
+//   this.select('-createdAt -updatedAt -__v -role -otp');
+//   next();
+// });
 
 userSchema.pre('save', function (next) {
   if (!this.isModified('password')) return next();

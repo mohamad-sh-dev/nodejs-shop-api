@@ -32,6 +32,7 @@ class UserAuthController extends BaseController {
       const { mobile, code } = req.body;
       const user = await UserModel.findOne({ mobile });
       if (!user) throw createHttpError.NotFound(messageCenter.USER.NOTFOUND);
+      console.log(user);
       if (user && user.otp.token.toString() !== code) { throw createHttpError.Unauthorized(messageCenter.AUTHENTICATION.INCORRECT_TOKEN); }
       const now = Date.now();
       if (user.otp.expiresIn < now) { throw createHttpError.Unauthorized(messageCenter.AUTHENTICATION.EXPIRE_TOKEN); }

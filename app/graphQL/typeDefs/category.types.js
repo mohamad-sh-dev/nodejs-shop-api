@@ -1,15 +1,15 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const {
-    GraphQLObjectType, GraphQLString
+    GraphQLObjectType, GraphQLString, GraphQLList
 } = require('graphql');
-const { PublicCategoryType } = require('./publicTypes');
+const { AnyType } = require('./publicTypes');
 
 const CategoryType = new GraphQLObjectType({
     name: 'CategoryType',
     fields: {
         _id: { type: GraphQLString },
         name: { type: GraphQLString },
-        subCatrgory: { type: PublicCategoryType }
+        subCategory: { type: new GraphQLList(AnyType) }
     }
 });
 

@@ -1,13 +1,17 @@
 /* eslint-disable no-return-await */
 /* eslint-disable import/no-extraneous-dependencies */
-const { GraphQLList } = require('graphql');
+const { GraphQLList, GraphQLString } = require('graphql');
 const { BlogsType } = require('../typeDefs/blogs.type');
 const { BlogModel } = require('../../model/blog');
 
 const BlogResolver = {
     type: new GraphQLList(BlogsType),
-    resolve: async () => await BlogModel.find().populate('author category')
-
+    args: { category: { type: GraphQLString } },
+    resolve: async (__, args) => {
+        const { category } = args;
+        const dbQuery = category ? { category } : {};
+        return await BlogModel.find(dbQuery).populate('author category');
+    }
 };
 
 module.exports = {

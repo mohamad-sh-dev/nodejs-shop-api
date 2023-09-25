@@ -31,3 +31,10 @@ module.exports = {
         PERMISSIONS: 'permissions'
     }
 };
+
+
+// {
+//     "status": "success",
+//     "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTM4Nzk0OTI3OSIsImlhdCI6MTY5NTY1MTY5MywiZXhwIjoxNjk1NzM4MDkzfQ.dJTYPsfK6Jot96S_aV3Tz_fgtQyC2prz6HjHLXf130E",
+//     "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTM4Nzk0OTI3OSIsImlhdCI6MTY5NTY1MTY5MywiZXhwIjoxNzI3MjA5MjkzfQ.7h8vdpFlSbeTz2m2lKyD3Yi_Vij2Px8amymVMdmBN54"
+//   }

@@ -1,7 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const {
-    GraphQLString, GraphQLObjectType, GraphQLInt,
+    GraphQLString, GraphQLObjectType, GraphQLInt, GraphQLScalarType, GraphQLList,
 } = require('graphql');
+const { toObject, parseLiteral } = require('../utils');
 
 const AuthorType = new GraphQLObjectType({
     name: 'AuthorType',
@@ -43,18 +44,50 @@ const SubCategoryType = new GraphQLObjectType({
 
 });
 const PublicCategoryType = new GraphQLObjectType({
-    name: 'CategoryType',
+    name: 'PublicCategoryType',
     fields: {
         _id: { type: GraphQLString },
-        name: { type: GraphQLString }
+        name: { type: GraphQLString },
     }
 
 });
 
+const EpisodesType = new GraphQLObjectType({
+    name: 'EpisodesType',
+    fields: {
+        _id: { type: GraphQLString },
+        title: { type: GraphQLString },
+        description: { type: GraphQLString },
+        chapterId: { type: GraphQLString },
+        duration: { type: GraphQLString },
+        address: { type: GraphQLString },
+    }
+});
+const ChaptersType = new GraphQLObjectType({
+    name: 'ChaptersType',
+    fields: {
+        _id: { type: GraphQLString },
+        title: { type: GraphQLString },
+        description: { type: GraphQLString },
+        courseId: { type: GraphQLString },
+        duration: { type: GraphQLString },
+        episodes: { type: new GraphQLList(EpisodesType) },
+    }
+
+});
+
+const AnyType = new GraphQLScalarType({
+    name: 'anyType',
+    parseValue: toObject,
+    serialize: toObject,
+    parseLiteral,
+});
 module.exports = {
+    AnyType,
     AuthorType,
     PublicCategoryType,
     SupplierType,
     PropertiesType,
-    SubCategoryType
+    SubCategoryType,
+    ChaptersType
 };

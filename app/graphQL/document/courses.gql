@@ -1,0 +1,20 @@
+{
+  courses{
+    _id
+    title
+    category{
+      name
+      subCategory 
+    }
+    chapters{
+    	duration
+      courseId
+      title
+      episodes {
+        address
+        title
+        description
+      }
+    }
+  }
+}

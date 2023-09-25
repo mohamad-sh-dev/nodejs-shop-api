@@ -3,9 +3,10 @@
 const { GraphQLList, GraphQLString } = require('graphql');
 const { PublicCategoryType } = require('../typeDefs/publicTypes');
 const { CategoryModel } = require('../../model/categories');
+const { CategoryType } = require('../typeDefs/category.types');
 
 const CategoryResolver = {
-    type: new GraphQLList(PublicCategoryType),
+    type: new GraphQLList(CategoryType),
     resolve: async () => await CategoryModel.find({ parentCategory: null }).populate('subCategory')
 
 };

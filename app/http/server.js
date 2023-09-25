@@ -80,6 +80,7 @@ module.exports = class Application {
     });
     // eslint-disable-next-line no-unused-vars
     this.#app.use((error, req, res, next) => {
+      console.log(error);
       const internalServerError = manageErrors.InternalServerError();
       const statusCode = error.statusCode || internalServerError.statusCode;
       const message = error.message || internalServerError.message;
