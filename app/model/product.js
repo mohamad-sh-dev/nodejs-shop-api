@@ -51,7 +51,7 @@ const productSchema = new mongoose.Schema(
     },
     suplier: {
       type: mongoose.Schema.ObjectId,
-      ref: 'Suplier',
+      ref: 'User',
     },
     properties: {
       length: { type: Number, default: 0 },

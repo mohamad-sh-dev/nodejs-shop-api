@@ -27,7 +27,7 @@ const blogSchema = new mongoose.Schema(
     },
     category: {
       type: mongoose.Schema.ObjectId,
-      ref: 'Categories',
+      ref: 'Category',
       required: true
     },
     comments: {

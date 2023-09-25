@@ -1,0 +1,30 @@
+{
+  products {
+    _id
+    title
+    summary
+    description
+    imageCover
+    type
+    price
+    discount
+    category {
+      _id 
+      name
+    }
+    suplier{
+      _id
+      firstName
+      lastName
+    }
+    properties {
+      length
+      height
+      width
+      weight
+      colors
+      model
+      madein
+    }
+  }  
+}

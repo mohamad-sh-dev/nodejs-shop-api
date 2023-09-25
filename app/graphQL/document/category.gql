@@ -1,0 +1,6 @@
+{
+  category {
+    _id
+    title
+  }
+}
