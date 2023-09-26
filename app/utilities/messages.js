@@ -23,6 +23,7 @@ module.exports = {
         },
         BLOGS: {
             CREATED: 'وبلاگ با موفقیت ایجاد شد',
+            NOT_FOUND: 'وبلاگ یافت نشد',
         },
         CATEGORIES: {
             CREATED: 'دسته بندی با موفقیت ایجاد شد',
@@ -50,6 +51,11 @@ module.exports = {
         },
         MULTER: {
             INCCORECT_FILE_FORMAT: 'فرمت فایل صحیح نمیباشد',
+        },
+        COMMENTS: {
+            CREATED: 'ثبت نظر با موفقیت انجام شد',
+            NOT_FOUND: 'کامنت یافت نشد',
+            REPLAYED_ONCE: 'شما نمیتوانید پاسخ دیگری ثبت کنید',
         }
 
     }

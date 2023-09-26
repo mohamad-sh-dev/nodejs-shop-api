@@ -75,14 +75,34 @@ const ChaptersType = new GraphQLObjectType({
     }
 
 });
+const AwnsersType = new GraphQLObjectType({
+    name: 'AwnsersType',
+    fields: {
+        _id: { type: GraphQLString },
+        user: { type: GraphQLString },
+        awnser: { type: GraphQLString },
+        parentComment: { type: GraphQLString },
+    }
 
+});
 const AnyType = new GraphQLScalarType({
     name: 'anyType',
     parseValue: toObject,
     serialize: toObject,
     parseLiteral,
 });
+const ResponseType = new GraphQLObjectType({
+    name: 'ResponseType',
+    fields: {
+        status: { type: GraphQLString },
+        message: { type: GraphQLString },
+        data: { type: AnyType },
+    }
+});
+
 module.exports = {
+    AwnsersType,
+    ResponseType,
     AnyType,
     AuthorType,
     PublicCategoryType,
