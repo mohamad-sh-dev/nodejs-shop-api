@@ -1,6 +1,8 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable default-case */
 const { Kind } = require('graphql');
+const createHttpError = require('http-errors');
+const { messageCenter } = require('../utilities/messages');
 
 function parseValueNode(valueNode) {
     switch (valueNode.kind) {
@@ -44,10 +46,18 @@ function toObject(value) {
     }
     return null;
 }
+async function checkExistContent(Model, id) {
+    const content = await Model.findOne({ _id: id });
+    if (!content) throw createHttpError.NotFound(messageCenter.public.notFoundContent);
+    return {
+        content
+    };
+}
 
 module.exports = {
     toObject,
     parseLiteral,
     parseValueNode,
-    parseObject
+    parseObject,
+    checkExistContent
 };

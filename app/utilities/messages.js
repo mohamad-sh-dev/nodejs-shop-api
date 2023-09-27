@@ -52,6 +52,10 @@ module.exports = {
         MULTER: {
             INCCORECT_FILE_FORMAT: 'فرمت فایل صحیح نمیباشد',
         },
+        LIKES: {
+            SET_LIKE: 'لایک محتوا انجام شد',
+            UNSET_LIKE: 'لایک محتوا برداشته شد'
+        },
         COMMENTS: {
             CREATED: 'ثبت نظر با موفقیت انجام شد',
             NOT_FOUND: 'کامنت یافت نشد',

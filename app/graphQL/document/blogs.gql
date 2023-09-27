@@ -5,6 +5,28 @@
     summary
     body
     image
+    likes {
+      _id
+      firstName
+    }
+    comments {
+      _id
+      comment
+      answer {
+        user {
+          _id
+          firstName
+          lastName
+        }
+        _id
+        answer
+      }
+      user {
+        _id
+        firstName
+        lastName
+      }
+    }
     category {
       _id
       name

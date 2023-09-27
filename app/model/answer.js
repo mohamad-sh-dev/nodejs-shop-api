@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
-const awnsers = new mongoose.Schema({
+const answers = new mongoose.Schema({
     user: {
         type: mongoose.Schema.ObjectId,
         ref: 'User',
         required: true
     },
-    awnser: {
+    answer: {
         type: String,
         required: true
     },
@@ -18,8 +18,8 @@ const awnsers = new mongoose.Schema({
 }, {
     timestamps: true
 });
-const AwnsersModel = mongoose.model('Awnsers', awnsers);
+const AnswersModel = mongoose.model('Answers', answers);
 
 module.exports = {
-    AwnsersModel,
+    AnswersModel,
 };

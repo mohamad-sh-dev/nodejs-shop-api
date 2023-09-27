@@ -37,7 +37,7 @@ const blogSchema = new mongoose.Schema(
     },
     likes: {
       type: [mongoose.Schema.ObjectId],
-      ref: 'Likes',
+      ref: 'User',
       default: [],
     },
     disLikes: {

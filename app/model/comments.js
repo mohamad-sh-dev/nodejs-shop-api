@@ -18,9 +18,9 @@ const commentsSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         required: true
     },
-    awnser: {
+    answer: {
         type: mongoose.Schema.ObjectId,
-        ref: 'Awnsers',
+        ref: 'Answers',
     }
 }, {
     virtuals: true,

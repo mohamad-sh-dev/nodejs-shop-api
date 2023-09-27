@@ -10,7 +10,16 @@ const ProductsResolver = {
     resolve: async (__, args) => {
         const { category } = args;
         const dbQuery = category ? { category } : {};
-        return await ProductModel.find(dbQuery).populate('suplier category');
+        return await ProductModel.find(dbQuery).populate('suplier category')
+            .populate({
+                path: 'comments',
+                populate: {
+                    path: 'user answer'
+                }
+            })
+            .populate({
+                path: 'comments.answer.user'
+            });
     }
 };
 

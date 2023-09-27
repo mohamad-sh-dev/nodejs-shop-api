@@ -1,11 +1,20 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const {
-    GraphQLString, GraphQLObjectType, GraphQLInt, GraphQLScalarType, GraphQLList,
+    GraphQLString, GraphQLObjectType, GraphQLInt, GraphQLScalarType, GraphQLList, GraphQLBoolean,
 } = require('graphql');
 const { toObject, parseLiteral } = require('../utils');
 
 const AuthorType = new GraphQLObjectType({
     name: 'AuthorType',
+    fields: {
+        _id: { type: GraphQLString },
+        firstName: { type: GraphQLString },
+        lastName: { type: GraphQLString },
+    }
+
+});
+const UserType = new GraphQLObjectType({
+    name: 'UserType',
     fields: {
         _id: { type: GraphQLString },
         firstName: { type: GraphQLString },
@@ -51,7 +60,6 @@ const PublicCategoryType = new GraphQLObjectType({
     }
 
 });
-
 const EpisodesType = new GraphQLObjectType({
     name: 'EpisodesType',
     fields: {
@@ -75,13 +83,24 @@ const ChaptersType = new GraphQLObjectType({
     }
 
 });
-const AwnsersType = new GraphQLObjectType({
-    name: 'AwnsersType',
+const AnswersType = new GraphQLObjectType({
+    name: 'AnswersType',
     fields: {
         _id: { type: GraphQLString },
-        user: { type: GraphQLString },
-        awnser: { type: GraphQLString },
+        user: { type: UserType },
+        answer: { type: GraphQLString },
         parentComment: { type: GraphQLString },
+    }
+
+});
+const CommentType = new GraphQLObjectType({
+    name: 'CommentType',
+    fields: {
+        _id: { type: GraphQLString },
+        user: { type: UserType },
+        answer: { type: AnswersType },
+        comment: { type: GraphQLString },
+        replyedOnce: { type: GraphQLBoolean },
     }
 
 });
@@ -96,12 +115,13 @@ const ResponseType = new GraphQLObjectType({
     fields: {
         status: { type: GraphQLString },
         message: { type: GraphQLString },
-        data: { type: AnyType },
     }
 });
 
 module.exports = {
-    AwnsersType,
+    UserType,
+    AnswersType,
+    CommentType,
     ResponseType,
     AnyType,
     AuthorType,

@@ -10,16 +10,23 @@ const CourseResolver = {
     resolve: async (__, args) => {
         const { category } = args;
         const dbQuery = category ? { category } : {};
-        await CourseModel.find(dbQuery)
+        return await CourseModel.find(dbQuery)
             .populate('category').populate({
                 path: 'chapters',
                 populate: {
                     path: 'episodes',
                 },
+            }).populate({
+                path: 'comments',
+                populate: {
+                    path: 'user answer'
+                }
+            })
+            .populate({
+                path: 'comments.answer.user'
             });
     }
 };
-
 module.exports = {
     CourseResolver
 };

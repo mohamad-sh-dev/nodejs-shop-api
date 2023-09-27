@@ -37,6 +37,10 @@ const productSchema = new mongoose.Schema(
       type: [mongoose.Schema.ObjectId],
       ref: 'Bookmarks',
     },
+    comments: {
+      type: [mongoose.Schema.ObjectId],
+      ref: 'Comments',
+    },
     price: {
       type: Number,
       default: 0,

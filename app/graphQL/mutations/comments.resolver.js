@@ -8,15 +8,11 @@ const { ResponseType } = require('../typeDefs/publicTypes');
 const { BlogModel } = require('../../model/blog');
 const { messageCenter } = require('../../utilities/messages');
 const { CommentsModel } = require('../../model/comments');
-const { AwnsersModel } = require('../../model/awnsers');
+const { AnswersModel } = require('../../model/answer');
+const { ProductModel } = require('../../model/product');
+const { CourseModel } = require('../../model/courses');
+const { checkExistContent } = require('../utils');
 
-async function checkExistBlog(id) {
-    const blog = await BlogModel.findOne({ _id: id });
-    if (!blog) throw createHttpError.NotFound(messageCenter.BLOGS.NOT_FOUND);
-    return {
-        blog
-    };
-}
 async function checkExistComment(id) {
     const comment = await CommentsModel.findOne({ _id: id });
     if (!comment) throw createHttpError.NotFound(messageCenter.COMMENTS.NOT_FOUND);
@@ -29,25 +25,26 @@ async function authenticateUser(context) {
     return await isAuthenticatedForGraphQL(req);
 }
 
-async function createBlogComment(userId, blogId, text) {
-    const { blog } = await checkExistBlog(blogId);
+async function createComment(userId, Model, contentID, text) {
+    const { content } = await checkExistContent(Model, contentID);
     const createdComment = await CommentsModel.create({
         user: userId,
         comment: text,
-        source: blogId,
+        source: contentID,
     });
 
     if (createdComment) {
-        blog.comments.push(createdComment.id);
-        await blog.save();
+        console.log(content);
+        content.comments.push(createdComment.id);
+        await content.save();
     }
 
     return createdComment;
 }
 async function createCommentAnswer(userId, parentCommentId, text) {
-    return await AwnsersModel.create({
+    return await AnswersModel.create({
         user: userId,
-        awnser: text,
+        answer: text,
         parentComment: parentCommentId,
     });
 }
@@ -58,7 +55,7 @@ async function createReplyToComment(userId, parentCommentId, text) {
         const commentAnswer = await createCommentAnswer(userId, parentCommentId, text);
 
         comment.replyedOnce = true;
-        comment.awnser.push(commentAnswer.id);
+        comment.answer = commentAnswer.id;
         await comment.save();
 
         return {
@@ -72,6 +69,7 @@ function createHttpErrorFromError(error) {
     const statusCode = error.statusCode || httpStatusCodes.INTERNAL_SERVER_ERROR;
     return createHttpError[statusCode](error.message);
 }
+
 const CreateCommentsForBlogs = {
     type: ResponseType,
     args: {
@@ -85,7 +83,57 @@ const CreateCommentsForBlogs = {
             const { blogID, text, parentComment } = args;
 
             if (!parentComment) {
-                await createBlogComment(user.id, blogID, text);
+                await createComment(user.id, BlogModel, blogID, text);
+                return {
+                    status: messageCenter.public.success,
+                    message: messageCenter.COMMENTS.CREATED,
+                };
+            }
+            return createReplyToComment(user.id, parentComment, text);
+        } catch (error) {
+            return createHttpErrorFromError(error);
+        }
+    },
+};
+const CreateCommentsForProducts = {
+    type: ResponseType,
+    args: {
+        productID: { type: GraphQLString },
+        text: { type: GraphQLString },
+        parentComment: { type: GraphQLString },
+    },
+    resolve: async (_, args, context) => {
+        try {
+            const user = await authenticateUser(context);
+            const { productID, text, parentComment } = args;
+
+            if (!parentComment) {
+                await createComment(user.id, ProductModel, productID, text);
+                return {
+                    status: messageCenter.public.success,
+                    message: messageCenter.COMMENTS.CREATED,
+                };
+            }
+            return createReplyToComment(user.id, parentComment, text);
+        } catch (error) {
+            return createHttpErrorFromError(error);
+        }
+    },
+};
+const CreateCommentsForCourses = {
+    type: ResponseType,
+    args: {
+        courseID: { type: GraphQLString },
+        text: { type: GraphQLString },
+        parentComment: { type: GraphQLString },
+    },
+    resolve: async (_, args, context) => {
+        try {
+            const user = await authenticateUser(context);
+            const { courseID, text, parentComment } = args;
+
+            if (!parentComment) {
+                await createComment(user.id, CourseModel, courseID, text);
                 return {
                     status: messageCenter.public.success,
                     message: messageCenter.COMMENTS.CREATED,
@@ -99,5 +147,7 @@ const CreateCommentsForBlogs = {
 };
 
 module.exports = {
-    CreateCommentsForBlogs
+    CreateCommentsForBlogs,
+    CreateCommentsForCourses,
+    CreateCommentsForProducts
 };

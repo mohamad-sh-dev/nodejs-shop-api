@@ -8,6 +8,17 @@
     type
     price
     discount
+    comments {
+      _id
+      comment
+      user{
+        firstName
+        lastName
+      }
+      answer{
+        answer
+      }
+    }
     category {
       _id 
       name

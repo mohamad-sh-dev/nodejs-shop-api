@@ -6,6 +6,13 @@
       name
       subCategory 
     }
+    comments{
+      comment
+      user {
+        firstName
+        lastName
+      }
+    }
     chapters{
     	duration
       courseId

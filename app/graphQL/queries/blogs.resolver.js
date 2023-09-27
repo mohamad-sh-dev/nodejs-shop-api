@@ -10,7 +10,17 @@ const BlogResolver = {
     resolve: async (__, args) => {
         const { category } = args;
         const dbQuery = category ? { category } : {};
-        return await BlogModel.find(dbQuery).populate('author category');
+        return await BlogModel.find(dbQuery)
+            .populate('author category likes')
+            .populate({
+                path: 'comments',
+                populate: {
+                    path: 'user answer'
+                }
+            })
+            .populate({
+                path: 'comments.answer.user'
+            });
     }
 };
 
