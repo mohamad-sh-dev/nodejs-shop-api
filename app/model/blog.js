@@ -27,7 +27,7 @@ const blogSchema = new mongoose.Schema(
     },
     category: {
       type: mongoose.Schema.ObjectId,
-      ref: 'Categories',
+      ref: 'Category',
       required: true
     },
     comments: {
@@ -37,17 +37,17 @@ const blogSchema = new mongoose.Schema(
     },
     likes: {
       type: [mongoose.Schema.ObjectId],
-      ref: 'Likes',
+      ref: 'User',
       default: [],
     },
     disLikes: {
       type: [mongoose.Schema.ObjectId],
-      ref: 'DisLikes',
+      ref: 'User',
       default: [],
     },
     bookmarks: {
       type: [mongoose.Schema.ObjectId],
-      ref: 'Bookmarks',
+      ref: 'User',
       default: [],
     }
   },

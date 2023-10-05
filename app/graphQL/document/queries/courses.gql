@@ -1,0 +1,39 @@
+{
+  courses{
+    _id
+    title
+    category{
+      name
+      subCategory 
+    }
+    comments{
+      comment
+      user {
+        firstName
+      }
+    }
+    disLikes{
+      _id
+      firstName
+    }
+    likes{
+      _id
+      firstName
+    }
+    chapters{
+    	duration
+      courseId
+      title
+      episodes {
+        address
+        title
+        description
+      }
+    }
+  }
+}
+{
+  userBookmarkedCourses {
+    _id
+    }
+}

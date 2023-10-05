@@ -1,0 +1,51 @@
+{
+  blogs {
+    _id
+    title
+    summary
+    body
+    image
+    likes {
+      _id
+      firstName
+    }
+    comments {
+      _id
+      comment
+      answer {
+        user {
+          _id
+          firstName
+          lastName
+        }
+        _id
+        answer
+      }
+      user {
+        _id
+        firstName
+        lastName
+      }
+    }
+    category {
+      _id
+      name
+    }
+    author {
+      _id
+      firstName
+      lastName
+    }
+  } 
+}
+{
+  userBookmarkedBlogs{
+    _id
+  }
+}
+mutation {
+ bookmarkBlog(BlogID : "64f74b04dda3ef0cb96b2fa1") {
+  status
+  message
+}
+}

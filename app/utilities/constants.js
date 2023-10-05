@@ -29,5 +29,17 @@ module.exports = {
         PROPERTIES: 'properties',
         METHODS: 'methods',
         PERMISSIONS: 'permissions'
+    },
+ZARINPAL_SANDBOX: {
+        DESCRIPTION: 'پرداخت',
+    },
+    PAYMENT_STATUS_CODES: {
+        OK: 100,
+        NOT_OK: 'NOK'
+    },
+    STATIC_ROUTES: {
+        VIEWS: {
+            PAYMENT_TEMPLATE: 'payment'
+        }
     }
 };

@@ -1,0 +1,54 @@
+{
+  products {
+    _id
+    title
+    summary
+    description
+    imageCover
+    type
+    price
+    discount
+    disLikes{
+      _id
+      firstName
+    }
+    likes{
+      _id
+      firstName
+    }
+    comments {
+      _id
+      comment
+      user {
+        firstName
+        lastName
+      }
+      answer {
+        answer
+      }
+    }
+    category {
+      _id
+      name
+    }
+    suplier {
+      _id
+      firstName
+      lastName
+    }
+    properties {
+      length
+      height
+      width
+      weight
+      colors
+      model
+      madein
+    }
+  }
+}
+{
+  userBookmarkedProducts {
+    _id
+    }
+}

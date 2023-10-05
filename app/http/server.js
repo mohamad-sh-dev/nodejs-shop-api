@@ -26,6 +26,7 @@ module.exports = class Application {
     this.#app = express();
     this.#express = express;
     this.configApplication();
+    this.configViewsTemplate();
     this.connectToDatabase();
     this.startServer();
     this.configRoutes();
@@ -42,6 +43,11 @@ module.exports = class Application {
       swaggerUi.serve,
       swaggerUi.setup(swaggerHandler())
     );
+  }
+
+  configViewsTemplate() {
+    this.#app.set('view engine', 'ejs');
+    this.#app.set('views', 'views');
   }
 
   connectToDatabase() {
@@ -80,6 +86,7 @@ module.exports = class Application {
     });
     // eslint-disable-next-line no-unused-vars
     this.#app.use((error, req, res, next) => {
+      console.log(error);
       const internalServerError = manageErrors.InternalServerError();
       const statusCode = error.statusCode || internalServerError.statusCode;
       const message = error.message || internalServerError.message;

@@ -1,4 +1,6 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const { Router } = require('express');
+const { graphqlHTTP } = require('express-graphql');
 const { userAuthentication } = require('./user/user.auth.router');
 const { DeveloperRouets } = require('./router.developer');
 const { adminPanelRoutes } = require('./admin/categories/category.routes');
@@ -13,6 +15,8 @@ const { adminPermissionsRoutes } = require('./admin/RBAC/permissions.routes');
 const { hasPermission } = require('../http/validations/RBAC.guard');
 const { isAuthenticated } = require('../http/middlewares/authorization');
 const { userRoutes } = require('./user/user.router');
+const { graphQlConfig } = require('../utilities/graphql.config');
+const { paymentRoutes } = require('./api/payment.routes');
 
 const router = new Router();
 
@@ -27,6 +31,8 @@ router.use('/admin/courses/chapters', isAuthenticated, hasPermission, adminChapt
 router.use('/admin/blogs', isAuthenticated, hasPermission, adminBlogsRoutes);
 router.use('/admin/panel', isAuthenticated, hasPermission, adminPanelRoutes);
 router.use('/developer', isAuthenticated, DeveloperRouets);
+router.use('/graphql', graphqlHTTP(graphQlConfig));
+router.use('/payment', paymentRoutes);
 router.use('/', home);
 
 module.exports = {

@@ -31,7 +31,7 @@ const courseSchema = new mongoose.Schema(
     },
     category: {
       type: mongoose.Schema.ObjectId,
-      ref: 'Categories',
+      ref: 'Category',
       required: true,
     },
     comments: {
@@ -41,17 +41,17 @@ const courseSchema = new mongoose.Schema(
     },
     likes: {
       type: [mongoose.Schema.ObjectId],
-      ref: 'Likes',
+      ref: 'User',
       required: true,
     },
     disLikes: {
       type: [mongoose.Schema.ObjectId],
-      ref: 'Dislikes',
+      ref: 'User',
       required: true,
     },
     bookmarks: {
       type: [mongoose.Schema.ObjectId],
-      ref: 'Bookmarks',
+      ref: 'User',
     },
     price: {
       type: Number,

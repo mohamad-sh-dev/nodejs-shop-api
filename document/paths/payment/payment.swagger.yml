@@ -1,0 +1,17 @@
+
+  /payment:
+    post:
+      summary: Create An Payment 
+      tags: ['Payment']
+      description: Create a Payment
+      security:
+        - authorization: []
+      responses:
+        400: 
+          $ref: '#/components/definitions/400Payment'
+        403:
+          $ref: '#/components/definitions/403'
+        401:
+          $ref: '#/components/definitions/401'
+        500:
+          $ref: '#/components/definitions/500'
