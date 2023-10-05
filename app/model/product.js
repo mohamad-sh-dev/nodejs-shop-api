@@ -35,7 +35,7 @@ const productSchema = new mongoose.Schema(
     },
     bookmarks: {
       type: [mongoose.Schema.ObjectId],
-      ref: 'Bookmarks',
+      ref: 'User',
     },
     comments: {
       type: [mongoose.Schema.ObjectId],
@@ -47,7 +47,7 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     discount: {
-      type: String,
+      type: Number,
     },
     type: {
       type: String,
@@ -66,6 +66,16 @@ const productSchema = new mongoose.Schema(
       model: { type: String },
       madein: { type: String },
 
+    },
+    likes: {
+      type: [mongoose.Schema.ObjectId],
+      ref: 'User',
+      required: true,
+    },
+    disLikes: {
+      type: [mongoose.Schema.ObjectId],
+      ref: 'User',
+      required: true,
     },
   },
   {

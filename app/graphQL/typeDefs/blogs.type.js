@@ -11,6 +11,8 @@ const BlogsType = new GraphQLObjectType({
     fields: {
         _id: { type: GraphQLString },
         likes: { type: new GraphQLList(UserType) },
+        disLikes: { type: new GraphQLList(UserType) },
+        bookmarks: { type: new GraphQLList(UserType) },
         title: { type: GraphQLString },
         summary: { type: GraphQLString },
         body: { type: GraphQLString },

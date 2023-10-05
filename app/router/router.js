@@ -16,6 +16,7 @@ const { hasPermission } = require('../http/validations/RBAC.guard');
 const { isAuthenticated } = require('../http/middlewares/authorization');
 const { userRoutes } = require('./user/user.router');
 const { graphQlConfig } = require('../utilities/graphql.config');
+const { paymentRoutes } = require('./api/payment.routes');
 
 const router = new Router();
 
@@ -31,6 +32,7 @@ router.use('/admin/blogs', isAuthenticated, hasPermission, adminBlogsRoutes);
 router.use('/admin/panel', isAuthenticated, hasPermission, adminPanelRoutes);
 router.use('/developer', isAuthenticated, DeveloperRouets);
 router.use('/graphql', graphqlHTTP(graphQlConfig));
+router.use('/payment', paymentRoutes);
 router.use('/', home);
 
 module.exports = {

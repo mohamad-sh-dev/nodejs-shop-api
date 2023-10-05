@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #3498db, #6c5ce7);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: #ffffff;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            color: #ffffff;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+
+        a.button-link {
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        button {
+            font-size: 18px;
+            padding: 15px 30px;
+            background: #2ecc71;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background: #27ae60;
+            transform: scale(1.05);
+        }
+    </style>
+    <title>
+        <%= pageTitle %>
+    </title>
+</head>
+
+<body>
+
+    <div class="container">
+        <p>
+            <%= message %>
+        </p>
+        <a href="http://localhost:8080/apiDocs" class="button-link">
+            <button>
+                بازگشت به سایت
+            </button>
+        </a>
+    </div>
+
+</body>
+
+</html>

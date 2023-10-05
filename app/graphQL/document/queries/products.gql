@@ -8,22 +8,30 @@
     type
     price
     discount
+    disLikes{
+      _id
+      firstName
+    }
+    likes{
+      _id
+      firstName
+    }
     comments {
       _id
       comment
-      user{
+      user {
         firstName
         lastName
       }
-      answer{
+      answer {
         answer
       }
     }
     category {
-      _id 
+      _id
       name
     }
-    suplier{
+    suplier {
       _id
       firstName
       lastName
@@ -37,5 +45,10 @@
       model
       madein
     }
-  }  
+  }
+}
+{
+  userBookmarkedProducts {
+    _id
+    }
 }

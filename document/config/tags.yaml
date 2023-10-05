@@ -1,6 +1,8 @@
 tags:
   - name : IndexPage
   - name : UserAuthentication
+  - name : Payment
+    description : (Required Permission)
   - name : RBAC Panel [Admin]
     description : (Required Permission)
   - name : Admin Panel [Blogs]

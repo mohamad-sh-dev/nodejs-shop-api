@@ -42,12 +42,12 @@ const blogSchema = new mongoose.Schema(
     },
     disLikes: {
       type: [mongoose.Schema.ObjectId],
-      ref: 'DisLikes',
+      ref: 'User',
       default: [],
     },
     bookmarks: {
       type: [mongoose.Schema.ObjectId],
-      ref: 'Bookmarks',
+      ref: 'User',
       default: [],
     }
   },

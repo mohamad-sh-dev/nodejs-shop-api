@@ -1,0 +1,18 @@
+mutation {
+    CoursesLikesResolver(CourseID : "64f9d19559f0e8b27fe7eba6") {
+    status
+    message
+}
+}
+mutation {
+    CoursesDisLikesResolver(CourseID : "64f9d19559f0e8b27fe7eba6") {
+    status
+    message
+}
+}
+mutation {
+ bookmarkCourse(CourseID : "64f9d19559f0e8b27fe7eba6") {
+  status
+  message
+}
+}

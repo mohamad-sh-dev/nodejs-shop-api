@@ -49,6 +49,12 @@ module.exports = {
             NOTFOUND: 'کاربر یافت نشد',
             ACCOUNT_NOTFOUND: 'وارد حساب کاربری خود شوید'
         },
+        USER_CART: {
+            NOT_FOUND_PRODUCT_IN_CART: 'محصول  مورد نظر در سبد خرید شما یافت نشد',
+            ADD_TO_CART: 'محصول با موفقیت به سبد خرید شما افزوده شد',
+            REMOVE_FROM_CART: 'محصول با موفقیت از سبد خرید شما حذف شد',
+            EMPTY: 'سبد خرید شما خالی است'
+        },
         MULTER: {
             INCCORECT_FILE_FORMAT: 'فرمت فایل صحیح نمیباشد',
         },
@@ -56,10 +62,29 @@ module.exports = {
             SET_LIKE: 'لایک محتوا انجام شد',
             UNSET_LIKE: 'لایک محتوا برداشته شد'
         },
+        DIS_LIKES: {
+            SET_LIKE: 'دیس لایک محتوا انجام شد',
+            UNSET_LIKE: 'دیس لایک محتوا برداشته شد'
+        },
+        BOOKMARKS: {
+            SET_BOOKMARK: 'محتوا به لیست علاقه مندی های شما اضافه شد',
+            UNSET_BOOKMARK: 'محتوا از لیست علاقه مندی های شما حذف شد'
+        },
         COMMENTS: {
             CREATED: 'ثبت نظر با موفقیت انجام شد',
             NOT_FOUND: 'کامنت یافت نشد',
             REPLAYED_ONCE: 'شما نمیتوانید پاسخ دیگری ثبت کنید',
+        },
+        PAYMENTS: {
+            NOT_FOUND: 'تراکنش یافت نشد',
+            ALLREADY_PAYED: 'تراکنش قبلا پرداخت شده است',
+            FAILED: 'تراکنش ناموفق',
+            SUCCESS: 'پرداخت با موفقیت انجام شد',
+        },
+        COURSES: {
+            COURSE_ALREADY_EXIST: 'دوره مورد نظر شما در سبد خرید وجود دارد',
+            COURSE_ALREADY_BUYED: 'این دوره قبلا توسط شما خریداری شده است',
+            NOT_FOUND_COURSE_IN_CART: 'دوره مورد نظر شما در سبد خرید وجود ندارد'
         }
 
     }

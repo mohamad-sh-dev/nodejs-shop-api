@@ -7,7 +7,13 @@ const { ProductsResolver } = require('./queries/products.resolver');
 const { CategoryResolver, SubCategoryResolver } = require('./queries/category.resolver');
 const { CourseResolver } = require('./queries/courses.resolver');
 const { CreateCommentsForBlogs, CreateCommentsForCourses, CreateCommentsForProducts } = require('./mutations/comments.resolver');
-const { BlogsLikesResolver } = require('./mutations/likes.resolver');
+const { BlogsLikesResolver, ProductLikesResolver, CoursesLikesResolver } = require('./mutations/likes.resolver');
+const { BlogsDisLikesResolver, ProductDisLikesResolver, CoursesDisLikesResolver } = require('./mutations/disLikes.resolver');
+const { BlogsBookmarksResolver, ProductBookmarksResolver, CoursesBookmarksResolver } = require('./mutations/bookmarks.resolver');
+const {
+    addProductToUserCart, removeProductFromUserCart, addCourseToUserCart, removeCourseFromUserCart, getUserCart
+} = require('./mutations/userCart.resolver');
+const { GetUserBookmarkedBlogs, GetUserBookmarkedProducts, GetUserBookmarkedCourses } = require('./queries/userBookmarks.resolver');
 
 const RootQuery = new GraphQLObjectType({
     name: 'RootQuery',
@@ -16,7 +22,10 @@ const RootQuery = new GraphQLObjectType({
         products: ProductsResolver,
         category: CategoryResolver,
         subCategory: SubCategoryResolver,
-        courses: CourseResolver
+        courses: CourseResolver,
+        userBookmarkedBlogs: GetUserBookmarkedBlogs,
+        userBookmarkedProducts: GetUserBookmarkedProducts,
+        userBookmarkedCourses: GetUserBookmarkedCourses
     }
 });
 const RootMutations = new GraphQLObjectType({
@@ -25,7 +34,22 @@ const RootMutations = new GraphQLObjectType({
         CreateCommentsForBlogs,
         CreateCommentsForProducts,
         CreateCommentsForCourses,
-        BlogsLikesResolver
+        BlogsLikesResolver,
+        CoursesLikesResolver,
+        ProductLikesResolver,
+        BlogsDisLikesResolver,
+        ProductDisLikesResolver,
+        CoursesDisLikesResolver,
+        ProductBookmarksResolver,
+        BlogsBookmarksResolver,
+        bookmarkCourse: CoursesBookmarksResolver,
+        bookmarkProduct: ProductBookmarksResolver,
+        bookmarkBlog: BlogsBookmarksResolver,
+        addProductToUserCart,
+        removeProductFromUserCart,
+        addCourseToUserCart,
+        removeCourseFromUserCart,
+        getUserCart
     }
 });
 

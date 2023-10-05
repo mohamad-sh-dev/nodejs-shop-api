@@ -26,6 +26,7 @@ module.exports = class Application {
     this.#app = express();
     this.#express = express;
     this.configApplication();
+    this.configViewsTemplate();
     this.connectToDatabase();
     this.startServer();
     this.configRoutes();
@@ -42,6 +43,11 @@ module.exports = class Application {
       swaggerUi.serve,
       swaggerUi.setup(swaggerHandler())
     );
+  }
+
+  configViewsTemplate() {
+    this.#app.set('view engine', 'ejs');
+    this.#app.set('views', 'views');
   }
 
   connectToDatabase() {

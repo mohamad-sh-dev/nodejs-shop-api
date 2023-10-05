@@ -1,0 +1,18 @@
+mutation {
+    ProductLikesResolver(ProductID : "64ef66427ace5edc7f13f4bc") {
+    status
+    message
+}
+}
+mutation {
+    ProductDisLikesResolver(ProductID : "64ef66427ace5edc7f13f4bc") {
+    status
+    message
+}
+}
+mutation {
+ bookmarkProduct(ProductID : "64ef66427ace5edc7f13f4bc") {
+  status
+  message
+}
+}

@@ -1,5 +1,14 @@
 components :
-  definitions : 
+  definitions :
+    400Payment : 
+      description : Bad Request
+      content : 
+        application/json : 
+          schema : 
+              $ref: '#/components/responses/schemas/400Payment'
+          example : 
+            stauts : 'ناموفق'
+            message : 'سبد خرید شما خالی است '
     200updatedContent : 
       description: success
       content :  
@@ -318,6 +327,14 @@ components :
       400badRequest: 
         type: object
         properties:
+          message: 
+            type: 
+              string
+      400Payment: 
+        type: object
+        properties:
+          status : 
+            type : string
           message: 
             type: 
               string

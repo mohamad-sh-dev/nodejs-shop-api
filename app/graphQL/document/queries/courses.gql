@@ -10,8 +10,15 @@
       comment
       user {
         firstName
-        lastName
       }
+    }
+    disLikes{
+      _id
+      firstName
+    }
+    likes{
+      _id
+      firstName
     }
     chapters{
     	duration
@@ -24,4 +31,9 @@
       }
     }
   }
+}
+{
+  userBookmarkedCourses {
+    _id
+    }
 }

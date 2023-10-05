@@ -1,15 +1,15 @@
 /* eslint-disable no-return-await */
 /* eslint-disable import/no-extraneous-dependencies */
 const { GraphQLString } = require('graphql');
-const { BlogModel } = require('../../model/blog');
 const { ResponseType } = require('../typeDefs/publicTypes');
 const { isAuthenticatedForGraphQL } = require('../../http/middlewares/authorization');
 const { checkExistContent } = require('../utils');
 const { messageCenter } = require('../../utilities/messages');
 const { ProductModel } = require('../../model/product');
 const { CourseModel } = require('../../model/courses');
+const { BlogModel } = require('../../model/blog');
 
-const BlogsLikesResolver = {
+const BlogsBookmarksResolver = {
     type: ResponseType,
     args: { BlogID: { type: GraphQLString } },
     resolve: async (__, args, context) => {
@@ -18,25 +18,26 @@ const BlogsLikesResolver = {
         const { BlogID } = args;
         await checkExistContent(BlogModel, BlogID);
         let message;
-        let likeActionQuery;
-        const isLikedByUser = await BlogModel.findOne({
-            likes: [user.id]
+        let bookmarkActionQuery;
+        const isBookmarkedAlready = await BlogModel.findOne({
+            _id: BlogID,
+            bookmarks: [user.id]
         });
-        if (isLikedByUser) {
-            likeActionQuery = { $pull: { likes: user.id } };
-            message = messageCenter.LIKES.UNSET_LIKE;
+        if (isBookmarkedAlready) {
+            bookmarkActionQuery = { $pull: { bookmarks: user.id } };
+            message = messageCenter.BOOKMARKS.UNSET_BOOKMARK;
         } else {
-            likeActionQuery = { $push: { likes: user.id } };
-            message = messageCenter.LIKES.SET_LIKE;
+            bookmarkActionQuery = { $push: { bookmarks: user.id } };
+            message = messageCenter.BOOKMARKS.SET_BOOKMARK;
         }
-        await BlogModel.updateOne({ _id: BlogID }, likeActionQuery);
+        await BlogModel.updateOne({ _id: BlogID }, bookmarkActionQuery);
         return {
             status: messageCenter.public.success,
             message
         };
     }
 };
-const ProductLikesResolver = {
+const ProductBookmarksResolver = {
     type: ResponseType,
     args: { ProductID: { type: GraphQLString } },
     resolve: async (__, args, context) => {
@@ -45,25 +46,26 @@ const ProductLikesResolver = {
         const { ProductID } = args;
         await checkExistContent(ProductModel, ProductID);
         let message;
-        let likeActionQuery;
-        const isLikedByUser = await ProductModel.findOne({
-            likes: [user.id]
+        let bookmarkActionQuery;
+        const isBookmarkedAlready = await ProductModel.findOne({
+            _id: ProductID,
+            bookmarks: [user.id]
         });
-        if (isLikedByUser) {
-            likeActionQuery = { $pull: { likes: user.id } };
-            message = messageCenter.LIKES.UNSET_LIKE;
+        if (isBookmarkedAlready) {
+            bookmarkActionQuery = { $pull: { bookmarks: user.id } };
+            message = messageCenter.BOOKMARKS.UNSET_BOOKMARK;
         } else {
-            likeActionQuery = { $push: { likes: user.id } };
-            message = messageCenter.LIKES.SET_LIKE;
+            bookmarkActionQuery = { $push: { bookmarks: user.id } };
+            message = messageCenter.BOOKMARKS.SET_BOOKMARK;
         }
-        await ProductModel.updateOne({ _id: ProductID }, likeActionQuery);
+        await ProductModel.updateOne({ _id: ProductID }, bookmarkActionQuery);
         return {
             status: messageCenter.public.success,
             message
         };
     }
 };
-const CoursesLikesResolver = {
+const CoursesBookmarksResolver = {
     type: ResponseType,
     args: { CourseID: { type: GraphQLString } },
     resolve: async (__, args, context) => {
@@ -72,27 +74,27 @@ const CoursesLikesResolver = {
         const { CourseID } = args;
         await checkExistContent(CourseModel, CourseID);
         let message;
-        let likeActionQuery;
-        const isLikedByUser = await CourseModel.findOne({
-            likes: [user.id]
+        let bookmarkActionQuery;
+        const isBookmarkedAlready = await CourseModel.findOne({
+            _id: CourseID,
+            bookmarks: [user.id]
         });
-        if (isLikedByUser) {
-            likeActionQuery = { $pull: { likes: user.id } };
-            message = messageCenter.LIKES.UNSET_LIKE;
+        if (isBookmarkedAlready) {
+            bookmarkActionQuery = { $pull: { bookmarks: user.id } };
+            message = messageCenter.BOOKMARKS.UNSET_BOOKMARK;
         } else {
-            likeActionQuery = { $push: { likes: user.id } };
-            message = messageCenter.LIKES.SET_LIKE;
+            bookmarkActionQuery = { $push: { bookmarks: user.id } };
+            message = messageCenter.BOOKMARKS.SET_BOOKMARK;
         }
-        await CourseModel.updateOne({ _id: CourseID }, likeActionQuery);
+        await CourseModel.updateOne({ _id: CourseID }, bookmarkActionQuery);
         return {
             status: messageCenter.public.success,
             message
         };
     }
 };
-
 module.exports = {
-    BlogsLikesResolver,
-    CoursesLikesResolver,
-    ProductLikesResolver
+    BlogsBookmarksResolver,
+    ProductBookmarksResolver,
+    CoursesBookmarksResolver
 };

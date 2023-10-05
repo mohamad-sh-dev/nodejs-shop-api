@@ -37,5 +37,15 @@
       lastName
     }
   } 
-  
+}
+{
+  userBookmarkedBlogs{
+    _id
+  }
+}
+mutation {
+ bookmarkBlog(BlogID : "64f74b04dda3ef0cb96b2fa1") {
+  status
+  message
+}
 }

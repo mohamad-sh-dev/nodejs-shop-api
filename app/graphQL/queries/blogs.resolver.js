@@ -11,7 +11,7 @@ const BlogResolver = {
         const { category } = args;
         const dbQuery = category ? { category } : {};
         return await BlogModel.find(dbQuery)
-            .populate('author category likes')
+            .populate('author category likes disLikes')
             .populate({
                 path: 'comments',
                 populate: {

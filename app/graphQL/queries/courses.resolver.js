@@ -11,7 +11,7 @@ const CourseResolver = {
         const { category } = args;
         const dbQuery = category ? { category } : {};
         return await CourseModel.find(dbQuery)
-            .populate('category').populate({
+            .populate('category likes disLikes bookmarks').populate({
                 path: 'chapters',
                 populate: {
                     path: 'episodes',

@@ -9,7 +9,7 @@ const { messageCenter } = require('../../utilities/messages');
 const { ProductModel } = require('../../model/product');
 const { CourseModel } = require('../../model/courses');
 
-const BlogsLikesResolver = {
+const BlogsDisLikesResolver = {
     type: ResponseType,
     args: { BlogID: { type: GraphQLString } },
     resolve: async (__, args, context) => {
@@ -18,25 +18,25 @@ const BlogsLikesResolver = {
         const { BlogID } = args;
         await checkExistContent(BlogModel, BlogID);
         let message;
-        let likeActionQuery;
-        const isLikedByUser = await BlogModel.findOne({
-            likes: [user.id]
+        let disLikeActionQuery;
+        const isDisLikedByUser = await BlogModel.findOne({
+            disLikes: [user.id]
         });
-        if (isLikedByUser) {
-            likeActionQuery = { $pull: { likes: user.id } };
-            message = messageCenter.LIKES.UNSET_LIKE;
+        if (isDisLikedByUser) {
+            disLikeActionQuery = { $pull: { disLikes: user.id } };
+            message = messageCenter.DIS_LIKES.UNSET_LIKE;
         } else {
-            likeActionQuery = { $push: { likes: user.id } };
-            message = messageCenter.LIKES.SET_LIKE;
+            disLikeActionQuery = { $push: { disLikes: user.id } };
+            message = messageCenter.DIS_LIKES.SET_LIKE;
         }
-        await BlogModel.updateOne({ _id: BlogID }, likeActionQuery);
+        await BlogModel.updateOne({ _id: BlogID }, disLikeActionQuery);
         return {
             status: messageCenter.public.success,
             message
         };
     }
 };
-const ProductLikesResolver = {
+const ProductDisLikesResolver = {
     type: ResponseType,
     args: { ProductID: { type: GraphQLString } },
     resolve: async (__, args, context) => {
@@ -45,25 +45,25 @@ const ProductLikesResolver = {
         const { ProductID } = args;
         await checkExistContent(ProductModel, ProductID);
         let message;
-        let likeActionQuery;
-        const isLikedByUser = await ProductModel.findOne({
-            likes: [user.id]
+        let disLikeActionQuery;
+        const isDisLikedByUser = await ProductModel.findOne({
+            disLikes: [user.id]
         });
-        if (isLikedByUser) {
-            likeActionQuery = { $pull: { likes: user.id } };
-            message = messageCenter.LIKES.UNSET_LIKE;
+        if (isDisLikedByUser) {
+            disLikeActionQuery = { $pull: { disLikes: user.id } };
+            message = messageCenter.DIS_LIKES.UNSET_LIKE;
         } else {
-            likeActionQuery = { $push: { likes: user.id } };
-            message = messageCenter.LIKES.SET_LIKE;
+            disLikeActionQuery = { $push: { disLikes: user.id } };
+            message = messageCenter.DIS_LIKES.SET_LIKE;
         }
-        await ProductModel.updateOne({ _id: ProductID }, likeActionQuery);
+        await ProductModel.updateOne({ _id: ProductID }, disLikeActionQuery);
         return {
             status: messageCenter.public.success,
             message
         };
     }
 };
-const CoursesLikesResolver = {
+const CoursesDisLikesResolver = {
     type: ResponseType,
     args: { CourseID: { type: GraphQLString } },
     resolve: async (__, args, context) => {
@@ -72,18 +72,18 @@ const CoursesLikesResolver = {
         const { CourseID } = args;
         await checkExistContent(CourseModel, CourseID);
         let message;
-        let likeActionQuery;
-        const isLikedByUser = await CourseModel.findOne({
-            likes: [user.id]
+        let disLikeActionQuery;
+        const isDisLikedByUser = await CourseModel.findOne({
+            disLikes: [user.id]
         });
-        if (isLikedByUser) {
-            likeActionQuery = { $pull: { likes: user.id } };
-            message = messageCenter.LIKES.UNSET_LIKE;
+        if (isDisLikedByUser) {
+            disLikeActionQuery = { $pull: { disLikes: user.id } };
+            message = messageCenter.DIS_LIKES.UNSET_LIKE;
         } else {
-            likeActionQuery = { $push: { likes: user.id } };
-            message = messageCenter.LIKES.SET_LIKE;
+            disLikeActionQuery = { $push: { disLikes: user.id } };
+            message = messageCenter.DIS_LIKES.SET_LIKE;
         }
-        await CourseModel.updateOne({ _id: CourseID }, likeActionQuery);
+        await CourseModel.updateOne({ _id: CourseID }, disLikeActionQuery);
         return {
             status: messageCenter.public.success,
             message
@@ -92,7 +92,7 @@ const CoursesLikesResolver = {
 };
 
 module.exports = {
-    BlogsLikesResolver,
-    CoursesLikesResolver,
-    ProductLikesResolver
+    BlogsDisLikesResolver,
+    ProductDisLikesResolver,
+    CoursesDisLikesResolver
 };

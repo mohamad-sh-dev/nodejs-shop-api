@@ -10,7 +10,7 @@ const ProductsResolver = {
     resolve: async (__, args) => {
         const { category } = args;
         const dbQuery = category ? { category } : {};
-        return await ProductModel.find(dbQuery).populate('suplier category')
+        return await ProductModel.find(dbQuery).populate('suplier category likes disLikes bookmarks')
             .populate({
                 path: 'comments',
                 populate: {

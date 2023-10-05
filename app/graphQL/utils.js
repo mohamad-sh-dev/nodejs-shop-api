@@ -2,6 +2,7 @@
 /* eslint-disable default-case */
 const { Kind } = require('graphql');
 const createHttpError = require('http-errors');
+const { StatusCodes: httpStatusCodes } = require('http-status-codes');
 const { messageCenter } = require('../utilities/messages');
 
 function parseValueNode(valueNode) {
@@ -53,8 +54,13 @@ async function checkExistContent(Model, id) {
         content
     };
 }
+function createHttpErrorFromError(error) {
+    const statusCode = error.statusCode || httpStatusCodes.INTERNAL_SERVER_ERROR;
+    return createHttpError[statusCode](error.message);
+}
 
 module.exports = {
+    createHttpErrorFromError,
     toObject,
     parseLiteral,
     parseValueNode,
