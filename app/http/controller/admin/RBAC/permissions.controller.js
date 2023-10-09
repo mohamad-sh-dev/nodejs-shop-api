@@ -52,13 +52,8 @@ class PermissionsController extends BaseController {
 
     async getPermissionById(req, res, next) {
         try {
-            const { title, id } = req.query;
-            const permission = await PermissionsModel.findOne({
-                $or: [
-                    { _id: id },
-                    { title }
-                ]
-            });
+            const { permissionID } = req.params;
+            const permission = await PermissionsModel.findById(permissionID);
             return sendResponseToClient(res, messageCenter.public.success, httpStatusCodes.OK, permission);
         } catch (error) {
             next(error);

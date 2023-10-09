@@ -1,7 +1,44 @@
 openapi: "3.0.2"
 info:
-  title: "NodeJs Store Api Documention"
-  description: "This Is Document Page NodeJs Store"
-  version: "1.0.0"
+  title: "Online Shop Node.js Project: MarketBlend"
+  description: |
+     MarketBlend is a versatile online shop built on Node.js, offering a seamless shopping experience with a wide range of features.
+      ## Features
+      - **Products:** Browse and explore a diverse catalog of products.
+      - **Courses:** Engage in online learning with structured courses, chapters, and episodes.
+      - **Blogs:** Read and publish blogs on various topics.
+      - **Categories:** Organize content for easy navigation.
+      - **GraphQL Section:** [Perform CRUD operations on products and courses seamlessly.](http://localhost:8080/graphql)
+
+      ## API Endpoints
+
+      Explore the MarketBlend API to integrate and extend the functionality:
+
+        - **Products:** CRUD operations for products.
+        - **Courses:** Manage courses, chapters, and episodes.
+        - **Blogs:** Create and read blogs.
+        - **Categories:** Organize and manage categories.
+        - **GraphQL Section:** Perform GraphQL operations for products and courses.
+
+      ## Payment Gateway
+
+     - **ZarinPal:** Secure and trusted payment gateway for smooth transactions.
+
+      ## Role-Based Access Control (RBAC)
+
+      - **Admin:** Full access to all features.
+      - **User:** Basic access for regular users.
+
+      ## Future Plans
+
+      Stay tuned for upcoming enhancements, including an online MongoDB database, log system, chat system for provider contact, and more.
+
+      Feel free to test and integrate the API to enhance your online shopping experience with MarketBlend!
+  version: "0.1.0"
+  contact:
+    email: mohamad.sh.w437@gmail.com
+externalDocs:
+  description: Find out more
+  url: https://github.com/mohamad-sh-dev/nodejs-shop-api
 servers:
-  - url: http://localhost:8080
+  - url: http://127.0.0.1:8080

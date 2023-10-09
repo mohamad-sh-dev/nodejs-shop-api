@@ -385,6 +385,94 @@ components :
           properties :
             status 
   examples :
+    userProfile : 
+      value : {
+       "cart": {
+        "totalPayAmounts": {
+          "coursesAmount": 0,
+          "productsAmount": 0,
+          "totalAmount": 0,
+        },
+        "products": [],
+        "courses": []
+        },
+        "_id": '63dd98711035750bf64d3a94',
+        "mobile": "09387949279",
+        "profileImage": "http://localhost:8080/uploads/user/2023/8/5/profileImage1695388162501.jpg",
+        "firstName": "mohamdhossein",
+        "lastName": "shabani",
+        "purchasedProducts": [
+          {
+            "_id": "64f723b2737bb0c00cb8df7d",
+            "title": "عنوان محصول 3",
+            "summary": "توضیحات کوتاه محصول 3",
+            "description": " توضیحات کوتاه محصول 3 توضیحات کامل محصول 3",
+          },
+        ],
+        "purchasedCourses": [
+          {
+            "_id": "64f9d19559f0e8b27fe7eba6",
+            "title": "عنوان دوره نمونه",
+            "summary": "توضیحات کوتاه دوره نمونه شماره یک",
+            "description": "توضیحات کامل دوره نمونه شماره یک توضیحات کامل دوره نمونه شماره یک توضیحات کامل دوره نمونه شماره یک",
+          }
+        ]
+      }
+    users : 
+      value : 
+        status : success
+        count : 2
+        data : [{
+          "cart": {
+            "totalPayAmounts": {
+              "coursesAmount": 0,
+              "productsAmount": 0,
+              "totalAmount": 0,
+            },
+            "products": [],
+            "courses": []
+            },
+            "_id": '63dd98711035750bf64d3a94',
+            "mobile": "09387949279",
+            "profileImage": "http://localhost:8080/uploads/user/2023/8/5/profileImage1695388162501.jpg",
+            "firstName": "mohamdhossein",
+            "lastName": "shabani",
+            "purchasedProducts": [
+              {
+                "_id": "64f723b2737bb0c00cb8df7d",
+                "title": "عنوان محصول 3",
+                "summary": "توضیحات کوتاه محصول 3",
+                "description": " توضیحات کوتاه محصول 3 توضیحات کامل محصول 3",
+              },
+            ],
+            "purchasedCourses": [
+              {
+                "_id": "64f9d19559f0e8b27fe7eba6",
+                "title": "عنوان دوره نمونه",
+                "summary": "توضیحات کوتاه دوره نمونه شماره یک",
+                "description": "توضیحات کامل دوره نمونه شماره یک توضیحات کامل دوره نمونه شماره یک توضیحات کامل دوره نمونه شماره یک",
+              }
+            ]
+            } ,
+            {
+          "cart": {
+            "totalPayAmounts": {
+              "coursesAmount": 0,
+              "productsAmount": 0,
+              "totalAmount": 0,
+            },
+            "products": [],
+            "courses": []
+            },
+            "_id": '63dd98711035750bf64d3a94',
+            "mobile": "09387949279",
+            "profileImage": "http://localhost:8080/uploads/user/2023/8/5/profileImage16953881654545.jpg",
+            "firstName": "sample",
+            "lastName": "sample",
+            "purchasedProducts": [],
+            "purchasedCourses": [
+            ]
+          }]
     category : 
       value : {
         "status": "success",
@@ -440,6 +528,18 @@ components :
           }
         ]
       }
+    permission : 
+      value :
+        status : 'success'
+        count : 1
+        data : {
+          "_id": "650c3ddbf1598ce0b921319d",
+          "title": "admin/roles",
+          "methods": [
+            "GET",
+          ],
+          "description": "دسترسی به نقش ها ",
+        }
     product : 
       value :
         status : 'success'
