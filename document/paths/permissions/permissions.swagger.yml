@@ -39,44 +39,45 @@
           500:
             $ref: '#/components/definitions/500'
   /admin/permissions/{permissionID}:
-        get:
-            description: Get A Specific Permission 
-            security:
-              - authorization: []
-            summary: Get A Specific Permission
-            tags:
-              - RBAC Panel [Admin]
-            parameters:
-              - description: The ID Of Permission
-                in: params
-                name: permissionID
-                schema : 
-                type : string  
-                pattern : "^[a-f\\d]{24}$"
-            responses:
-              200:
-                content:
-                  application/json:
-                    examples:
-                      permission:
-                        $ref: '#/components/examples/permission'
-                      contentNull:
-                        $ref: '#/components/examples/contentNull'  
-                    schema:
-                      $ref: '#/components/responses/schemas/200getContents'
-                description: success
-              404:
-                description: not found
-                content : 
-                  application/json : 
-                    schema  : 
-                      $ref  :   '#/components/responses/schemas/404notFound'
-                    example : 
-                      messasge : دسترسی مورد نظر یافت نشد
-              403:
-                $ref: '#/components/definitions/403'
-              500:
-                $ref: '#/components/definitions/500'
+    get:
+      description: Get A Specific Permission 
+      security:
+        - authorization: []
+      summary: Get A Specific Permission
+      tags:
+        - RBAC Panel [Admin]
+      parameters:
+        - name : permissionID
+          in : path
+          description : the id of permission
+          required : true
+          schema:
+            type: string
+            pattern: "^[a-f\\d]{24}$"
+      responses:
+        200:
+          content:
+            application/json:
+              examples:
+                permission:
+                  $ref: '#/components/examples/permission'
+                contentNull:
+                  $ref: '#/components/examples/contentNull'  
+              schema:
+                $ref: '#/components/responses/schemas/200getContents'
+          description: success
+        404:
+          description: not found
+          content : 
+            application/json : 
+              schema  : 
+                $ref  :   '#/components/responses/schemas/404notFound'
+              example : 
+                messasge : دسترسی مورد نظر یافت نشد
+        403:
+          $ref: '#/components/definitions/403'
+        500:
+          $ref: '#/components/definitions/500'
   /admin/permissions:
     post:
       summary: Create An Permission 
@@ -125,7 +126,7 @@
               example :
                 message : ' "توضیحات" نمیتواند خالی باشد || "عنوان" فرمت صحیح نمیباشد'
         403:
-          '#/components/definitions/403'
+          $ref : '#/components/definitions/403'
         401:
           $ref: '#/components/definitions/401'
         500:

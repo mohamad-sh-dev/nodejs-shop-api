@@ -15,7 +15,7 @@
                   $ref :  '#/components/responses/schemas/200getContent'
                 examples : 
                   user : 
-                    $ref : '#/components/examples/user'
+                    $ref : '#/components/examples/userProfile'
           403:
            $ref: '#/components/definitions/403'
           404: 
@@ -89,16 +89,16 @@
         401: 
           $ref: '#/components/definitions/401'
         500:
-        description: internal server error   
-        content : 
-          application/json : 
-            schema : 
-              $ref : '#/components/responses/schemas/500InternalServerError'
-            examples :
-              internalServerError :  
-                $ref : '#/components/examples/internalServerError'
-              removeFailed :  
-                  $ref : '#/components/examples/removeFailed'
+          description: internal server error   
+          content :   
+            application/json : 
+              schema : 
+                $ref : '#/components/responses/schemas/500InternalServerError'
+              examples :
+                internalServerError :  
+                  $ref : '#/components/examples/internalServerError'
+                removeFailed :  
+                    $ref : '#/components/examples/removeFailed'
   /user/list :
      get :
       summary: Get List Of Users 

@@ -84,6 +84,7 @@ class Payment {
     }
 
     async payment() {
+        if (this.requestDataConfig.payment.Amount <= 0) throw createHttpError.BadRequest(messageCenter.USER_CART.EMPTY);
         const response = await axios(this.requestOptionsConfig.payment.url, {
             method: this.requestOptionsConfig.payment.method,
             data: this.requestDataConfig.payment

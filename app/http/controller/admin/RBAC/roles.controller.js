@@ -71,20 +71,7 @@ class RolesController extends BaseController {
     async updateRole(req, res, next) {
         try {
             const { roleID, title } = req.body;
-            const role = (await RolesModel.aggregate([
-                {
-                    $match: {
-                        $or: [
-                            {
-                                title
-                            },
-                            {
-                                _id: new ObjectId(roleID)
-                            }
-                        ]
-                    }
-                }
-            ]))[0];
+            const { _doc: role } = (await this.checkRoleExist(roleID, title)).data;
             const allowedFiledsForUpdate = ['name', 'description', 'permissions'];
             const filteredBody = filterObj(req.body, allowedFiledsForUpdate);
             Object.keys(role).forEach((key) => {
@@ -111,20 +98,20 @@ class RolesController extends BaseController {
 
     async removeRole(req, res, next) {
         try {
-            const { roleId, name } = req.query;
-            await this.checkExistrole(roleId, name);
+            const { roleID, name } = req.query;
+            await this.checkRoleExist(roleID, name);
             const removeRoleResult = await RolesModel.deleteOne({
                 $or: [
                     {
                         name
                     },
                     {
-                        _id: new ObjectId(roleId)
+                        _id: new ObjectId(roleID)
                     }
                 ]
             });
 
-            if (!removeRoleResult.modifiedCount) throw createHttpError.InternalServerError(messageCenter.public.REMOVEFAILED);
+            if (!removeRoleResult.deletedCount) throw createHttpError.InternalServerError(messageCenter.public.REMOVEFAILED);
             return sendResponseToClient(res, messageCenter.public.success, httpStatusCodes.OK,);
         } catch (error) {
             next(error);

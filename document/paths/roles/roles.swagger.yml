@@ -22,42 +22,43 @@
                 example : {
                   "status": "success",
                   "message": "",
-                  "data": { }
+                  "data": { 
+                    "status": "success",
+                    "message": "",
+                    "count": 3,
+                    "data": [
+                      {
+                        "_id": "6509b3d54421dbe19c5a8214",
+                        "name": "ADMIN",
+                        "description": "نقش ادمین",
+                        "permissions": [
+                          "650c3ddbf1598ce0b921319d",
+                          "650c419aff86c91c5bf8d117",
+                        ],
+                        "__v": 0,
+                      },
+                      {
+                        "_id": "6509c74067b6a6073657420e",
+                        "name": "USER",
+                        "description": "نقش کاربر",
+                        "permissions": [],
+                        "__v": 0,
+                      },
+                      {
+                        "_id": "650c4426d8d59ea59a19b253",
+                        "name": "MASTER",
+                        "description": "نقش مالک",
+                        "permissions": [],
+                        "__v": 0,
+                      }
+                    ]
+                  }
                 }
           403:
              $ref: '#/components/definitions/403'
           500:
              $ref: '#/components/definitions/500'
   /admin/roles:
-    get:
-      description: Get List Of All Roles With Permissions
-      security:
-        - authorization: []
-      summary: Get List Of All Roles With Permissions
-      tags:
-        - RBAC Panel [Admin]
-      parameters:
-        - description: search box
-          in: query
-          name: search
-          schema:
-            type: string
-      responses:
-        200:
-          content:
-            application/json:
-              examples:
-                roles:
-                  $ref: '#/components/examples/roles'
-                contentNull:
-                  $ref: '#/components/examples/contentNull'  
-              schema:
-                $ref: '#/components/responses/schemas/200getContents'
-          description: success
-        403:
-           $ref: '#/components/definitions/403'
-        500:
-          $ref: '#/components/definitions/500'
     post:
       summary: Create Role
       tags: ['RBAC Panel [Admin]']
@@ -82,7 +83,14 @@
               example : {
                 "status": "success",
                 "message": "",
-                "data": {}
+                "count": 1,
+                "data": {
+                  "name": "TEST",
+                  "description": "TESTTESTTEST",
+                  "permissions": [],
+                  "_id": "6523ffe36eb653b6a719bc34",
+                  "__v": 0,
+                }
               }
         400:
           description: bad request

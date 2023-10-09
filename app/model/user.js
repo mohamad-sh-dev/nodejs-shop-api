@@ -57,7 +57,7 @@ const userSchema = new mongoose.Schema(
     },
     purchasedCourses: {
       type: [mongoose.Schema.ObjectId],
-      ref: 'Courses'
+      ref: 'Course'
     },
     purchasedProducts: {
       type: [mongoose.Schema.ObjectId],
@@ -251,7 +251,9 @@ userSchema.pre('save', function (next) {
 });
 
 userSchema.method('comparePassword', async (savedPass, enteredPass) => bcrypt.compare(enteredPass, savedPass));
-
+userSchema.index({
+  firstName: 'text', lastName: 'text', username: 'text', email: 'text', mobile: 'text',
+});
 const UserModel = mongoose.model('User', userSchema);
 module.exports = {
   UserModel,

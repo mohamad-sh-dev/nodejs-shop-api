@@ -35,6 +35,12 @@ class UserController extends BaseController {
             const { id } = req.user;
             const user = await UserModel.findOne({
                 _id: id
+            }, '-createdAt -updatedAt -__v -role -otp').populate({
+                path: 'purchasedProducts',
+                select: 'title summary description'
+            }).populate({
+                path: 'purchasedCourses',
+                select: 'title summary description'
             });
             return sendResponseToClient(res, messageCenter.public.success, httpStatusCodes.OK, user);
         } catch (error) {
@@ -46,7 +52,7 @@ class UserController extends BaseController {
         try {
             const { id } = req.user;
             const { data: user } = await this.findUser(id);
-            if (Object.keys(req.file).length > 1) {
+            if (req.file && Object.keys(req.file).length > 1) {
                 const oldProfileImagePath = user.profileImage;
                 await unlinkFile([oldProfileImagePath]);
                 const newProfileImagePath = req.file.uploadedPath;
