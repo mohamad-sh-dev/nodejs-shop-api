@@ -13,6 +13,6 @@ All notable changes to this project will be documented in this file.
 - API documentation using Swagger.
 
 ### Changed
-
 - Updated README.md with detailed project information.
+- Set Redis Url
 
