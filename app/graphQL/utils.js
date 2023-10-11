@@ -65,5 +65,5 @@ module.exports = {
     parseLiteral,
     parseValueNode,
     parseObject,
-    checkExistContent
+    checkExistContent,
 };

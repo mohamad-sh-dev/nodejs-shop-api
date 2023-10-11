@@ -1,7 +1,9 @@
-module.exports = {
+module.exports = Object.freeze({
+    USER_PROFILE_IAMGE_DEFAULT_STRING: 'default.jpg',
     REQUEST_PARAMS: 'params',
     REQUEST_BODY: 'body',
     REQUEST_QUERY: 'query',
+    MASTER_ROLE: 'MASTER',
     MONGO_ID_PATTERN: /^[0-9a-fA-F]{24}$/,
     PASSWORD_PATTERN: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, // Minimum eight characters, at least one letter and one number:
     PRODUCT_TYPES: ['virtual', 'phicycal'],
@@ -42,4 +44,4 @@ ZARINPAL_SANDBOX: {
             PAYMENT_TEMPLATE: 'payment'
         }
     }
-};
+});

@@ -4,7 +4,7 @@ const { messageCenter } = require('../../../utilities/messages');
 exports.createPermissionSchema = joi.object({
   title: joi
     .string()
-    .pattern(/^[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)$/)
+    .pattern(/^\/[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)?$/)
     .required()
     .messages({
       'string.empty': '"عنوان" دسترسی نمیتواند خالی باشد',
