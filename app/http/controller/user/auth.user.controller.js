@@ -7,15 +7,16 @@ const {
   signAccessToken,
   signRefreshToken,
   verifyRefreshToken,
+  setHostUrl,
 } = require('../../../utilities/functions');
 const { messageCenter } = require('../../../utilities/messages');
+const { UPLOADS_ENTITIES, USER_PROFILE_IAMGE_DEFAULT_STRING } = require('../../../utilities/constants');
 
 class UserAuthController extends BaseController {
   async getOtp(req, res, next) {
     try {
       const token = randomTokenGenerator();
-      const { mobile } = req.body;
-      const result = await this.saveUser(mobile, token);
+      const result = await this.saveUser(req, token);
       if (!result) throw createHttpError.BadGateway(messageCenter.AUTHENTICATION.FAILED_LOGIN);
       return res.status(200).json({
         status: messageCenter.public.success,
@@ -47,18 +48,21 @@ class UserAuthController extends BaseController {
     }
   }
 
-  async saveUser(mobile, token) {
+  async saveUser(req, token) {
     const otp = {
       token,
       expiresIn: Date.now() + 120000
     };
+    const { mobile } = req.body;
     const user = await this.checkExistUser(mobile);
     if (user) {
       return this.updateUser(mobile, otp);
     }
     return UserModel.create({
       mobile,
+      username: mobile,
       otp,
+      profileImage: `${await setHostUrl(req, UPLOADS_ENTITIES.USER)}/${USER_PROFILE_IAMGE_DEFAULT_STRING}`
     });
   }
 

@@ -47,7 +47,6 @@ const userSchema = new mongoose.Schema(
     },
     profileImage: {
       type: String,
-      default: '/uploads/users/profileImages/default.png',
     },
     discount: {
       type: String,

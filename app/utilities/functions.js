@@ -139,6 +139,12 @@ function sendResponseToClient(response, status, statusCode, data, message) {
   });
 }
 
+async function setHostUrl(req, entity) {
+  const directoryPath = path.join(__dirname, '..', '..', 'public', 'uploads', entity);
+  await fsPromises.mkdir(directoryPath, { recursive: true });
+  console.log(directoryPath);
+  return `${req.protocol}://${req.get('host')}/uploads/${entity}`;
+}
 module.exports = {
   sendResponseToClient,
   randomTokenGenerator,
@@ -149,5 +155,6 @@ module.exports = {
   filterObj,
   makeUploadDestination,
   mergeExistContentWithFilteredBody,
-  assignUploadPathToImages
+  assignUploadPathToImages,
+  setHostUrl
 };

@@ -1,6 +1,7 @@
 const createHttpError = require('http-errors');
 const { RolesModel } = require('../../model/RBAC/roles');
 const { messageCenter } = require('../../utilities/messages');
+const { MASTER_ROLE } = require('../../utilities/constants');
 
 async function hasPermission(req, res, next) {
     try {
@@ -11,7 +12,11 @@ async function hasPermission(req, res, next) {
         });
         if (!rolesDocument) throw new createHttpError.Forbidden(messageCenter.PERMISSIONS.NOT_ACCESS);
 
+        console.log(rolesDocument.permissions);
         if (!rolesDocument.permissions.length) {
+            return next();
+        }
+        if (role === MASTER_ROLE && !rolesDocument.permissions.length) {
             return next();
         }
 
