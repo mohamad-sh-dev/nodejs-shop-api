@@ -12,10 +12,6 @@ async function hasPermission(req, res, next) {
         });
         if (!rolesDocument) throw new createHttpError.Forbidden(messageCenter.PERMISSIONS.NOT_ACCESS);
 
-        console.log(rolesDocument.permissions);
-        if (!rolesDocument.permissions.length) {
-            return next();
-        }
         if (role === MASTER_ROLE && !rolesDocument.permissions.length) {
             return next();
         }
