@@ -23,4 +23,4 @@ All notable changes to this project will be documented in this file.
 - Fix default user profile image url
 - Fix remove old profile image path
 - Fix set undefined username 
-
+- Fix set undefined email
