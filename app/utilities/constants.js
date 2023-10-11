@@ -9,7 +9,7 @@ module.exports = {
         BLOGS: 'blogs',
         COURSES: 'courses',
         EPISODES: 'episodes',
-        USER: 'user',
+        USER: 'users',
         PRODUCTS: 'products'
     },
     LIMIT_SIZES: {
