@@ -8,7 +8,7 @@ info:
       - **Courses:** Engage in online learning with structured courses, chapters, and episodes.
       - **Blogs:** Read and publish blogs on various topics.
       - **Categories:** Organize content for easy navigation.
-      - **GraphQL Section:** [Perform CRUD operations on products and courses seamlessly.](http://localhost:8080/graphql)
+      - **GraphQL Section:** [Perform CRUD operations on products and courses seamlessly.](https://nodejs-shop-api.onrender.com/graphql)
 
       ## API Endpoints
 
@@ -41,4 +41,7 @@ externalDocs:
   description: Find out more
   url: https://github.com/mohamad-sh-dev/nodejs-shop-api
 servers:
+  - url: https://nodejs-shop-api.onrender.com
+    description: "develop"
   - url: http://127.0.0.1:8080
+    

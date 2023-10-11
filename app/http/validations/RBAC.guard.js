@@ -9,7 +9,9 @@ async function hasPermission(req, res, next) {
             path: 'permissions',
             select: { title: 1, methods: 1, _id: 0 }
         });
-        if (!rolesDocument || !rolesDocument.permissions.length) {
+        if (!rolesDocument) throw new createHttpError.Forbidden(messageCenter.PERMISSIONS.NOT_ACCESS);
+
+        if (!rolesDocument.permissions.length) {
             return next();
         }
 

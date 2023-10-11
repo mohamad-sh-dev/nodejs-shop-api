@@ -11,8 +11,10 @@ All notable changes to this project will be documented in this file.
 - Role-Based Access Control (RBAC) implementation.
 - Integration with ZarinPal payment gateway.
 - API documentation using Swagger.
+- Add host server url to swagger severs
 
 ### Changed
 - Updated README.md with detailed project information.
 - Set Redis Url
+- Change guard strategy when rolesDocument not found 
 

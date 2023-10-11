@@ -1,8 +1,11 @@
 const redis = require('redis');
 
-const redisCilent = redis.createClient({
-    url: 'redis://red-ckillc8mccbs73afivmg:6379',
-});
+const redisCilent = redis.createClient(
+    {
+        url: process.env.REDIS_URL
+    }
+);
+
 redisCilent.connect();
 redisCilent.on('connect', () => {
     console.log('redis is connected...');
