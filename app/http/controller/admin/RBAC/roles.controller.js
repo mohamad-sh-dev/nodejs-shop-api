@@ -20,14 +20,7 @@ class RolesController extends BaseController {
                     $text: {
                         $search: search
                     }
-                }, { __v: 0, createdAt: 0, updatedAt: 0 }).populate({
-                    path: 'category',
-                    select: {
-                        name: 1,
-                        _id: 0,
-                        subCategoryDetails: 0
-                    }
-                });
+                }, { __v: 0, createdAt: 0, updatedAt: 0 });
             } else {
                 roles = await RolesModel.aggregate([
                     {

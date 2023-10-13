@@ -7,10 +7,11 @@ const {
   signAccessToken,
   signRefreshToken,
   verifyRefreshToken,
-  setHostUrl,
+  makeEntityDirectory,
+  resolveHostAndProtocol,
 } = require('../../../utilities/functions');
 const { messageCenter } = require('../../../utilities/messages');
-const { UPLOADS_ENTITIES, USER_PROFILE_IAMGE_DEFAULT_STRING } = require('../../../utilities/constants');
+const { UPLOADS_ENTITIES, USER_PROFILE_IAMGE_DEFAULT_NAME } = require('../../../utilities/constants');
 
 class UserAuthController extends BaseController {
   async getOtp(req, res, next) {
@@ -58,11 +59,15 @@ class UserAuthController extends BaseController {
     if (user) {
       return this.updateUser(mobile, otp);
     }
+
+    const userUploadsRoot = await makeEntityDirectory(UPLOADS_ENTITIES.USER);
+    const domain = await resolveHostAndProtocol(req);
+    const profileImageRoot = `${domain}/${userUploadsRoot}/${USER_PROFILE_IAMGE_DEFAULT_NAME}`;
     return UserModel.create({
       mobile,
       username: mobile,
       otp,
-      profileImage: `${await setHostUrl(req, UPLOADS_ENTITIES.USER)}/${USER_PROFILE_IAMGE_DEFAULT_STRING}`
+      profileImage: profileImageRoot
     });
   }
 

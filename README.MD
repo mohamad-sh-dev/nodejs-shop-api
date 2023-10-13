@@ -173,9 +173,6 @@ Roles can be assigned and managed through the admin panel or directly in the dat
 
 MarketBlend is an evolving project, and we have exciting plans for its future development. Here are some features we plan to add:
 
-- **Use Online MongoDB Database**: Currently, the project uses a local MongoDB database. In the future, we plan to migrate to an online MongoDB database for better scalability and accessibility.
-
-- **Log System Implementation**: Implement a robust logging system for better traceability and debugging. This will include capturing important events, errors, and user activities.
 
 - **Chat System Integration**: Integrate a chat system to facilitate communication between users and providers. This will enhance user experience and provide a seamless way for customers to contact product or course providers.
 

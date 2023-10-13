@@ -3,7 +3,6 @@ const { REQUEST_BODY } = require('../../utilities/constants');
 
 function validateRequestBody(schema, bodyType = REQUEST_BODY) {
   return async (req, res, next) => {
-    console.log(req.body);
     try {
       await schema.validateAsync(req[bodyType]);
       next();

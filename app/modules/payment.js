@@ -21,7 +21,8 @@ class Payment {
         this.userID = userID;
         const userInfo = await UserModel.findById(userID);
         this.userCart = userInfo.cart;
-        this.totalAmount = this.userCart.totalPayAmounts.totalAmount;
+        const { totalPaymentAmounts } = await userInfo.calculateFinalPrices();
+        this.totalAmount = totalPaymentAmounts.totalPayAmount;
         this.requestDataConfig = this.sandbox ? {
             payment: {
                 MerchantID: process.env.MERCHANT_ID,
@@ -92,6 +93,7 @@ class Payment {
         const responseData = response.data;
         const { Authority, Status } = responseData;
         if (Status !== PAYMENT_STATUS_CODES.OK) throw createHttpError.InternalServerError(messageCenter.public.internalServerErrorMsg);
+
         await PaymentModel.create({
             user: this.userID,
             authority: Authority,

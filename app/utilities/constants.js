@@ -1,5 +1,6 @@
 module.exports = Object.freeze({
-    USER_PROFILE_IAMGE_DEFAULT_STRING: 'default.jpg',
+    API_DOCUMENT_ROUTE: '/apiDocs',
+    USER_PROFILE_IAMGE_DEFAULT_NAME: 'default.jpg',
     REQUEST_PARAMS: 'params',
     REQUEST_BODY: 'body',
     REQUEST_QUERY: 'query',

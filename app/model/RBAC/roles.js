@@ -16,7 +16,7 @@ const rolesSchema = new mongoose.Schema({
     }
 });
 
-rolesSchema.index({ name: 'text' });
+rolesSchema.index({ name: 'text', description: 'text' });
 
 const RolesModel = mongoose.model('Roles', rolesSchema);
 

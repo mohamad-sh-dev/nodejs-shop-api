@@ -37,7 +37,7 @@ exports.updatePermissionSchema = joi.object({
     .error(new Error(messageCenter.product.incorrectId)),
   title: joi
     .string()
-    .pattern(/^[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)$/)
+    .pattern(/^\/[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)?$/)
     .allow('')
     .messages({
       'string.pattern.base': 'فرمت عنوان وارد شده صحیح نمیباشد',

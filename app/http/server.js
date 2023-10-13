@@ -8,8 +8,8 @@ const swaggerUi = require('swagger-ui-express');
 
 const manageErrors = require('http-errors');
 const { allRouets } = require('../router/router');
-const { swaggerHandler } = require('../utilities/swaggerHandler');
 const { messageCenter } = require('../utilities/messages');
+const { swaggerHandler } = require('../../document/swagger.loader');
 
 module.exports = class Application {
   #PORT;

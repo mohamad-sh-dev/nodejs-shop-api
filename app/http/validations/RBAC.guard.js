@@ -21,7 +21,7 @@ async function hasPermission(req, res, next) {
 
         const hasAccess = userPermissions.some((permission) => {
             const permissionMethods = permission.methods;
-            const permissionRouteSegments = permission.title.split('/');
+            const permissionRouteSegments = permission.title.split('/').filter(Boolean);
 
             return (
                 (permissionMethods.includes(req.method) || permissionMethods === '*')

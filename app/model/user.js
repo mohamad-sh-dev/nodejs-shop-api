@@ -89,21 +89,7 @@ const userSchema = new mongoose.Schema(
         finalPrice: {
           type: Number
         }
-      }],
-      totalPayAmounts: {
-        coursesAmount: {
-          type: Number,
-          default: 0
-        },
-        productsAmount: {
-          type: Number,
-          default: 0
-        },
-        totalAmount: {
-          type: Number,
-          default: 0
-        },
-      }
+      }]
     }
   },
   {
@@ -126,9 +112,8 @@ userSchema.methods.addProductToUserCart = async function (productID) {
       productID: findProductResult.id,
       quantity: 1,
     });
-    this.calculateUserCart();
   }
-  // await this.save();
+  await this.save();
 };
 userSchema.methods.removeProductFromUserCart = async function (productID) {
   const findProductResult = await ProductModel.findOne({ _id: productID });
@@ -194,37 +179,71 @@ userSchema.methods.calculateUserCart = async function () {
     });
   this.cart.products = populatedProducts.cart.products;
   this.cart.courses = populatedCourses.cart.courses;
-  const totalPayAmounts = {
-    productsAmount: 0,
-    coursesAmount: 0,
-    totalPayAmount: 0,
-    productIDs: [],
-    courseIDs: []
-  };
   this.cart.products = this.cart.products.map((product) => {
     const { price, discount } = product.productID;
     const totalPrice = price * product.quantity;
     const finalPrice = totalPrice - ((discount / 100) * price);
-    this.cart.totalPayAmounts.productsAmount += finalPrice;
-    totalPayAmounts.productsAmount += finalPrice;
-    totalPayAmounts.productIDs.push(product.productID.id);
+    // this.cart.totalPaymentAmounts.productsAmount += finalPrice;
+
+    // totalPaymentAmounts.productsAmount += finalPrice;
+    // totalPaymentAmounts.productIDs.push(product.productID.id);
+
     return { ...product, totalPrice, finalPrice };
   });
 
   this.cart.courses = this.cart.courses.map((course) => {
     const { price, discount } = course.courseID;
     const finalPrice = price - ((discount / 100) * price);
-    this.cart.totalPayAmounts.coursesAmount += finalPrice;
-    totalPayAmounts.coursesAmount += finalPrice;
-    totalPayAmounts.courseIDs.push(course.courseID.id);
+    // this.cart.totalPaymentAmounts.coursesAmount += finalPrice;
+    // totalPaymentAmounts.coursesAmount += finalPrice;
+    // totalPaymentAmounts.courseIDs.push(course.courseID.id);
     return { ...course, totalPrice: finalPrice, finalPrice };
   });
-  this.cart.totalPayAmounts.totalAmount = this.cart.totalPayAmounts.coursesAmount + this.cart.totalPayAmounts.productsAmount;
+  // this.cart.totalPaymentAmounts.totalAmount = this.cart.totalPaymentAmounts.coursesAmount + this.cart.totalPaymentAmounts.productsAmount;
   await this.save();
-  totalPayAmounts.totalPayAmount = totalPayAmounts.productsAmount + totalPayAmounts.coursesAmount;
+  // totalPaymentAmounts.totalPayAmount = totalPaymentAmounts.productsAmount + totalPaymentAmounts.coursesAmount;
   return {
     ...this.cart,
-    totalPayAmounts
+    // totalPaymentAmounts
+  };
+};
+userSchema.methods.calculateFinalPrices = async function () {
+  const populatedProducts = await this.model('User')
+    .populate(this, {
+      path: 'cart.products.productID',
+      select: 'title summary description price discount',
+      model: 'Product',
+    });
+  const populatedCourses = await this.model('User')
+    .populate(this, {
+      path: 'cart.courses.courseID',
+      select: 'title summary description price discount',
+      model: 'Course',
+    });
+  const totalPaymentAmounts = {
+    productsAmount: 0,
+    coursesAmount: 0,
+    totalPayAmount: 0,
+    productIDs: [],
+    courseIDs: []
+  };
+  this.cart.products = populatedProducts.cart.products;
+  this.cart.courses = populatedCourses.cart.courses;
+
+  this.cart.products = this.cart.products.forEach((product) => {
+    const { finalPrice } = product;
+    totalPaymentAmounts.productsAmount += finalPrice;
+    totalPaymentAmounts.productIDs.push(product.productID.id);
+  });
+
+  this.cart.courses = this.cart.courses.forEach((course) => {
+    const { finalPrice } = course;
+    totalPaymentAmounts.coursesAmount += finalPrice;
+    totalPaymentAmounts.courseIDs.push(course.courseID.id);
+  });
+  totalPaymentAmounts.totalPayAmount = totalPaymentAmounts.productsAmount + totalPaymentAmounts.coursesAmount;
+  return {
+    totalPaymentAmounts
   };
 };
 

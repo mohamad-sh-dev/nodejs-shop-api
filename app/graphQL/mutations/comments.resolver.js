@@ -34,7 +34,6 @@ async function createComment(userId, Model, contentID, text) {
     });
 
     if (createdComment) {
-        console.log(content);
         content.comments.push(createdComment.id);
         await content.save();
     }
