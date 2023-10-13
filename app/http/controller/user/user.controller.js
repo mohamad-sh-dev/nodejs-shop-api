@@ -72,8 +72,8 @@ class UserController extends BaseController {
 
     async removeUser(req, res, next) {
         try {
-            const { userID } = req.body;
-            await this.find(userID);
+            const { userID } = req.query;
+            await this.findUser(userID);
             const removeUserResult = await UserModel.deleteOne({ _id: userID });
             if (!removeUserResult.deletedCount) throw createHttpError.InternalServerError(messageCenter.public.REMOVEFAILED);
             return sendResponseToClient(res, messageCenter.public.success, httpStatusCodes.OK);

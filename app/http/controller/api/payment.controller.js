@@ -1,8 +1,10 @@
 const { StatusCodes: httpStatusCodes } = require('http-status-codes');
-const { sendResponseToClient } = require('../../../utilities/functions');
+const { sendResponseToClient, resolveHostAndProtocol } = require('../../../utilities/functions');
 const { messageCenter } = require('../../../utilities/messages');
 const BaseController = require('../baseController');
-const { PAYMENT_STATUS_CODES, STATIC_ROUTES, ZARINPAL_SANDBOX } = require('../../../utilities/constants');
+const {
+ PAYMENT_STATUS_CODES, STATIC_ROUTES, ZARINPAL_SANDBOX, API_DOCUMENT_ROUTE
+} = require('../../../utilities/constants');
 const { PaymentModel } = require('../../../model/payment');
 const { Payment } = require('../../../modules/payment');
 
@@ -26,10 +28,12 @@ class PaymentController extends BaseController {
     async verify(req, res, next) {
         try {
             const { Authority, Status } = req.query;
+            const returnUrl = `${await resolveHostAndProtocol(req)}${API_DOCUMENT_ROUTE}`;
             if (Status === PAYMENT_STATUS_CODES.NOT_OK) {
                 return res.render(STATIC_ROUTES.VIEWS.PAYMENT_TEMPLATE, {
                     pageTitle: httpStatusCodes.BAD_REQUEST,
-                    message: messageCenter.PAYMENTS.FAILED
+                    message: messageCenter.PAYMENTS.FAILED,
+                    returnUrl
                 });
             }
             const paymentInfo = await PaymentModel.findOne({
@@ -39,14 +43,16 @@ class PaymentController extends BaseController {
             if (!paymentInfo) {
                 return res.render(STATIC_ROUTES.VIEWS.PAYMENT_TEMPLATE, {
                     pageTitle: httpStatusCodes.NOT_FOUND,
-                    message: messageCenter.PAYMENTS.NOT_FOUND
+                    message: messageCenter.PAYMENTS.NOT_FOUND,
+                    returnUrl
                 });
             }
 
             await this.paymentModule.verify(Authority, paymentInfo);
             return res.render(STATIC_ROUTES.VIEWS.PAYMENT_TEMPLATE, {
                 pageTitle: httpStatusCodes.OK,
-                message: messageCenter.PAYMENTS.SUCCESS
+                message: messageCenter.PAYMENTS.SUCCESS,
+                returnUrl
             });
         } catch (error) {
             next(error);

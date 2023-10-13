@@ -13,7 +13,6 @@ router.get('/random-number', (req, res) => {
 });
 router.get('/hash-string/:string', (req, res) => {
   const { string } = req.params;
-  console.log(string);
   const salt = bcrypt.genSaltSync(10);
   const hashString = bcrypt.hashSync(string, salt);
   res.status(200).json({
