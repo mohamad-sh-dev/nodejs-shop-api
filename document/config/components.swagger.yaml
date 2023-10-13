@@ -385,6 +385,42 @@ components :
           properties :
             status 
   examples :
+    course : {
+      value : {
+      "status": "success",
+      "message": "",
+      "count": 2,
+      "data": [
+            {
+          "_id": "65042e6dd6fa3b30bc1e12a1",
+          "title": "کورس تستی",
+          "summary": "توضیحات کوتاه کورس تستی",
+          "description": "توضیحات کامل کورس تستی توضیحات کامل کورس نمونه  توضیحات کامل کورس تستی ",
+          "image": "/uploads/courses/images/default.png",
+          "tags": [
+            "#کورس_تستی",
+          ],
+          "category": "64f8425470253377ce19cf56",
+          "comments": [],
+          "likes": [],
+          "disLikes": [],
+          "bookmarks": [],
+          "price": 0,
+          "discount": 0,
+          "type": "free",
+          "chapters": [
+            "65042e75d6fa3b30bc1e12a5",
+          ],
+          "duration": "03:05:40",
+          "teacher": "63dd98711035750bf64d3a94",
+          "students": [],
+          "createdAt": "2023-09-15T10:14:05.408Z",
+          "updatedAt": "2023-09-15T12:16:26.045Z",
+          "__v": 0,
+        }
+      ]
+      }
+    }
     userProfile : 
       value : {
        "cart": {

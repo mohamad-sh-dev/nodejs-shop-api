@@ -72,7 +72,7 @@
               examples:
                 contentNull:
                   $ref: '#/components/examples/contentNull'
-                product:
+                course:
                   $ref: '#/components/examples/course'
               schema:
                 $ref: '#/components/responses/schemas/200getContents'

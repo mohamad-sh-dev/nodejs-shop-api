@@ -33,3 +33,4 @@ All notable changes to this project will be documented in this file.
 - Fix permissionSchema title bug
 - Fix RBAC guard segment bug
 - Fix remove user bug (find user for delete)
+- Fix course content in swagger response 
